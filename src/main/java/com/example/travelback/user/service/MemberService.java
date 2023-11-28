@@ -1,7 +1,7 @@
-package com.example.travelback.service;
+package com.example.travelback.user.service;
 
-import com.example.travelback.dto.Member;
-import com.example.travelback.mapper.MemberMapper;
+import com.example.travelback.user.dto.Member;
+import com.example.travelback.user.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;

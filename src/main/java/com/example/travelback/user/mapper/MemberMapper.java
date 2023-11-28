@@ -1,6 +1,6 @@
-package com.example.travelback.mapper;
+package com.example.travelback.user.mapper;
 
-import com.example.travelback.dto.Member;
+import com.example.travelback.user.dto.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

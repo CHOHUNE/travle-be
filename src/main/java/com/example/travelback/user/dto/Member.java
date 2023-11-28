@@ -1,4 +1,4 @@
-package com.example.travelback.dto;
+package com.example.travelback.user.dto;
 
 import lombok.Data;
 

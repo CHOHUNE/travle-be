@@ -1,7 +1,7 @@
-package com.example.travelback.controller;
+package com.example.travelback.user.controller;
 
-import com.example.travelback.dto.Member;
-import com.example.travelback.service.MemberService;
+import com.example.travelback.user.dto.Member;
+import com.example.travelback.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
