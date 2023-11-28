@@ -3,10 +3,9 @@ package com.example.travelback.trans.controller;
 import com.example.travelback.trans.dto.Trans;
 import com.example.travelback.trans.service.TransService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +15,17 @@ public class TransController {
 
     @PostMapping("/add")
     public void add (@RequestBody Trans trans) {
-        System.out.println("trans = " + trans);
         service.add(trans);
+    }
+
+    @GetMapping("list")
+    public List<Trans> list() {
+        // TODO : transport의 컬럼에 type을 추가 하고 type에 맞게 조회 시키기
+        return service.list();
+    }
+
+    @GetMapping("id/{id}")
+    public Trans get(@PathVariable Integer id) {
+        return service.get(id);
     }
 }
