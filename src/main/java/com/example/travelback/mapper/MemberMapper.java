@@ -3,6 +3,7 @@ package com.example.travelback.mapper;
 import com.example.travelback.dto.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface MemberMapper {
@@ -28,4 +29,18 @@ public interface MemberMapper {
                 #{userEmail})
             """)
     int add(Member member);
+
+
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userId = #{userId}
+            """)
+    String selectId(String userId);
+
+    @Select("""
+            SELECT userId
+            
+            """)
+    Member selectById(String id);
 }
