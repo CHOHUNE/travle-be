@@ -16,9 +16,7 @@ public class TransController {
 
     @PostMapping("/add")
     public void add (@RequestBody Trans trans,
-                     @RequestParam(name = "type", defaultValue = "bus") String type) {
-        System.out.println(trans);
-        System.out.println(type);
+                     @RequestParam(name = "type") String type) {
         service.add(trans, type);
     }
 

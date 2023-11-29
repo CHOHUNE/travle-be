@@ -33,6 +33,11 @@ public class TransService {
     }
 
     public void delete(Integer id) {
+
+        // 운송 상품 삭제전 type 테이블 을 삭제
+        transTypeMapper.deleteByTId(id);
+
+        // 운송 상품 삭제 하기
         mapper.deleteById(id);
     }
 }

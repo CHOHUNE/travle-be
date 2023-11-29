@@ -1,5 +1,6 @@
 package com.example.travelback.trans.mapper;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,4 +14,9 @@ public interface TransTypeMapper {
 
     void insert(Integer tId, String type);
 
+    @Delete("""
+        DELETE FROM transtype
+        WHERE tId = #{tId}
+        """)
+    void deleteByTId(Integer tId);
 }
