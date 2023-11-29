@@ -15,6 +15,7 @@ public class TransController {
 
     @PostMapping("/add")
     public void add (@RequestBody Trans trans) {
+        System.out.println(trans);
         service.add(trans);
     }
 
@@ -27,5 +28,11 @@ public class TransController {
     @GetMapping("id/{id}")
     public Trans get(@PathVariable Integer id) {
         return service.get(id);
+    }
+
+    @PutMapping("edit")
+    public void edit (@RequestBody Trans trans) {
+        System.out.println(trans);
+        service.update(trans);
     }
 }

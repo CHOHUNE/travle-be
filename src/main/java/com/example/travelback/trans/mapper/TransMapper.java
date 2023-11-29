@@ -4,6 +4,7 @@ import com.example.travelback.trans.dto.Trans;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -25,4 +26,15 @@ public interface TransMapper {
         WHERE tId = #{id}
         """)
     Trans selectByTId(Integer id);
+
+    @Update("""
+        UPDATE transport
+        SET 
+            transTitle = #{transTitle},
+            transStartDay = #{transStartDay},
+            transPrice = #{transPrice},
+            transContent = #{transContent}
+        WHERE tId = #{tId}
+        """)
+    void update(Trans trans);
 }

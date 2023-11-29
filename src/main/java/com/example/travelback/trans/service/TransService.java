@@ -23,4 +23,8 @@ public class TransService {
     public Trans get(Integer id) {
         return mapper.selectByTId(id);
     }
+
+    public void update(Trans trans) {
+        mapper.update(trans);
+    }
 }
