@@ -27,4 +27,8 @@ public class TransService {
     public void update(Trans trans) {
         mapper.update(trans);
     }
+
+    public void delete(Integer id) {
+        mapper.deleteById(id);
+    }
 }

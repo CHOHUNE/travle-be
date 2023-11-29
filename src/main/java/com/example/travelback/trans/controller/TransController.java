@@ -32,7 +32,11 @@ public class TransController {
 
     @PutMapping("edit")
     public void edit (@RequestBody Trans trans) {
-        System.out.println(trans);
         service.update(trans);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        service.delete(id);
     }
 }

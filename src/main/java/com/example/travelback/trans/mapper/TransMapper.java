@@ -1,10 +1,7 @@
 package com.example.travelback.trans.mapper;
 
 import com.example.travelback.trans.dto.Trans;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -37,4 +34,10 @@ public interface TransMapper {
         WHERE tId = #{tId}
         """)
     void update(Trans trans);
+
+    @Delete("""
+        DELETE FROM transport
+        WHERE tId = #{id}
+        """)
+    void deleteById(Integer id);
 }
