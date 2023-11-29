@@ -40,4 +40,12 @@ public class TransService {
         // 운송 상품 삭제 하기
         mapper.deleteById(id);
     }
+
+    public List<Trans> listPopularBus() {
+        return mapper.selectPopularToBus();
+    }
+
+    public List<Trans> listPopularAir() {
+        return mapper.selectPopularToAir();
+    }
 }

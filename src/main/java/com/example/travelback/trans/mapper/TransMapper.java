@@ -29,6 +29,40 @@ public interface TransMapper {
     List<Trans> selectAll();
 
     @Select("""
+        SELECT 
+                tp.tId,
+                tp.transStartDay,
+                tp.transTitle, 
+                tp.transPrice, 
+                tp.transContent, 
+                tp.transInserted, 
+                tty.typeName 
+            FROM transport tp JOIN transtype tty 
+            ON tp.tId = tty.tId
+            WHERE tty.typeName = 'bus'
+            ORDER BY tp.tId DESC 
+            LIMIT 4;
+        """)
+    List<Trans> selectPopularToBus();
+
+    @Select("""
+        SELECT 
+                tp.tId,
+                tp.transStartDay,
+                tp.transTitle, 
+                tp.transPrice, 
+                tp.transContent, 
+                tp.transInserted, 
+                tty.typeName 
+            FROM transport tp JOIN transtype tty 
+            ON tp.tId = tty.tId
+            WHERE tty.typeName = 'air'
+            ORDER BY tp.tId DESC 
+            LIMIT 4;
+        """)
+    List<Trans> selectPopularToAir();
+
+    @Select("""
         SELECT * FROM transport
         WHERE tId = #{id}
         """)
@@ -50,4 +84,6 @@ public interface TransMapper {
         WHERE tId = #{id}
         """)
     void deleteById(Integer id);
+
+
 }

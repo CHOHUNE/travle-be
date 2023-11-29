@@ -22,8 +22,19 @@ public class TransController {
 
     @GetMapping("list")
     public List<Trans> list() {
-        // TODO : transport의 컬럼에 type을 추가 하고 type에 맞게 조회 시키기
         return service.list();
+    }
+
+    @GetMapping("listPopularBus")
+    // transport 페이지 에서 버스 카테고리 중 인기 있는 순으로 4개 씩 조회 되게 하기
+    public List<Trans> listPopularBus() {
+        return service.listPopularBus();
+    }
+
+    @GetMapping("listPopularAir")
+    // transport 페이지 에서 비행기 카테고리 중 인기 있는 순으로 4개 씩 조회 되게 하기
+    public List<Trans> listPopularAir() {
+        return service.listPopularAir();
     }
 
     @GetMapping("id/{id}")
