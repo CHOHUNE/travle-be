@@ -1,6 +1,7 @@
 package com.example.travelback.trans.controller;
 
 import com.example.travelback.trans.dto.Trans;
+import com.example.travelback.trans.dto.TransType;
 import com.example.travelback.trans.service.TransService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ public class TransController {
     private final TransService service;
 
     @PostMapping("/add")
-    public void add (@RequestBody Trans trans) {
+    public void add (@RequestBody Trans trans,
+                     @RequestParam(name = "type", defaultValue = "bus") String type) {
         System.out.println(trans);
-        service.add(trans);
+        System.out.println(type);
+        service.add(trans, type);
     }
 
     @GetMapping("list")

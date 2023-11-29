@@ -11,6 +11,7 @@ public interface TransMapper {
         INSERT INTO transport (transStartDay, transTitle, transPrice, transContent) 
         VALUES (#{transStartDay}, #{transTitle}, #{transPrice}, #{transContent}) 
         """)
+    @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
 
     @Select("""
