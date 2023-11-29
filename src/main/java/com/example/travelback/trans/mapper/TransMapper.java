@@ -15,7 +15,16 @@ public interface TransMapper {
     Integer insert(Trans trans);
 
     @Select("""
-        SELECT * FROM transport
+        SELECT 
+            tp.tId,
+            tp.transStartDay,
+            tp.transTitle, 
+            tp.transPrice, 
+            tp.transContent, 
+            tp.transInserted, 
+            tty.typeName 
+        FROM transport tp JOIN transtype tty 
+        ON tp.tId = tty.tId
         """)
     List<Trans> selectAll();
 
