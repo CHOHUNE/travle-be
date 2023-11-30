@@ -89,8 +89,7 @@ public class MemberController {
 
     @PostMapping("kakaoLogin")
     public ResponseEntity<KaKaoDataForm> kakaoLogin(@RequestParam String code, HttpSession session) {
-//        String token = kakaoService.getKaKaoAccessToken(code);
-//        KaKaoDataForm res = kakaoService.createKakaoUser(token);
+        System.out.println("code = " + code);
         KaKaoDataForm kakaoData = kakaoLoginService.performKakaoLogin(code);
 
         if (kakaoData != null) {

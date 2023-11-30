@@ -20,8 +20,8 @@ public class KakaoService {
     private String redirectUri;
 
     public String getKaKaoAccessToken(String code) {
-        String access_Token = "";
-        String refresh_Token = "";
+        String access_Token = null;
+        String refresh_Token = null;
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
         try{
@@ -73,7 +73,7 @@ public class KakaoService {
 
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            conn.setRequestProperty("Authorization", "bearer (" + token);
+            conn.setRequestProperty("Authorization", "bearer " + token);
 
             int responseCode = conn.getResponseCode();
 
@@ -97,25 +97,25 @@ public class KakaoService {
                     hasEmail = hasEmailElement.getAsBoolean();
                 }
             }
-            String email = "";
-            if (hasEmail) {
-                JsonElement emailElement = kakaoAccountElement.getAsJsonObject().get("email");
-                if (emailElement != null && emailElement.isJsonPrimitive()) {
-                    email = emailElement.getAsString();
-                }
-            }
+//            String email = "";
+//            if (hasEmail) {
+//                JsonElement emailElement = kakaoAccountElement.getAsJsonObject().get("email");
+//                if (emailElement != null && emailElement.isJsonPrimitive()) {
+//                    email = emailElement.getAsString();
+//                }
+//            }
 
             String nickname = element.getAsJsonObject().get("properties").getAsJsonObject().get("nickname").getAsString();
             String profile_image = element.getAsJsonObject().get("properties").getAsJsonObject().get("profile_image").getAsString();
 
             System.out.println("id: " + id);
-            System.out.println("email: " + email);
+//            System.out.println("email: " + email);
             System.out.println("nickname: " + nickname);
             System.out.println("profile_image: " + profile_image);
 
             br.close();
 
-            KaKaoDataForm res = new KaKaoDataForm(id, nickname, email, profile_image);
+            KaKaoDataForm res = new KaKaoDataForm(id, nickname, profile_image);
             return res;
 
         } catch (IOException e) {

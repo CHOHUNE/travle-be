@@ -13,7 +13,7 @@ public class KakaoLoginService {
     private KakaoService kakaoService;
 
     @Autowired
-    public void KakaoLoginService(KakaoService kakaoService) {
+    public KakaoLoginService(KakaoService kakaoService) {
         this.kakaoService = kakaoService;
     }
 
