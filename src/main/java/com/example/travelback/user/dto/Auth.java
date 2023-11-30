@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class Auth {
     private Integer id; // pk
-    private String memberId; // fk
+    private String memberId;
     private String name;
 }
