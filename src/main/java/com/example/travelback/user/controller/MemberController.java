@@ -1,12 +1,18 @@
 package com.example.travelback.user.controller;
 
+import com.example.travelback.user.dto.KaKaoDataForm;
 import com.example.travelback.user.dto.Member;
+//import com.example.travelback.user.service.KakaoLoginService;
+import com.example.travelback.user.service.KakaoService;
 import com.example.travelback.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,7 +20,15 @@ import org.springframework.web.context.request.WebRequest;
 public class MemberController {
 
     private final MemberService service;
+//    private final KakaoLoginService kakaoLoginService;
+    private final KakaoService kakaoService;
 
+
+    @Value("${Rest.api.key}")
+    private String RestApiKey;
+
+    @Value("${Redirect.uri}")
+    private String redirectUri;
 
     // -------------------- 회원가입 로직 --------------------
     @PostMapping("signup")
@@ -33,14 +47,13 @@ public class MemberController {
 
     // -------------------- 로그인 로직 --------------------
     @PostMapping("login")
-    public ResponseEntity login(@RequestBody Member member, WebRequest request) {
+    public ResponseEntity login(Member member, WebRequest request) {
         if (service.login(member, request)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-
     @GetMapping
     public ResponseEntity<Member> view(@SessionAttribute(value = "login", required = false) String userId, Member login) {
         if (login == null) {
@@ -55,6 +68,27 @@ public class MemberController {
         Member member = service.getMember(userId);
         return ResponseEntity.ok(member);
     }
+
+    // -------------------- 카카오 로그인 api key, redirecturi --------------------
+    @GetMapping("kakaoKey")
+    public Map<String, String> kakaoKey() {
+        return Map.of("key", RestApiKey, "redirect", redirectUri);
+    }
+    // -------------------- 카카오 로그인 로직 --------------------
+//    @GetMapping("/oauth2/kakao")
+//    public String kakaoLogin() {
+//        // 카카오 로그인 URL 생성
+//        String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + RestApiKey +
+//                          "&redirect_uri=" + redirectUri +
+//                          "&response_type=code";
+//        return "redirect:" + kakaoUrl;
+//    }
+
+//    @PostMapping("kakaoLogin")
+//    public ResponseEntity kakaoLogin(@RequestParam String code) {
+//        String token = kakaoService.getAccessToken(code, redirectUri);
+//        KaKaoDataForm res = kakaoService.createKakaoUser(token);
+//    }
 
 
     // -------------------- id 중복체크 로직 --------------------

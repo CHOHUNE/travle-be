@@ -1,10 +1,14 @@
 package com.example.travelback.user.service;
 
+import com.example.travelback.user.dto.Auth;
 import com.example.travelback.user.dto.Member;
 import com.example.travelback.user.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,13 +31,13 @@ public class MemberService {
         if (member.getUserName() == null || member.getUserName().isBlank()) {
             return false;
         }
-        if (member.getUserAddress1() == null || member.getUserAddress1().isBlank()) {
+        if (member.getUserPostCode() == null || member.getUserPostCode().isBlank()) {
             return false;
         }
-        if (member.getUserAddress2() == null || member.getUserAddress2().isBlank()) {
+        if (member.getUserAddress() == null || member.getUserAddress().isBlank()) {
             return false;
         }
-        if (member.getUserAddress3() == null || member.getUserAddress3().isBlank()) {
+        if (member.getUserDetailAddress() == null || member.getUserDetailAddress().isBlank()) {
             return false;
         }
         if (member.getUserPhoneNumber() == null || member.getUserPhoneNumber().isBlank()) {
@@ -53,12 +57,21 @@ public class MemberService {
 
     // -------------------- 로그인 service --------------------
     public boolean login(Member member, WebRequest request) {
+        Member dbMember = mapper.selectById(member.getUserId());
 
+        if (dbMember != null) {
+            if (dbMember.getUserPassword().equals(member.getUserPassword())) {
+                List<Auth> auth = mapper.selectAuthById(member.getUserId());
+                dbMember.setAuth(auth);
+                dbMember.setUserPassword("");
+                request.setAttribute("login", dbMember, RequestAttributes.SCOPE_SESSION);
+                return true;
+            }
+        }
         return false;
     }
-
-    public Member getMember(String id) {
-        return mapper.selectById(id);
+    public Member getMember(String userId) {
+        return mapper.selectById(userId);
     }
 
 
@@ -75,7 +88,6 @@ public class MemberService {
         }
         return login.getId().equals(userId);
     }
-
     private boolean isAdmin(Member login) {
         if (login.getAuth() != null) {
             return login.getAuth()
@@ -85,4 +97,6 @@ public class MemberService {
         }
         return false;
     }
+
+
 }

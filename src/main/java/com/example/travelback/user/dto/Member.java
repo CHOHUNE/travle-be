@@ -8,14 +8,22 @@ import java.util.List;
 @Data
 public class Member {
     private Integer id; // pk
+
+    // ---------- user 관련 ----------
     private String userId;
     private String userPassword;
     private String userName;
-    private String userAddress1;
-    private String userAddress2;
-    private String userAddress3;
+    private String userPostCode;
+    private String userAddress;
+    private String userDetailAddress;
     private String userPhoneNumber;
     private String userEmail;
     private LocalDateTime inserted;
+
+    // --------- 관리자 관련 ----------
     private List<Auth> auth;
+
+    // ---------- sms 관련 ----------
+    private String verificationCode;
+    private String sendSMS;
 }
