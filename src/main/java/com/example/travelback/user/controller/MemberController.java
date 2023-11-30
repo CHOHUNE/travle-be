@@ -77,15 +77,15 @@ public class MemberController {
         return Map.of("key", RestApiKey, "redirect", redirectUri);
     }
     // -------------------- 카카오 로그인 로직 --------------------
-    @GetMapping("/oauth2/kakao")
-    public String kakaoLogin() {
-        // 카카오 로그인 URL 생성
-        String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + RestApiKey +
-                          "&redirect_uri=" + redirectUri +
-                          "&response_type=code";
-        System.out.println("Kakao Login URL: " + kakaoUrl);
-        return "redirect:" + kakaoUrl;
-    }
+//    @GetMapping("/oauth2/kakao")
+//    public String kakaoLogin() {
+//        // 카카오 로그인 URL 생성
+//        String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + RestApiKey +
+//                          "&redirect_uri=" + redirectUri +
+//                          "&response_type=code";
+//        System.out.println("Kakao Login URL: " + kakaoUrl);
+//        return "redirect:" + kakaoUrl;
+//    }
 
     @PostMapping("kakaoLogin")
     public ResponseEntity<KaKaoDataForm> kakaoLogin(@RequestParam String code, HttpSession session) {
