@@ -2,9 +2,10 @@ package com.example.travelback.user.controller;
 
 import com.example.travelback.user.dto.KaKaoDataForm;
 import com.example.travelback.user.dto.Member;
-//import com.example.travelback.user.service.KakaoLoginService;
+import com.example.travelback.user.service.KakaoLoginService;
 import com.example.travelback.user.service.KakaoService;
 import com.example.travelback.user.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService service;
-//    private final KakaoLoginService kakaoLoginService;
+    private final KakaoLoginService kakaoLoginService;
     private final KakaoService kakaoService;
 
 
@@ -47,13 +48,14 @@ public class MemberController {
 
     // -------------------- 로그인 로직 --------------------
     @PostMapping("login")
-    public ResponseEntity login(Member member, WebRequest request) {
+    public ResponseEntity login(@RequestBody Member member, WebRequest request) {
         if (service.login(member, request)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
     @GetMapping
     public ResponseEntity<Member> view(@SessionAttribute(value = "login", required = false) String userId, Member login) {
         if (login == null) {
@@ -75,20 +77,29 @@ public class MemberController {
         return Map.of("key", RestApiKey, "redirect", redirectUri);
     }
     // -------------------- 카카오 로그인 로직 --------------------
-//    @GetMapping("/oauth2/kakao")
-//    public String kakaoLogin() {
-//        // 카카오 로그인 URL 생성
-//        String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + RestApiKey +
-//                          "&redirect_uri=" + redirectUri +
-//                          "&response_type=code";
-//        return "redirect:" + kakaoUrl;
-//    }
+    @GetMapping("/oauth2/kakao")
+    public String kakaoLogin() {
+        // 카카오 로그인 URL 생성
+        String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + RestApiKey +
+                          "&redirect_uri=" + redirectUri +
+                          "&response_type=code";
+        System.out.println("Kakao Login URL: " + kakaoUrl);
+        return "redirect:" + kakaoUrl;
+    }
 
-//    @PostMapping("kakaoLogin")
-//    public ResponseEntity kakaoLogin(@RequestParam String code) {
-//        String token = kakaoService.getAccessToken(code, redirectUri);
+    @PostMapping("kakaoLogin")
+    public ResponseEntity<KaKaoDataForm> kakaoLogin(@RequestParam String code, HttpSession session) {
+//        String token = kakaoService.getKaKaoAccessToken(code);
 //        KaKaoDataForm res = kakaoService.createKakaoUser(token);
-//    }
+        KaKaoDataForm kakaoData = kakaoLoginService.performKakaoLogin(code);
+
+        if (kakaoData != null) {
+            session.setAttribute("kakadoUserInfo", kakaoData);
+            return ResponseEntity.ok(kakaoData);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 
 
     // -------------------- id 중복체크 로직 --------------------

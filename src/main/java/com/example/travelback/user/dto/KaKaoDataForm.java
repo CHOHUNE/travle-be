@@ -9,7 +9,7 @@ public class KaKaoDataForm {
     private String email;
     private String profileImage;
 
-    public void KakaoDataForm(Long id, String nickname, String email, String profileImage) {
+    public KaKaoDataForm(Long id, String nickname, String email, String profileImage) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
