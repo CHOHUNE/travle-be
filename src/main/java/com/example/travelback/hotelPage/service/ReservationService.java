@@ -12,7 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationService {
     private final ReservationMapper reservationMapper;
 
-
+//    @Transactional
+//    public boolean saveReservation(Reservation reservation){
+//        reservationMapper.insertReservation(reservation);
+//        return reservation.getId() != null;
+//    }
     public Reservation getReservationById(long id){
         return reservationMapper.selectReservationById(id);
     }

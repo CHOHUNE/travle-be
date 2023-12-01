@@ -14,21 +14,23 @@ import java.util.List;
 public class HotelService {
     private final HotelMapper hotelMapper;
 
-//    @Transactional
-//    public boolean saveHotel(Hotel hotel){
-//        hotelMapper.insertHotel(hotel);
-//        return hotel.getHId() != null;
-//
-//    }
+    public void addHotel(Hotel hotel) {
+        hotelMapper.insertHotel(hotel);
+    }
 
+    public void deleteHotel(Integer id){
+        hotelMapper.deleById(id);
+    }
 
-    public Hotel getHotelById(Long id){
+    public Hotel getHotelById(Long id) {
         return hotelMapper.selectHotelById(id);
     }
 
-
-
     public List<Hotel> getAllHotels() {
         return hotelMapper.selectAllHotels();
+    }
+
+    public void update(Hotel hotel) {
+        hotelMapper.update(hotel);
     }
 }

@@ -13,11 +13,4 @@ public class HotelReservationController {
     private final ReservationService reservationService;
 
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id){
-        Reservation reservation=reservationService.getReservationById(id);
-        return ResponseEntity.ok(reservation);
-    }
-
 }
