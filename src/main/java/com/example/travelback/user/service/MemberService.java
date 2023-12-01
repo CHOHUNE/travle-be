@@ -99,4 +99,10 @@ public class MemberService {
     }
 
 
+    public String getLoggedInUserId(WebRequest request) {
+        Member login = (Member) request.getAttribute("login", RequestAttributes.SCOPE_SESSION);
+        return login != null ? login.getUserId() : null;
+    }
+
+
 }
