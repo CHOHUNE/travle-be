@@ -1,6 +1,7 @@
 package com.example.travelback.hotelPage.service;
 
 
+import com.example.travelback.hotelPage.domain.Hotel;
 import com.example.travelback.hotelPage.domain.Reservation;
 import com.example.travelback.hotelPage.mapper.ReservationMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReservationService {
     private final ReservationMapper reservationMapper;
 
-//    @Transactional
-//    public boolean saveReservation(Reservation reservation){
-//        reservationMapper.insertReservation(reservation);
-//        return reservation.getId() != null;
-//    }
+
+    public void addResrvation(Reservation reservation) {
+        reservationMapper.insertReservation(reservation);
+    }
+
     public Reservation getReservationById(long id){
-        return reservationMapper.selectReservationById(id);
+        return reservationMapper.getReservationById(id);
     }
 }
