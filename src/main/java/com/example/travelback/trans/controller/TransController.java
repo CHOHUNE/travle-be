@@ -4,6 +4,7 @@ import com.example.travelback.trans.dto.Trans;
 import com.example.travelback.trans.service.TransService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,8 +15,9 @@ public class TransController {
     private final TransService service;
 
     @PostMapping("/add")
-    public void add (@RequestBody Trans trans,
-                     @RequestParam(name = "type") String type) {
+    public void add (Trans trans,
+                     @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
+                     @RequestParam(value = "type") String type) {
         service.add(trans, type);
     }
 
