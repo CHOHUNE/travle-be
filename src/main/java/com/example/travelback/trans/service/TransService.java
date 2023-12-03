@@ -6,18 +6,22 @@ import com.example.travelback.trans.mapper.TransMapper;
 import com.example.travelback.trans.mapper.TransTypeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class TransService {
     private final TransMapper mapper;
     private final TransTypeMapper transTypeMapper;
     private final MainImageMapper mainImageMapper;
 
-    public void add(Trans trans, String type, MultipartFile transMainImage) {
+    public void add(Trans trans, String type, MultipartFile transMainImage) throws IOException {
         // 상품 추가
         mapper.insert(trans);
 
@@ -25,13 +29,30 @@ public class TransService {
         // -> transport(tId), 이미지 파일 이름
         if(transMainImage != null) { // 파일을 넣었을때에만 
             mainImageMapper.insert(trans.getTId(), transMainImage.getOriginalFilename());
+            // 파일이 실제로 등록이 된 후에는 S3로 저장 기능 추가
+            // 실제 파일을 S3 bucket에 upload (파일이 있으면 )
+            upload(trans.getTId(), transMainImage);
         }
-
-        // 실제 파일을 S3 bucket에 upload (파일이 있으면 )
 
         // 상품 등록할 때에 상품 타입을 등록 하는 기능
         transTypeMapper.insert(trans.getTId(), type);
     }
+
+    // 로컬에 테스트 (시작) ----------------------------------------------------------------------------------------------
+    private void upload(Integer tId, MultipartFile transMainImage) throws IOException {
+        // 파일저장 경로
+        // /Users/seungwon/Desktop/study/Temp/travel/trans/mainImage/게시물번호/파일명
+        File folder = new File("/Users/seungwon/Desktop/study/Temp/travel/trans/mainImage/"+tId);
+        if(!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String path = folder.getAbsolutePath() + "/" + transMainImage.getOriginalFilename();
+        File des = new File(path);
+        transMainImage.transferTo(des);
+
+    }
+    // 로컬에 테스트 (끝) ----------------------------------------------------------------------------------------------
 
     public List<Trans> list() {
         return mapper.selectAll();
