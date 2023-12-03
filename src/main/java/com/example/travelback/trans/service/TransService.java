@@ -5,9 +5,14 @@ import com.example.travelback.trans.mapper.MainImageMapper;
 import com.example.travelback.trans.mapper.TransMapper;
 import com.example.travelback.trans.mapper.TransTypeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +25,13 @@ public class TransService {
     private final TransMapper mapper;
     private final TransTypeMapper transTypeMapper;
     private final MainImageMapper mainImageMapper;
+
+    // 아마존 파일 업로드 ====================
+    @Value("${aws.s3.bucket.name}")
+    private String bucket;
+
+    private final S3Client s3;
+    // 아마존 파일 업로드 ====================
 
     public void add(Trans trans, String type, MultipartFile transMainImage) throws IOException {
         // 상품 추가
@@ -38,21 +50,22 @@ public class TransService {
         transTypeMapper.insert(trans.getTId(), type);
     }
 
-    // 로컬에 테스트 (시작) ----------------------------------------------------------------------------------------------
+    // 아마존 테스트 (시작) ----------------------------------------------------------------------------------------------
     private void upload(Integer tId, MultipartFile transMainImage) throws IOException {
-        // 파일저장 경로
-        // /Users/seungwon/Desktop/study/Temp/travel/trans/mainImage/게시물번호/파일명
-        File folder = new File("/Users/seungwon/Desktop/study/Temp/travel/trans/mainImage/"+tId);
-        if(!folder.exists()) {
-            folder.mkdirs();
-        }
+        String key = "travel/trans/mainImage/" + tId + "/" + transMainImage.getOriginalFilename();
 
-        String path = folder.getAbsolutePath() + "/" + transMainImage.getOriginalFilename();
-        File des = new File(path);
-        transMainImage.transferTo(des);
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        // 파일저장 경로
+        s3.putObject(objectRequest, RequestBody.fromInputStream(transMainImage.getInputStream(), transMainImage.getSize()));
+
 
     }
-    // 로컬에 테스트 (끝) ----------------------------------------------------------------------------------------------
+    // 아마존 테스트 (끝) ----------------------------------------------------------------------------------------------
 
     public List<Trans> list() {
         return mapper.selectAll();
