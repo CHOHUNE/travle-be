@@ -18,7 +18,11 @@ public class TransController {
     public void add (Trans trans,
                      @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
                      @RequestParam(value = "type") String type) {
-        service.add(trans, type);
+        if (transMainImage != null){
+            System.out.println("transMainImage = " + transMainImage.getOriginalFilename());
+            System.out.println("transMainImage = " + transMainImage.getSize());
+        }
+        service.add(trans, type, transMainImage);
     }
 
     @GetMapping("list")
