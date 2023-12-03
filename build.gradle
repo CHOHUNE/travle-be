@@ -36,6 +36,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+
+    // 파일 업로드 추가
+    implementation 'software.amazon.awssdk:s3:2.21.26'
 }
 
 tasks.named('test') {
