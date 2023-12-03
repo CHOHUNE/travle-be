@@ -27,10 +27,13 @@ public class TransService {
     private final MainImageMapper mainImageMapper;
 
     // 아마존 파일 업로드 ====================
+    private final S3Client s3;
+
     @Value("${aws.s3.bucket.name}")
     private String bucket;
 
-    private final S3Client s3;
+    @Value("${image.file.prefix}")
+    private String urlPrefix;
     // 아마존 파일 업로드 ====================
 
     public void add(Trans trans, String type, MultipartFile transMainImage) throws IOException {
@@ -71,9 +74,18 @@ public class TransService {
         return mapper.selectAll();
     }
 
+    // 조회 테스트 중 (시작) ------------------------------------------------------------------------------------------------
     public Trans get(Integer id) {
+//        Trans trans = mapper.selectByTId(id);
+//
+//        String mainImage = MainImageMapper.selectByTId(id);
+//
+//        trans.setMainImage(mainImage);
+//        return trans;
+
         return mapper.selectByTId(id);
     }
+    // 조회 테스트 중 (끝)--------------------------------------------------------------------------------------------------
 
     public void update(Trans trans) {
         mapper.update(trans);
