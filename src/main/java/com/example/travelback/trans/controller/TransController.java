@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class TransController {
     @PostMapping("/add")
     public void add (Trans trans,
                      @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
-                     @RequestParam(value = "type") String type) {
+                     @RequestParam(value = "type") String type) throws IOException {
         if (transMainImage != null){
             System.out.println("transMainImage = " + transMainImage.getOriginalFilename());
             System.out.println("transMainImage = " + transMainImage.getSize());
