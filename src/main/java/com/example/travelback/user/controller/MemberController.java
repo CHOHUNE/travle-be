@@ -26,8 +26,6 @@ public class MemberController {
     private final KakaoLoginService kakaoLoginService;
     private final KakaoService kakaoService;
 
-
-
     @Value("${Rest.api.key}")
     private String RestApiKey;
 
