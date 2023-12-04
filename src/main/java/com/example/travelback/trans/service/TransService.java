@@ -1,6 +1,7 @@
 package com.example.travelback.trans.service;
 
 import com.example.travelback.trans.dto.Trans;
+import com.example.travelback.trans.dto.TransMainImage;
 import com.example.travelback.trans.mapper.MainImageMapper;
 import com.example.travelback.trans.mapper.TransMapper;
 import com.example.travelback.trans.mapper.TransTypeMapper;
@@ -76,14 +77,19 @@ public class TransService {
 
     // 조회 테스트 중 (시작) ------------------------------------------------------------------------------------------------
     public Trans get(Integer id) {
-//        Trans trans = mapper.selectByTId(id);
-//
-//        String mainImage = MainImageMapper.selectByTId(id);
-//
-//        trans.setMainImage(mainImage);
-//        return trans;
+        Trans trans = mapper.selectByTId(id);
 
-        return mapper.selectByTId(id);
+        TransMainImage mainImageName = mainImageMapper.selectNameByTId(id);
+
+        String url = urlPrefix + "travel/trans/mainImage/" + id + "/" + mainImageName.getName();
+        mainImageName.setUrl(url);
+
+        trans.setMainImage(mainImageName);
+
+
+        return trans;
+
+//        return mapper.selectByTId(id);
     }
     // 조회 테스트 중 (끝)--------------------------------------------------------------------------------------------------
 
