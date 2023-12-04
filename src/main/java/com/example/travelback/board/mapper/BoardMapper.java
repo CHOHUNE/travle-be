@@ -1,10 +1,7 @@
 package com.example.travelback.board.mapper;
 
 import com.example.travelback.board.domain.Board;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -13,23 +10,34 @@ public interface BoardMapper {
 
 
     @Insert("""
-            insert into prj.board (title, content, writer) values (#{title},#{content},#{writer});
+            insert into board (title, content, writer) values (#{title},#{content},#{writer});
         """)
     int add(Board board);
 
     @Select("""
-                 select * from prj.board;
+                 select * from board LIMIT #{from},5;
        """)
 
-    List<Board> list();
+    List<Board> selectAll(Integer from);
 
     @Select("""
-                select * from prj.board where id=#{id};
+                select * from board where id=#{id};
         """)
     Board id(Integer id);
 
     @Delete("""
-                delete from prj.board where id=#{id};
+                delete from board where id=#{id};
         """)
     int remove(Integer id);
+
+    @Update("""
+                    update board set content = #{content}, title=#{title}, writer=#{writer} where id=#{id};
+        """)
+
+    int update(Board board);
+
+    @Select("""
+                select count(*) from board;
+        """)
+    int countAll();
 }
