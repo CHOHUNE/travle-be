@@ -29,6 +29,7 @@ SELECT * FROM hotel
             DELETE FROM hotel
             WHERE hId=#{id}
             """)
+
     void deleById(Integer id);
 
 @Update("""
