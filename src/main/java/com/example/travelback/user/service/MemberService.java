@@ -17,7 +17,7 @@ import java.util.Map;
 public class MemberService {
 
     private final MemberMapper mapper;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     // -------------------- 회원가입 유효성 검증-------------------
     // TODO : 각 input 마다 정규식표현 넣어야함
@@ -54,8 +54,8 @@ public class MemberService {
 
     // -------------------- 회원가입 serivce --------------------
     public boolean insert(Member member) {
-        String encryptedPassword = passwordEncoder.encrypt(member.getUserEmail(), member.getUserPassword());
-        member.setUserPassword(encryptedPassword);
+//        String encryptedPassword = passwordEncoder.encrypt(member.getUserEmail(), member.getUserPassword());
+//        member.setUserPassword(encryptedPassword);
         return mapper.add(member) == 1;
     }
 
