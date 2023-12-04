@@ -18,6 +18,15 @@ public class Boardcontroller {
 
     private  final BoardService service;
 
+    @GetMapping("list")
+    public List<Board> list(){
+        return service.list();
+    }
+
+
+
+
+
     @PostMapping("add")
     public ResponseEntity add(@RequestBody Board board){
         System.out.println("Board = " + board);
@@ -38,10 +47,10 @@ public class Boardcontroller {
 
 
     // api/board/list?p=4
-    @GetMapping("list")
-    public Map<String ,Object> list(@RequestParam(value = "p",defaultValue = "1")Integer page){
-        return service.list(page);
-    }
+//    @GetMapping("list")
+//    public Map<String ,Object> list(@RequestParam(value = "p",defaultValue = "1")Integer page){
+//        return service.list(page);
+//    }
 
 
     @GetMapping("id/{id}")
