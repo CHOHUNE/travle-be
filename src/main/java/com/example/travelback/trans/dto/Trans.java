@@ -13,5 +13,7 @@ public class Trans {
     private String transContent;
     private LocalDateTime transInserted;
     private String typeName;
+//     이미지 조회 테스트 중
+//    private String mainImage;
 
 }
