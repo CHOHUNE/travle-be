@@ -2,12 +2,11 @@ package com.example.travelback.board.service;
 
 import com.example.travelback.board.domain.Board;
 import com.example.travelback.board.mapper.BoardMapper;
+import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -15,11 +14,13 @@ public class BoardService {
 
     private final BoardMapper mapper;
 
-    public boolean add(Board board) {
-     return  mapper.add(board)==1;
+    public boolean add(Board board, Member login) {
+        board.setWriter(login.getUserId());
+        return  mapper.add(board)==1;
     }
 
     public boolean validate( Board board){
+
         if (board==null){
             return  false;
         }
@@ -75,7 +76,13 @@ public class BoardService {
     }
 
     public boolean update(Board board) {
-        mapper.update(board);
-        return false;
+        return mapper.update(board) == 1;
     }
+    public boolean hasAccess(Integer id, Member login) {
+        Board board= mapper.selectById(id);
+        return board.getWriter().equals(login.getUserId());
+
+    }
+
+
 }
