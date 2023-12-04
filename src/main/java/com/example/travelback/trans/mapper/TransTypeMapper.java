@@ -11,7 +11,6 @@ public interface TransTypeMapper {
             INSERT INTO transtype (tId, typeName)
             VALUES (#{tId}, #{type})
         """)
-
     void insert(Integer tId, String type);
 
     @Delete("""

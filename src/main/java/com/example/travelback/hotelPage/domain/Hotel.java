@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class Hotel {
-    private Long hId;
+    private Long hid;
     private String name;
     private String location;
     private String mainImg;
@@ -14,6 +14,11 @@ public class Hotel {
     private double rating;
     private int numberOfBed;
     private String review;
+    private String roomType;
+    private String subImg1;
+    private String subImg2;
+    private String mapImg;
+    private String numberOfBedRooms;
     private Double totalPrice;
 }
 

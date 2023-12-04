@@ -5,20 +5,18 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 public class Reservation{
-    private Long id;
-    private Integer hrId;
-    private Hotel hotel;
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
+
+    private int hrId;
+    private int hId;
     private String guestName;
+    private Date checkinDate;
+    private Date checkoutDate;
     private int numberOfGuests;
     private boolean isConfirmed;
-    private LocalDateTime createdAt;
-    private String mapImageUrl;
-    private String subImage1;
-    private String subImage2;
+    private Date createdAt;
 
 }
