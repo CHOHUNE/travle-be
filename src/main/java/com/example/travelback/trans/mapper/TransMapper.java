@@ -14,17 +14,21 @@ public interface TransMapper {
     @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
 
-    @Select("""
-        SELECT 
+    @Select(
+        """
+        SELECT
             tp.tId,
             tp.transStartDay,
-            tp.transTitle, 
-            tp.transPrice, 
-            tp.transContent, 
-            tp.transInserted, 
-            tty.typeName 
-        FROM transport tp JOIN transtype tty 
+            tp.transTitle,
+            tp.transPrice,
+            tp.transContent,
+            tp.transInserted,
+            tty.typeName,
+            tMI.url 
+        FROM transport tp JOIN transtype tty
         ON tp.tId = tty.tId
+        LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+        ORDER BY tp.tId
         """)
     List<Trans> selectAll();
 

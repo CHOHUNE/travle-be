@@ -14,6 +14,7 @@ public class Trans {
     private String transContent;
     private LocalDateTime transInserted;
     private String typeName;
+    private String url;
 
     // 이미지 조회 테스트 중
     private TransMainImage mainImage;
