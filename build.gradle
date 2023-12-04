@@ -29,6 +29,8 @@ dependencies {
     // CollSMS
     implementation 'net.nurigo:sdk:4.3.0'
 
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
     compileOnly 'org.projectlombok:lombok'

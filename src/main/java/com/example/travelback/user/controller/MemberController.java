@@ -1,10 +1,11 @@
 package com.example.travelback.user.controller;
 
-import com.example.travelback.user.dto.KaKaoDataForm;
 import com.example.travelback.user.dto.Member;
-//import com.example.travelback.user.service.KakaoLoginService;
+import com.example.travelback.user.service.KakaoLoginService;
 import com.example.travelback.user.service.KakaoService;
 import com.example.travelback.user.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,9 +23,8 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService service;
-//    private final KakaoLoginService kakaoLoginService;
+    private final KakaoLoginService kakaoLoginService;
     private final KakaoService kakaoService;
-
 
     @Value("${Rest.api.key}")
     private String RestApiKey;
@@ -47,26 +49,17 @@ public class MemberController {
 
     // -------------------- 로그인 로직 --------------------
     @PostMapping("login")
-    public ResponseEntity login(Member member, WebRequest request) {
+    public ResponseEntity login(@RequestBody Member member, WebRequest request) {
         if (service.login(member, request)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    @GetMapping
-    public ResponseEntity<Member> view(@SessionAttribute(value = "login", required = false) String userId, Member login) {
-        if (login == null) {
-            // UNAUTHORIZED : 사용자가 로그인 하지 않거나, 올바르지 않은 인증정보를 제공한것
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        if (!service.hasAccess(userId, login)) {
-            // FORBIDDEN : 인증은 성공했지만, 접근권한이 없음 (관리자, 유저) 간 관계
-            // 관리자는 모든 권한이 있지만 유저는 그렇지 않음
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        Member member = service.getMember(userId);
-        return ResponseEntity.ok(member);
+
+    @GetMapping("login")
+    public Member login(@SessionAttribute(value = "login", required = false) Member login) {
+        return login;
     }
 
     // -------------------- 카카오 로그인 api key, redirecturi --------------------
@@ -74,21 +67,45 @@ public class MemberController {
     public Map<String, String> kakaoKey() {
         return Map.of("key", RestApiKey, "redirect", redirectUri);
     }
-    // -------------------- 카카오 로그인 로직 --------------------
-//    @GetMapping("/oauth2/kakao")
-//    public String kakaoLogin() {
-//        // 카카오 로그인 URL 생성
-//        String kakaoUrl = "https://kauth.kakao.com/oauth/authorize?client_id=" + RestApiKey +
-//                          "&redirect_uri=" + redirectUri +
-//                          "&response_type=code";
-//        return "redirect:" + kakaoUrl;
-//    }
 
-//    @PostMapping("kakaoLogin")
-//    public ResponseEntity kakaoLogin(@RequestParam String code) {
-//        String token = kakaoService.getAccessToken(code, redirectUri);
-//        KaKaoDataForm res = kakaoService.createKakaoUser(token);
+
+//    @RequestMapping("kakaoLogin")
+//    public String kakao_login(HttpServletRequest request) {
+//        String client_id = RestApiKey;
+//        String redirect_uri = redirectUri;
+//        String login_url = "https://kauth.kakao.com/oauth/authorize?response_type=code"
+//                           + "&client_id=" + client_id
+//                           + "&redirect_uri=" + redirect_uri;
+//
+//        return "redirect:" + login_url;
 //    }
+    KakaoAPI kakaoApi = new KakaoAPI();
+    @PostMapping("kakaoLogin")
+    public Map<String, Object> kakaoLogin(@RequestParam("code") String code, HttpSession session) {
+        // 1번 인증코드 요청 전달
+        String accessToken = kakaoApi.getAccessToken(code);
+        // 2번 인증코드로 토큰 전달
+        HashMap<String, Object> userInfo = kakaoApi.getUserInfo(accessToken);
+        System.out.println("login info : " + userInfo.toString());
+//        Map<String, Object> response = new HashMap<>();
+        if(userInfo.get("email") != null) {
+            session.setAttribute("userId", userInfo.get("email"));
+            session.setAttribute("isKakao", true);
+            session.setAttribute("accessToken", accessToken);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", userInfo.get(accessToken));
+        return response;
+    }
+
+    // ---------- 로그아웃 로직 ----------------
+    @PostMapping("logout")
+    public void logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 
 
     // -------------------- id 중복체크 로직 --------------------
@@ -101,5 +118,64 @@ public class MemberController {
         }
     }
 
+    // -------------------- 회원 리스트 --------------------
+    @GetMapping("list")
+    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page) {
+
+
+        return service.list(page);
+    }
+
+    // -------------------- 회원 정보 보기 --------------------
+    @GetMapping
+    public ResponseEntity<Member> view(String userId) {
+        Member member = service.getMember(userId);
+
+        return ResponseEntity.ok(member);
+    }
+
+    // -------------------- 회원 삭제 --------------------
+    @DeleteMapping
+    public ResponseEntity delete(String userId) {
+        if (service.deleteMember(userId)) {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.internalServerError().build();
+    }
+
+    // -------------------- Email 중복체크 --------------------
+    @GetMapping(value = "check", params = "userEmail")
+    public ResponseEntity checkEmail(String userEmail) {
+        if (service.getEmail(userEmail) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @PutMapping("edit")
+    public ResponseEntity edit(@RequestBody Member member) {
+        if (service.update(member)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
