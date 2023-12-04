@@ -54,8 +54,12 @@ public class MemberService {
 
     // -------------------- 회원가입 serivce --------------------
     public boolean insert(Member member) {
+
+        // 회원가입 시 비밀번호 암호화
 //        String encryptedPassword = passwordEncoder.encrypt(member.getUserEmail(), member.getUserPassword());
 //        member.setUserPassword(encryptedPassword);
+
+
         return mapper.add(member) == 1;
     }
 
@@ -144,5 +148,29 @@ public class MemberService {
             member.setUserPassword(oldMember.getUserPassword());
         }
         return mapper.update(member) == 1;
+    }
+
+    public String findPassword(Member member, WebRequest request) {
+        String s = mapper.selectByUserId(member);
+
+        if (s != null) {
+            request.setAttribute("findPasswordUserId", s, RequestAttributes.SCOPE_SESSION);
+        }
+        return s;
+
+    }
+
+    public boolean changePw(Member member) {
+        return mapper.changePw(member) == 1;
+    }
+
+    public String findId(Member member, WebRequest request) {
+        String b = mapper.selectByUserName(member);
+
+        if (b != null) {
+            request.setAttribute("findIdUserName", b, RequestAttributes.SCOPE_SESSION);
+        }
+        return b;
+
     }
 }

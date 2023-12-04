@@ -94,4 +94,25 @@ public interface MemberMapper {
             """)
     int countAll();
 
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userId = #{userId};
+            """)
+    String selectByUserId(Member member);
+
+    @Update("""
+            UPDATE member
+            SET
+                userPassword = #{userPassword}
+            WHERE userId = #{userId}
+            """)
+    int changePw(Member member);
+
+    @Select("""
+            SELECT userName
+            FROM member
+            WHERE userName = #{userName}
+            """)
+    String selectByUserName(Member member);
 }

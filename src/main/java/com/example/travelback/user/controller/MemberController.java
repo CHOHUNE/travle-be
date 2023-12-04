@@ -4,7 +4,6 @@ import com.example.travelback.user.dto.Member;
 import com.example.travelback.user.service.KakaoLoginService;
 import com.example.travelback.user.service.KakaoService;
 import com.example.travelback.user.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -163,6 +161,41 @@ public class MemberController {
         }
     }
 
+    // -------------------- pw 찾기 --------------------
+    @PostMapping("findPw")
+    public ResponseEntity<Member> findPw(@RequestBody Member member, WebRequest request) {
+        if (service.findPassword(member, request) != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
+        }
+    }
+    @PutMapping("findPwChange")
+    public ResponseEntity findPwChange(@RequestBody Member member, @SessionAttribute("findPasswordUserId") String userId) {
+        System.out.println("member = " + member);
+
+        member.setUserId(userId);
+
+        if (member.getUserPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400 Bad Request
+        }
+
+        if (service.changePw(member)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // -------------------- ID 찾기 -------------------- 진행중
+    @PostMapping("findId")
+    public ResponseEntity findId(@RequestBody Member member, WebRequest request) {
+        if (service.findId(member, request) != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
 
 
