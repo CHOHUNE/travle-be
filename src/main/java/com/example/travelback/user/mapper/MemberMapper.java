@@ -2,9 +2,8 @@ package com.example.travelback.user.mapper;
 
 import com.example.travelback.user.dto.Auth;
 import com.example.travelback.user.dto.Member;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import retrofit2.http.DELETE;
 
 import java.util.List;
 
@@ -57,5 +56,42 @@ public interface MemberMapper {
             WHERE userId = #{userId}
             """)
     String selectId(String userId);
+
+    @Select("""
+            SELECT userId, userName, userPassword, userEmail, userPhoneNumber, inserted
+            FROM member
+            ORDER BY inserted DESC
+            LIMIT #{from}, 5;
+            """)
+    List<Member> selectAll(Integer from);
+
+    @Delete("""
+            DELETE FROM member
+            WHERE userId = #{userId}
+            """)
+    int deleteById(String userId);
+
+    @Select("""
+            SELECT userEmail
+            FROM member
+            WHERE userEmail = #{userEmail}
+            """)
+    String selectEmail(String userEmail);
+
+    @Update("""
+            UPDATE member
+            SET
+                userPassword = #{userPassword},
+                userEmail = #{userEmail},
+                userPhoneNumber = #{userPhoneNumber}
+            WHERE userId = #{userId}
+            """)
+    int update(Member member);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM member;
+            """)
+    int countAll();
 
 }

@@ -1,8 +1,12 @@
 package com.example.travelback.user.dto;
 
+import com.example.travelback.user.util.AppUtill;
 import lombok.Data;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Data
@@ -26,4 +30,10 @@ public class Member {
     // ---------- sms 관련 ----------
     private String verificationCode;
     private String sendSMS;
+
+    // ---------- 시간 관련 ----------
+    public String getAgo() {
+       return AppUtill.getAgo(inserted, LocalDateTime.now());
+
+    }
 }

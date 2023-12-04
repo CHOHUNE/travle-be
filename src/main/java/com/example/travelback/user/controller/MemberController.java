@@ -4,6 +4,7 @@ import com.example.travelback.user.dto.Member;
 import com.example.travelback.user.service.KakaoLoginService;
 import com.example.travelback.user.service.KakaoService;
 import com.example.travelback.user.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,14 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member/")
+@RequestMapping("/api/member")
 public class MemberController {
 
     private final MemberService service;
@@ -57,20 +58,7 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    @GetMapping
-    public ResponseEntity<Member> view(@SessionAttribute(value = "login", required = false) String userId, Member login) {
-        if (login == null) {
-            // UNAUTHORIZED : 사용자가 로그인 하지 않거나, 올바르지 않은 인증정보를 제공한것
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        if (!service.hasAccess(userId, login)) {
-            // FORBIDDEN : 인증은 성공했지만, 접근권한이 없음 (관리자, 유저) 간 관계
-            // 관리자는 모든 권한이 있지만 유저는 그렇지 않음
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        Member member = service.getMember(userId);
-        return ResponseEntity.ok(member);
-    }
+
     @GetMapping("login")
     public Member login(@SessionAttribute(value = "login", required = false) Member login) {
         return login;
@@ -82,6 +70,17 @@ public class MemberController {
         return Map.of("key", RestApiKey, "redirect", redirectUri);
     }
 
+
+//    @RequestMapping("kakaoLogin")
+//    public String kakao_login(HttpServletRequest request) {
+//        String client_id = RestApiKey;
+//        String redirect_uri = redirectUri;
+//        String login_url = "https://kauth.kakao.com/oauth/authorize?response_type=code"
+//                           + "&client_id=" + client_id
+//                           + "&redirect_uri=" + redirect_uri;
+//
+//        return "redirect:" + login_url;
+//    }
     KakaoAPI kakaoApi = new KakaoAPI();
     @PostMapping("kakaoLogin")
     public Map<String, Object> kakaoLogin(@RequestParam("code") String code, HttpSession session) {
@@ -121,7 +120,64 @@ public class MemberController {
         }
     }
 
+    // -------------------- 회원 리스트 --------------------
+    @GetMapping("list")
+    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page) {
 
 
+        return service.list(page);
+    }
+
+    // -------------------- 회원 정보 보기 --------------------
+    @GetMapping
+    public ResponseEntity<Member> view(String userId) {
+        Member member = service.getMember(userId);
+
+        return ResponseEntity.ok(member);
+    }
+
+    // -------------------- 회원 삭제 --------------------
+    @DeleteMapping
+    public ResponseEntity delete(String userId) {
+        if (service.deleteMember(userId)) {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.internalServerError().build();
+    }
+
+    // -------------------- Email 중복체크 --------------------
+    @GetMapping(value = "check", params = "userEmail")
+    public ResponseEntity checkEmail(String userEmail) {
+        if (service.getEmail(userEmail) == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @PutMapping("edit")
+    public ResponseEntity edit(@RequestBody Member member) {
+        if (service.update(member)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,6 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class KakaoAPI {
 
+    @Value("${Rest.api.key}")
+    private String RestApiKey;
+
+    @Value("${Redirect.uri}")
+    private String Redirecturi;
+
     public String getAccessToken(String code) {
         String accessToken = "";
         String refreshToken = "";
@@ -29,8 +35,8 @@ public class KakaoAPI {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=9095ec9b24d94c371bae12f6439455f2");
-            sb.append("&redirect_uri=http://localhost:3000/auth");
+            sb.append("&client_id=" + RestApiKey);
+            sb.append("&redirect_uri=" + Redirecturi);
             sb.append("&code=").append(code);
 
             bw.write(sb.toString());
