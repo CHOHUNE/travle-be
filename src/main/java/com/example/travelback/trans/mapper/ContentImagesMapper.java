@@ -1,6 +1,7 @@
 package com.example.travelback.trans.mapper;
 
 import com.example.travelback.trans.dto.TransContentImages;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -20,4 +21,10 @@ public interface ContentImagesMapper {
         WHERE tId = #{tId}
         """)
     List<TransContentImages> selectNameByTId(Integer tId);
+
+    @Delete("""
+        DELETE FROM transcontentimages 
+        WHERE tId = #{tId}
+        """)
+    void deleteByTId(Integer tId);
 }

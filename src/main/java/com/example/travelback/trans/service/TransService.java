@@ -149,8 +149,31 @@ public class TransService {
         // 운송 상품 삭제전 mainimage 테이블 삭제, aws DB 파일도 삭제
         deleteMainImage(id);
 
+        // 운송 상품 삭제전 contentimage 테이블 삭제, aws DB 파일도 삭제
+        deleteContentImage(id);
+
         // 운송 상품 삭제 하기
         mapper.deleteById(id);
+    }
+
+    // 운송 상품 삭제전 contentimage 테이블 삭제, aws DB 파일도 삭제
+    private void deleteContentImage(Integer id) {
+        List<TransContentImages> transContentImages = contentImagesMapper.selectNameByTId(id);
+
+        if(transContentImages != null){
+            for (TransContentImages transContentImage : transContentImages){
+                String key = "travel/trans/contentImages/" + id + "/" + transContentImage.getName();
+                DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(key)
+                        .build();
+                // 파일삭제 경로로 삭제
+                s3.deleteObject(objectRequest);
+            }
+        }
+
+        // 테이블 이미지 삭제
+        contentImagesMapper.deleteByTId(id);
     }
 
     // 운송 상품 삭제전 mainimage 테이블 삭제, aws DB 파일도 삭제
