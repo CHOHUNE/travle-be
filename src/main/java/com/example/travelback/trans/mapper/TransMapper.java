@@ -8,8 +8,8 @@ import java.util.List;
 @Mapper
 public interface TransMapper {
     @Insert("""
-        INSERT INTO transport (transStartDay, transTitle, transPrice, transContent) 
-        VALUES (#{transStartDay}, #{transTitle}, #{transPrice}, #{transContent}) 
+        INSERT INTO transport (transStartDay, transTitle, transPrice, transContent, transStartLocation, transArriveLocation) 
+        VALUES (#{transStartDay}, #{transTitle}, #{transPrice}, #{transContent}, #{transStartLocation}, #{transArriveLocation}) 
         """)
     @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
@@ -21,6 +21,8 @@ public interface TransMapper {
                 tp.transTitle,
                 tp.transPrice,
                 tp.transContent,
+                tp.transStartLocation,
+                tp.transArriveLocation,
                 tp.transInserted,
                 tty.typeName,
                 tMI.url 
@@ -38,6 +40,8 @@ public interface TransMapper {
                 tp.transTitle, 
                 tp.transPrice, 
                 tp.transContent, 
+                tp.transStartLocation,
+                tp.transArriveLocation,
                 tp.transInserted, 
                 tty.typeName,
                 tMI.url  
@@ -57,6 +61,8 @@ public interface TransMapper {
                 tp.transTitle, 
                 tp.transPrice, 
                 tp.transContent, 
+                tp.transStartLocation,
+                tp.transArriveLocation,
                 tp.transInserted, 
                 tty.typeName,
                 tMI.url

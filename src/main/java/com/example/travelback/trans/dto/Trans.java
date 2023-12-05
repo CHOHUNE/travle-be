@@ -12,6 +12,8 @@ public class Trans {
     private String transTitle;
     private String transPrice;
     private String transContent;
+    private String transStartLocation;
+    private String transArriveLocation;
     private LocalDateTime transInserted;
     private String typeName;
     private String url;
