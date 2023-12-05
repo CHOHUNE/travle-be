@@ -2,6 +2,7 @@ package com.example.travelback.trans.service;
 
 import com.example.travelback.trans.dto.Trans;
 import com.example.travelback.trans.dto.TransMainImage;
+import com.example.travelback.trans.mapper.ContentImagesMapper;
 import com.example.travelback.trans.mapper.MainImageMapper;
 import com.example.travelback.trans.mapper.TransMapper;
 import com.example.travelback.trans.mapper.TransTypeMapper;
@@ -16,7 +17,6 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,6 +27,7 @@ public class TransService {
     private final TransMapper mapper;
     private final TransTypeMapper transTypeMapper;
     private final MainImageMapper mainImageMapper;
+    private final ContentImagesMapper contentImagesMapper;
 
     // 아마존 파일 업로드 ====================
     private final S3Client s3;
@@ -38,26 +39,53 @@ public class TransService {
     private String urlPrefix;
     // 아마존 파일 업로드 ====================
 
-    public void add(Trans trans, String type, MultipartFile transMainImage) throws IOException {
+    // 운송 상품 등록 (시작) ------------------------------------------------------------------------------------------------
+    public void add(Trans trans, String type, MultipartFile transMainImage, MultipartFile[] transContentImages) throws IOException {
         // 상품 추가
         mapper.insert(trans);
 
         // transMainImage 테이블에 정보 저장
         // -> transport(tId), 이미지 파일 이름
+        // 메인 이미지
         if(transMainImage != null) { // 파일을 넣었을때에만
             String url = urlPrefix + "travel/trans/mainImage/" + trans.getTId() + "/" + transMainImage.getOriginalFilename();
             mainImageMapper.insert(trans.getTId(), transMainImage.getOriginalFilename(), url);
             // 파일이 실제로 등록이 된 후에는 S3로 저장 기능 추가
             // 실제 파일을 S3 bucket에 upload (파일이 있으면 )
-            upload(trans.getTId(), transMainImage);
+            uploadMainImage(trans.getTId(), transMainImage);
+        }
+
+        // 배열로 들어오는 상품 상세 이미지
+        if(transContentImages != null) {
+            for (int i = 0; i < transContentImages.length; i++) {
+                String url = urlPrefix + "travel/trans/contentImages/" + trans.getTId() + "/" + transContentImages[i].getOriginalFilename();
+                contentImagesMapper.insert(trans.getTId(), transContentImages[i].getOriginalFilename(), url);
+                // 파일 정보를 s3 bucket 에 저장 시키기
+                uploadContentImages(trans.getTId(), transContentImages[i]);
+            }
         }
 
         // 상품 등록할 때에 상품 타입을 등록 하는 기능
         transTypeMapper.insert(trans.getTId(), type);
     }
 
-    // 아마존 테스트 (시작) ----------------------------------------------------------------------------------------------
-    private void upload(Integer tId, MultipartFile transMainImage) throws IOException {
+    // 운송 상품 content 이미지 업로드 (시작) -------------------------------------------------------------------------------------
+    private void uploadContentImages(Integer tId, MultipartFile transContentImage) throws IOException {
+        String key = "travel/trans/contentImages/" + tId + "/" + transContentImage.getOriginalFilename();
+
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        // 파일저장 경로
+        s3.putObject(objectRequest, RequestBody.fromInputStream(transContentImage.getInputStream(), transContentImage.getSize()));
+    }
+    // 운송 상품 content 이미지 업로드 (끝) --------------------------------------------------------------------------------------
+
+    // 운송 상품 메인 이미지 업로드 (시작) -------------------------------------------------------------------------------------
+    private void uploadMainImage(Integer tId, MultipartFile transMainImage) throws IOException {
         String key = "travel/trans/mainImage/" + tId + "/" + transMainImage.getOriginalFilename();
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
@@ -71,7 +99,8 @@ public class TransService {
 
 
     }
-    // 아마존 테스트 (끝) ----------------------------------------------------------------------------------------------
+    // 운송 상품 메인 이미지 업로드 (끝) --------------------------------------------------------------------------------------
+    // 운송 상품 등록 (끝) ------------------------------------------------------------------------------------------------
 
     public List<Trans> list() {
         return mapper.selectAll();
