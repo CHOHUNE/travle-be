@@ -1,11 +1,10 @@
 package com.example.travelback.user.sms;
 
 import com.example.travelback.user.dto.Member;
+import com.example.travelback.user.mapper.MemberMapper;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -20,13 +19,15 @@ import java.util.Random;
 @RestController
 @Component
 @RequestMapping("/api/member")
-public class smsUtil {
+@RequiredArgsConstructor
+public class SmsUtil {
     @Value("${coolsms.api.key}")
     private String apikey;
     @Value("${coolsms.api.Secret}")
     private String SecretKey;
 
     private DefaultMessageService messageService;
+    private final MemberMapper mapper;
 
     // ---------- 난수 저장 로직 ----------
     private Map<String, String> verificationCodes = new HashMap<>();
@@ -74,9 +75,32 @@ public class smsUtil {
         return numStr.toString();
     }
 
-    // ---------- 인증번호 저장 / 비교 로직 ----------
+    // ---------- 인증번호 저장 / 비교 로직 (아이디, 패스워드 찾기용) ----------
     @PostMapping("sendSmsOk")
-    public ResponseEntity<String> verifySMS(@RequestBody Member request) {
+    public ResponseEntity<Map<String,Object>> verifySMS(@RequestBody Member request) {
+        // verificationCodes : 생성된 난수를 보낸 핸드폰번호랑 매치해서 storedCode에 저장
+        String storedCode = verificationCodes.get(request.getUserPhoneNumber());
+
+        // 생성해서 저장한 난수와, 프론트에서 적은 난수랑 비교
+        if (storedCode != null && storedCode.equals(request.getVerificationCode())) {
+
+            // id 불러오는 로직
+            String id = mapper.selectByUserNameAndId(request.getUserPhoneNumber());
+            // 성공한 경우 저장된 난수 삭제
+            verificationCodes.remove(request.getUserPhoneNumber());
+
+            return ResponseEntity.ok(Map.of("message", "본인인증 성공", "id", id));
+        }
+//        else {
+//            // 본인인증 실패
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new HashMap<>());
+//        }
+        return null;
+    }
+
+    // ---------- 인증번호 저장 / 비교 로직 (회원가입용) ----------
+    @PostMapping("sendSmsOk2")
+    public ResponseEntity<String> verifySMS2(@RequestBody Member request) {
         // verificationCodes : 생성된 난수를 보낸 핸드폰번호랑 매치해서 storedCode에 저장
         String storedCode = verificationCodes.get(request.getUserPhoneNumber());
 

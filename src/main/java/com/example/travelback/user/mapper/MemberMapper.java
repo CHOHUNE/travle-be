@@ -3,7 +3,6 @@ package com.example.travelback.user.mapper;
 import com.example.travelback.user.dto.Auth;
 import com.example.travelback.user.dto.Member;
 import org.apache.ibatis.annotations.*;
-import retrofit2.http.DELETE;
 
 import java.util.List;
 
@@ -110,9 +109,30 @@ public interface MemberMapper {
     int changePw(Member member);
 
     @Select("""
+            SELECT userId
+            FROM member
+            WHERE userName = #{userName} AND userPhoneNumber = #{userPhoneNumber}
+            """)
+    String selectByUserName(String userName, String userPhoneNumber);
+
+
+    @Select("""
+            SELECT userName, userPhoneNumber
+            FROM member
+            WHERE userName = #{userName} AND userPhoneNumber = #{userPhoneNumber}
+            """)
+    String selectByUserName2(String userName, String userPhoneNumber);
+    @Select("""
             SELECT userName
             FROM member
             WHERE userName = #{userName}
             """)
-    String selectByUserName(Member member);
+    String selectFindName(Member member);
+
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userPhoneNumber = #{userPhoneNumber}
+            """)
+    String selectByUserNameAndId(String userPhoneNumber);
 }
