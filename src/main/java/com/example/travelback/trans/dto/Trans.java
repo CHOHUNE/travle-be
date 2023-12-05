@@ -19,4 +19,6 @@ public class Trans {
     // 이미지 조회 테스트 중
     private TransMainImage mainImage;
 
+    private List<TransContentImages> contentImages;
+
 }

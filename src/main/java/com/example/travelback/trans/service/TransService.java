@@ -1,6 +1,7 @@
 package com.example.travelback.trans.service;
 
 import com.example.travelback.trans.dto.Trans;
+import com.example.travelback.trans.dto.TransContentImages;
 import com.example.travelback.trans.dto.TransMainImage;
 import com.example.travelback.trans.mapper.ContentImagesMapper;
 import com.example.travelback.trans.mapper.MainImageMapper;
@@ -116,6 +117,17 @@ public class TransService {
             String url = urlPrefix + "travel/trans/mainImage/" + id + "/" + mainImageName.getName();
             mainImageName.setUrl(url);
         }
+
+        List<TransContentImages> contentImages = contentImagesMapper.selectNameByTId(id);
+        if(contentImages != null) {
+            for (TransContentImages contentImage: contentImages) {
+                String url = urlPrefix + "travel/trans/contentImages/" + id + "/" + contentImage.getName();
+                contentImage.setUrl(url);
+            }
+            trans.setContentImages(contentImages);
+        }
+
+
 
         trans.setMainImage(mainImageName);
 
