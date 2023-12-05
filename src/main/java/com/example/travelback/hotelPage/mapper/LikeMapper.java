@@ -1,24 +1,21 @@
 package com.example.travelback.hotelPage.mapper;
 
 import com.example.travelback.hotelPage.domain.Like;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface LikeMapper {
-    @Delete("""
-DELETE FROM hotelLike
-WHERE hId=#{hId}
-AND userId=#{userId}
-""")
-    int delete(Like like);
 
-    @Insert("""
-         INSERT INTO hotelLik (hId,userId)   
-         VALUES (#{hID},#{userId})
-            """)
-    int insert(Like like);
+    @Select("SELECT * FROM hotelike WHERE id = #{id}")
+    Like getLikeById(Integer id);
 
+    @Select("SELECT * FROM hotelike WHERE hid = #{hotelId}")
+    Like getLikesByHotelId(Integer hotelId);
+
+    @Insert("INSERT INTO hotelike (hid, userId) VALUES (#{hotelId}, #{userId})")
+    void insertLike(Like like);
+
+    @Delete("DELETE FROM hotelike WHERE id = #{id}")
+    void deleteLike(Integer id);
 
 }

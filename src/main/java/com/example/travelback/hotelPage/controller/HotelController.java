@@ -1,9 +1,9 @@
 package com.example.travelback.hotelPage.controller;
 
 
+import com.example.travelback.hotelPage.domain.Hotel;
 import com.example.travelback.hotelPage.domain.Reservation;
 import com.example.travelback.hotelPage.service.HotelService;
-import com.example.travelback.hotelPage.domain.Hotel;
 import com.example.travelback.hotelPage.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -65,7 +65,6 @@ public class HotelController {
         reservationService.addResrvation(reservation);
 
     }
-
     }
 
 

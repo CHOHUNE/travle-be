@@ -12,7 +12,7 @@ public interface HotelMapper {
     @Insert("""
             INSERT INTO hotel (hId, name, location, description, mainImg, rating, numberOfBed, review, roomType, subImg1, subImg2, mapImg, numberOfBedRooms, totalPrice)
              
-            VALUES (#{hId}, #{name}, #{location}, #{description}, #{mainImg}, #{rating}, #{numberOfBed}, #{review}, #{roomType}, #{subImg1}, #{subImg2}, #{mapImg}, #{numberOfBedRooms}, #{totalPrice})""")
+            VALUES (#{hid}, #{name}, #{location}, #{description}, #{mainImg}, #{rating}, #{numberOfBed}, #{review}, #{roomType}, #{subImg1}, #{subImg2}, #{mapImg}, #{numberOfBedRooms}, #{totalPrice})""")
 
     void insertHotel(Hotel hotel);
 
