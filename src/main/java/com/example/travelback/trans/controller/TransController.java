@@ -18,12 +18,10 @@ public class TransController {
     @PostMapping("/add")
     public void add (Trans trans,
                      @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
+                     @RequestParam(value = "transContentImages[]", required = false) MultipartFile[] transContentImages,
                      @RequestParam(value = "type") String type) throws IOException {
-        if (transMainImage != null){
-            System.out.println("transMainImage = " + transMainImage.getOriginalFilename());
-            System.out.println("transMainImage = " + transMainImage.getSize());
-        }
-        service.add(trans, type, transMainImage);
+
+        service.add(trans, type, transMainImage, transContentImages);
     }
 
     @GetMapping("list")
