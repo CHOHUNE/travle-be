@@ -3,23 +3,41 @@ package com.example.travelback.hotelPage.service;
 
 import com.example.travelback.hotelPage.domain.Hotel;
 import com.example.travelback.hotelPage.mapper.HotelMapper;
+import com.example.travelback.hotelPage.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class HotelService {
     private final HotelMapper hotelMapper;
+    private final LikeMapper likeMapper;
 
-    public void addHotel(Hotel hotel) {
-        hotelMapper.insertHotel(hotel);
-    }
+    private final S3Client s3Client;
+
+    @Value("${aws.s3.bucket.name}")
+    private String BUCKET_NAME;
+
+    @Value("${image.file.prefix}")
+    private String urlPrefix;
+
+// 기존 add 코드
+
 
     public void deleteHotel(Integer id){
-        hotelMapper.deleById(id);
+        likeMapper.deleteLike(id);
+        hotelMapper.deletById(id);
     }
 
     public Hotel getHotelById(Long id) {
@@ -30,7 +48,51 @@ public class HotelService {
         return hotelMapper.selectAllHotels();
     }
 
-    public void update(Hotel hotel) {
-        hotelMapper.update(hotel);
+//    기존 update
+    public void update(Hotel hotel) {hotelMapper.update(hotel);}
+
+
+    public void addHotel(Hotel hotel,MultipartFile mainImg) throws IOException {
+
+
+        // 이미지 업로드 및 URL 설정
+        if(mainImg !=null){
+            String mainImgUrl = uploadFile(hotel.getHid(), mainImg);
+
+            String url = urlPrefix + "travel/hotel/img" + hotel.getHid() + "/" +mainImg.getName();
+
+            hotelMapper.insertHotel(hotel,url);
+            hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(),mainImgUrl);
+//            uploadFile(hotel.getHid(),mainImg);
+        }
     }
+
+
+//    uploadFile
+private String uploadFile(Long hid, MultipartFile mainImg) throws IOException {
+
+
+        // 파일 이름 생성
+        String key = "travel/hotel/img/" + hid + "/" + mainImg.getOriginalFilename();
+
+        // S3에 파일 업로드
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(mainImg.getInputStream(), mainImg.getSize()));
+
+//       URL 설정
+
+    GetUrlRequest getUrlRequest = GetUrlRequest.builder()
+            .bucket(BUCKET_NAME)
+            .key(key)
+            .build();
+
+    URL imageUrl = s3Client.utilities().getUrl(getUrlRequest);
+
+    return imageUrl.toString();
+}
 }

@@ -15,7 +15,7 @@ public interface LikeMapper {
     @Insert("INSERT INTO hotelike (hid, userId) VALUES (#{hotelId}, #{userId})")
     void insertLike(Like like);
 
-    @Delete("DELETE FROM hotelike WHERE id = #{id}")
+    @Delete("DELETE FROM hotelike WHERE hid = #{hid}")
     void deleteLike(Integer id);
 
 }

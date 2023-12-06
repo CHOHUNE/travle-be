@@ -9,7 +9,7 @@ public class Hotel {
     private Long hid;
     private String name;
     private String location;
-    private String mainImg;
+//    private String mainImg;
     private String description;
     private double rating;
     private int numberOfBed;
@@ -20,6 +20,7 @@ public class Hotel {
     private String mapImg;
     private String numberOfBedRooms;
     private Double totalPrice;
+    private String mainImgUrl;
 }
 
 
