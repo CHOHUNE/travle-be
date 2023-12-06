@@ -27,4 +27,16 @@ public interface MainImageMapper {
         WHERE tId = #{tId}
         """)
     void deleteByTId(Integer tId);
+
+    @Select("""
+        SELECT * FROM transmainimage
+        WHERE id = #{removeMainImageId}
+        """)
+    TransMainImage selectById(Integer removeMainImageId);
+
+    @Delete("""
+        DELETE FROM transmainimage
+        WHERE id = #{removeMainImageId}
+        """)
+    void deleteById(Integer removeMainImageId);
 }

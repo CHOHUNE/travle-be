@@ -107,7 +107,7 @@ public class TransService {
         return mapper.selectAll();
     }
 
-    // 조회 테스트 중 (시작) ------------------------------------------------------------------------------------------------
+    // 운송 상품 해당 아이디 조회 (시작) ------------------------------------------------------------------------------------------------
     public Trans get(Integer id) {
         Trans trans = mapper.selectByTId(id);
 
@@ -134,11 +134,38 @@ public class TransService {
         return trans;
 
     }
-    // 조회 테스트 중 (끝)--------------------------------------------------------------------------------------------------
+    // 운송 상품 해당 아이디 조회 (끝)--------------------------------------------------------------------------------------------------
 
-    public void update(Trans trans) {
+    // 운송 상품 업데이트 (시작)--------------------------------------------------------------------------------------------------
+    public void update(Trans trans, Integer removeMainImageId, MultipartFile transMainImage) throws IOException {
+
+        // 메인 이미지 업데이트 전 메인 이미지 지우기가 있다면 지우기
+        if(removeMainImageId != null) {
+            // s3에서 지우기
+            TransMainImage mainImage = mainImageMapper.selectById(removeMainImageId);
+            String key = "travel/trans/mainImage/" + trans.getTId() + "/" + mainImage.getName();
+            DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build();
+            s3.deleteObject(objectRequest);
+            // db에서 지우기
+            mainImageMapper.deleteById(removeMainImageId);
+        }
+
+        // 메인 이미지를 지우고 난 후에는 업로드 이미지 넣기
+        if(transMainImage != null) {
+            // s3에 업로드
+            uploadMainImage(trans.getTId(), transMainImage);
+            // db에 업로드
+            String url = urlPrefix + "travel/trans/mainImage/" + trans.getTId() + "/" + transMainImage.getOriginalFilename();
+            mainImageMapper.insert(trans.getTId(), transMainImage.getOriginalFilename(), url);
+        }
+
+
         mapper.update(trans);
     }
+    // 운송 상품 업데이트 (끝)--------------------------------------------------------------------------------------------------
 
     // 운송 상품 삭제 (시작)-------------------------------------------------------------------------------------------------
     public void delete(Integer id) {
