@@ -66,7 +66,7 @@ public class HotelService {
         if (mainImg != null) {
             hotelMapper.insertHotel(hotel);
 
-            String mainImgUrl = uploadFile(hotel.getHid(), mainImg);
+            String mainImgUrl = urlPrefix+uploadFile(hotel.getHid(), mainImg);
 
 
             hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl);

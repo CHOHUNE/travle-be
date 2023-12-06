@@ -10,9 +10,9 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (hId, name, location, description, rating, numberOfBed, review, roomType, numberOfBedRooms, totalPrice)
+            INSERT INTO hotel (hId, name, location, description, rating, numberOfBed, review, roomType, numberOfBedRooms, totalPrice,mainImgUrl)
              
-            VALUES (#{hid}, #{name}, #{location}, #{description}, #{rating}, #{numberOfBed}, #{review}, #{roomType},  #{numberOfBedRooms}, #{totalPrice})""")
+            VALUES (#{hid}, #{name}, #{location}, #{description}, #{rating}, #{numberOfBed}, #{review}, #{roomType},  #{numberOfBedRooms}, #{totalPrice},#{mainImgUrl})""")
     @Options(useGeneratedKeys = true,keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
@@ -53,7 +53,7 @@ public interface HotelMapper {
             """)
     void updateMainImg(long hid, String mainImg,String mainImgUrl);
 
- @Select("""
+    @Select("""
 SELECT mainImg
 FROM hotel
 WHERE hId=#{hid}
