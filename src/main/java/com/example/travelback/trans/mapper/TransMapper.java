@@ -76,8 +76,19 @@ public interface TransMapper {
     List<Trans> selectPopularToAir();
 
     @Select("""
-        SELECT * FROM transport
-        WHERE tId = #{id}
+        SELECT 
+                tp.tId,
+                tp.transStartDay,
+                tp.transTitle, 
+                tp.transPrice, 
+                tp.transContent, 
+                tp.transStartLocation,
+                tp.transArriveLocation,
+                tp.transInserted, 
+                tty.typeName
+            FROM transport tp JOIN transtype tty 
+            ON tp.tId = tty.tId
+            WHERE tp.tId = #{id}
         """)
     Trans selectByTId(Integer id);
 
