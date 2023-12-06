@@ -10,11 +10,11 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (hId, name, location, description, rating, numberOfBed, review, roomType, numberOfBedRooms, totalPrice,mainImgUrl)
+            INSERT INTO hotel (hId, name, location, description, rating, numberOfBed, review, roomType, numberOfBedRooms, totalPrice)
              
-            VALUES (#{hotel.hid}, #{hotel.name}, #{hotel.location}, #{hotel.description}, #{hotel.rating}, #{hotel.numberOfBed}, #{hotel.review}, #{hotel.roomType},  #{hotel.numberOfBedRooms}, #{hotel.totalPrice},#{mainImgUrl})""")
-    @Options(useGeneratedKeys = true,keyProperty = "hotel.hid")
-    void insertHotel(Hotel hotel, String mainImgUrl);
+            VALUES (#{hid}, #{name}, #{location}, #{description}, #{rating}, #{numberOfBed}, #{review}, #{roomType},  #{numberOfBedRooms}, #{totalPrice})""")
+    @Options(useGeneratedKeys = true,keyProperty = "hid")
+    void insertHotel(Hotel hotel);
 
     @Select("SELECT * FROM hotel WHERE hId = #{hid}")
     Hotel selectHotelById(Long id);
@@ -53,6 +53,13 @@ public interface HotelMapper {
             """)
     void updateMainImg(long hid, String mainImg,String mainImgUrl);
 
+ @Select("""
+SELECT mainImg
+FROM hotel
+WHERE hId=#{hid}
+""")
+    String selectNameByHotelId(Integer hid);
+// file delete Mapper
 
     // 다른 메서드들...
 }

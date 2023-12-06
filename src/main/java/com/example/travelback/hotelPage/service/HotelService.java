@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -35,8 +36,12 @@ public class HotelService {
 // 기존 add 코드
 
 
-    public void deleteHotel(Integer id){
+    public void deleteHotel(Integer id) {
+//        라이크 삭제
         likeMapper.deleteLike(id);
+//        파일 삭제
+        deleteFile(id);
+//
         hotelMapper.deletById(id);
     }
 
@@ -48,28 +53,30 @@ public class HotelService {
         return hotelMapper.selectAllHotels();
     }
 
-//    기존 update
-    public void update(Hotel hotel) {hotelMapper.update(hotel);}
+    //    기존 update
+    public void update(Hotel hotel) {
+        hotelMapper.update(hotel);
+    }
 
 
-    public void addHotel(Hotel hotel,MultipartFile mainImg) throws IOException {
+    public void addHotel(Hotel hotel, MultipartFile mainImg) throws IOException {
 
 
         // 이미지 업로드 및 URL 설정
-        if(mainImg !=null){
+        if (mainImg != null) {
+            hotelMapper.insertHotel(hotel);
+
             String mainImgUrl = uploadFile(hotel.getHid(), mainImg);
 
-            String url = urlPrefix + "travel/hotel/img" + hotel.getHid() + "/" +mainImg.getName();
 
-            hotelMapper.insertHotel(hotel,url);
-            hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(),mainImgUrl);
+            hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl);
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }
 
 
-//    uploadFile
-private String uploadFile(Long hid, MultipartFile mainImg) throws IOException {
+    //    uploadFile
+    private String uploadFile(Long hid, MultipartFile mainImg) throws IOException {
 
 
         // 파일 이름 생성
@@ -86,13 +93,30 @@ private String uploadFile(Long hid, MultipartFile mainImg) throws IOException {
 
 //       URL 설정
 
-    GetUrlRequest getUrlRequest = GetUrlRequest.builder()
-            .bucket(BUCKET_NAME)
-            .key(key)
-            .build();
+        GetUrlRequest getUrlRequest = GetUrlRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(key)
+                .build();
 
-    URL imageUrl = s3Client.utilities().getUrl(getUrlRequest);
+        URL imageUrl = s3Client.utilities().getUrl(getUrlRequest);
+        return key;
+//    return imageUrl.toString();
+    }
 
-    return imageUrl.toString();
-}
+    private void deleteFile(Integer hid) {
+
+//        파일명
+        String mainImg = hotelMapper.selectNameByHotelId(hid);
+
+//    s3 bucket
+        String key = "travel/hotel/img/" + hid + "/" + mainImg;
+
+        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(key)
+                .build();
+
+        s3Client.deleteObject(objectRequest);
+    }
+
 }
