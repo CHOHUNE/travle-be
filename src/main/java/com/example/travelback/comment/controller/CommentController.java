@@ -1,3 +1,4 @@
+
 package com.example.travelback.comment.controller;
 
 import com.example.travelback.comment.service.CommentService;
@@ -6,10 +7,9 @@ import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +18,7 @@ public class CommentController {
 
     private final CommentService service;
 
-    @RequestMapping("add")
+    @PostMapping("add")
     public ResponseEntity add(@RequestBody Comment comment,
                               @SessionAttribute (value = "login" ,required = false )Member login){
         System.out.println("comment = " + comment);
@@ -29,10 +29,20 @@ public class CommentController {
         if (service.add(comment,login)){
             return  ResponseEntity.ok().build();
         }else {
-        return ResponseEntity.badRequest().build();
-
+            return ResponseEntity.badRequest().build();
         }
-
     }
 
+    @GetMapping("list")
+    public List<Comment> list(@RequestParam("id")Integer boardId){
+        return service.list(boardId);
+    }
+
+
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable Integer id){
+        service.revmove(id);
+        System.out.println("id 삭제 되었습니다. = " + id);
+
+    }
 }
