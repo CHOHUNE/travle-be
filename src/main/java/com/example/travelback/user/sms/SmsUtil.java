@@ -91,14 +91,13 @@ public class SmsUtil {
 
             return ResponseEntity.ok(Map.of("message", "본인인증 성공", "id", id));
         }
-//        else {
-//            // 본인인증 실패
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new HashMap<>());
-//        }
-        return null;
+        else {
+            // 본인인증 실패
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new HashMap<>());
+        }
     }
 
-    // ---------- 인증번호 저장 / 비교 로직 (회원가입용) ----------
+    // ---------- 인증번호 저장 / 비교 로직 (회원가입, 회원수정용) ----------
     @PostMapping("sendSmsOk2")
     public ResponseEntity<String> verifySMS2(@RequestBody Member request) {
         // verificationCodes : 생성된 난수를 보낸 핸드폰번호랑 매치해서 storedCode에 저장
@@ -110,7 +109,8 @@ public class SmsUtil {
             // 성공한 경우 저장된 난수 삭제
             verificationCodes.remove(request.getUserPhoneNumber());
             return ResponseEntity.ok("본인인증 성공");
-        } else {
+        }
+        else {
             // 본인인증 실패
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("본인인증 실패");
         }

@@ -82,7 +82,10 @@ public interface MemberMapper {
             SET
                 userPassword = #{userPassword},
                 userEmail = #{userEmail},
-                userPhoneNumber = #{userPhoneNumber}
+                userPhoneNumber = #{userPhoneNumber},
+                userPostCode = #{userPostCode},
+                userAddress = #{userAddress},
+                userDetailAddress = #{userDetailAddress}
             WHERE userId = #{userId}
             """)
     int update(Member member);
