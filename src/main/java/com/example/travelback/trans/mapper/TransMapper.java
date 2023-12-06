@@ -8,8 +8,8 @@ import java.util.List;
 @Mapper
 public interface TransMapper {
     @Insert("""
-        INSERT INTO transport (transStartDay, transTitle, transPrice, transContent, transStartLocation, transArriveLocation) 
-        VALUES (#{transStartDay}, #{transTitle}, #{transPrice}, #{transContent}, #{transStartLocation}, #{transArriveLocation}) 
+        INSERT INTO transport ( transTitle, transPrice, transContent, transStartLocation, transArriveLocation) 
+        VALUES ( #{transTitle}, #{transPrice}, #{transContent}, #{transStartLocation}, #{transArriveLocation}) 
         """)
     @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
@@ -17,7 +17,6 @@ public interface TransMapper {
     @Select("""
         SELECT
                 tp.tId,
-                tp.transStartDay,
                 tp.transTitle,
                 tp.transPrice,
                 tp.transContent,
@@ -36,7 +35,6 @@ public interface TransMapper {
     @Select("""
         SELECT 
                 tp.tId,
-                tp.transStartDay,
                 tp.transTitle, 
                 tp.transPrice, 
                 tp.transContent, 
@@ -57,7 +55,6 @@ public interface TransMapper {
     @Select("""
         SELECT 
                 tp.tId,
-                tp.transStartDay,
                 tp.transTitle, 
                 tp.transPrice, 
                 tp.transContent, 
@@ -78,7 +75,6 @@ public interface TransMapper {
     @Select("""
             SELECT
                 tp.tId,
-                tp.transStartDay,
                 tp.transTitle,
                 tp.transPrice,
                 tp.transContent,
@@ -98,7 +94,6 @@ public interface TransMapper {
         UPDATE transport
         SET 
             transTitle = #{transTitle},
-            transStartDay = #{transStartDay},
             transPrice = #{transPrice},
             transContent = #{transContent}
         WHERE tId = #{tId}
