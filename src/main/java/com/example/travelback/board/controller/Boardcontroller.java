@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +22,9 @@ public class Boardcontroller {
     private  final BoardService service;
 
     @GetMapping("list")
-    public List<Board> list(){
-        return service.list();
+    public Map<String, Object> list(@RequestParam(value = "p" ,defaultValue = "1")Integer page,
+                                    @RequestParam(value = "k" ,defaultValue = "")String keyword){
+        return service.list(page,keyword);
     }
 
 
@@ -54,12 +56,6 @@ public class Boardcontroller {
         }
     }
 
-
-    // api/board/list?p=4
-//    @GetMapping("list")
-//    public Map<String ,Object> list(@RequestParam(value = "p",defaultValue = "1")Integer page){
-//        return service.list(page);
-//    }
 
 
     @GetMapping("id/{id}")

@@ -2,7 +2,6 @@ package com.example.travelback.board.mapper;
 
 import com.example.travelback.board.domain.Board;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -11,10 +10,16 @@ public interface BoardMapper {
 
 
     @Select("""
-                 select * from board;
+                 select * from board
+                 where  content like #{keyword} 
+                       or title like #{keyword}
+                       or writer like  #{keyword}
+                       
+                       
+                  LIMIT #{from},5
        """)
 
-    List<Board> list();
+    List<Board> selectAll(int from, String keyword);
 
 
 //
@@ -57,4 +62,14 @@ public interface BoardMapper {
         WHERE id = #{id}
         """)
     Board selectById(Integer id);
+
+    @Select("""
+                select count(*) from board 
+                 where  content like #{keyword} 
+                       or title like #{keyword}
+                       or writer like  #{keyword}
+        """)
+    int countAll(String keyword);
+
+
 }
