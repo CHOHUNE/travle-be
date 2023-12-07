@@ -3,7 +3,6 @@ package com.example.travelback.user.mapper;
 import com.example.travelback.user.dto.Auth;
 import com.example.travelback.user.dto.Member;
 import org.apache.ibatis.annotations.*;
-import retrofit2.http.DELETE;
 
 import java.util.List;
 
@@ -83,7 +82,10 @@ public interface MemberMapper {
             SET
                 userPassword = #{userPassword},
                 userEmail = #{userEmail},
-                userPhoneNumber = #{userPhoneNumber}
+                userPhoneNumber = #{userPhoneNumber},
+                userPostCode = #{userPostCode},
+                userAddress = #{userAddress},
+                userDetailAddress = #{userDetailAddress}
             WHERE userId = #{userId}
             """)
     int update(Member member);
@@ -94,4 +96,46 @@ public interface MemberMapper {
             """)
     int countAll();
 
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userId = #{userId};
+            """)
+    String selectByUserId(Member member);
+
+    @Update("""
+            UPDATE member
+            SET
+                userPassword = #{userPassword}
+            WHERE userId = #{userId}
+            """)
+    int changePw(Member member);
+
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userName = #{userName} AND userPhoneNumber = #{userPhoneNumber}
+            """)
+    String selectByUserName(String userName, String userPhoneNumber);
+
+
+    @Select("""
+            SELECT userName, userPhoneNumber
+            FROM member
+            WHERE userName = #{userName} AND userPhoneNumber = #{userPhoneNumber}
+            """)
+    String selectByUserName2(String userName, String userPhoneNumber);
+    @Select("""
+            SELECT userName
+            FROM member
+            WHERE userName = #{userName}
+            """)
+    String selectFindName(Member member);
+
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userPhoneNumber = #{userPhoneNumber}
+            """)
+    String selectByUserNameAndId(String userPhoneNumber);
 }

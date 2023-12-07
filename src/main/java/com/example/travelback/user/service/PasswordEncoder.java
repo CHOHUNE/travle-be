@@ -26,12 +26,12 @@
 //        }
 //    }
 //
-//    private byte[] getSalt(String email)
-//            throws NoSuchAlgorithmException, UnsupportedEncodingException {
-//
+//    private byte[] getSalt(String email) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+//        if (email == null) {
+//            email = "";
+//        }
 //        MessageDigest digest = MessageDigest.getInstance("SHA-512");
 //        byte[] keyBytes = email.getBytes("UTF-8");
-//
 //        return digest.digest(keyBytes);
 //    }
 //}

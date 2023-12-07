@@ -21,32 +21,40 @@ public class MemberService {
 
     // -------------------- 회원가입 유효성 검증-------------------
     // TODO : 각 input 마다 정규식표현 넣어야함
-    public boolean validate(Member member) {
+    public boolean validate(Member member, Map<String, String> map) {
         if (member == null) {
             return false;
         }
         if (member.getUserId() == null || member.getUserId().isBlank()) {
+            map.put("message", "아이디를 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserPassword() == null || member.getUserPassword().isBlank()) {
+            map.put("message", "비밀번호를 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserName() == null || member.getUserName().isBlank()) {
+            map.put("message", "이름을 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserPostCode() == null || member.getUserPostCode().isBlank()) {
+            map.put("message", "주소를 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserAddress() == null || member.getUserAddress().isBlank()) {
+            map.put("message", "주소를 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserDetailAddress() == null || member.getUserDetailAddress().isBlank()) {
+            map.put("message", "주소를 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserPhoneNumber() == null || member.getUserPhoneNumber().isBlank()) {
+            map.put("message", "핸드폰번호를 다시 입력해주시기 바랍니다.");
             return false;
         }
         if (member.getUserEmail() == null || member.getUserEmail().isBlank()) {
+            map.put("message", "이메일을 다시 입력해주시기 바랍니다.");
             return false;
         }
         return true;
@@ -54,8 +62,12 @@ public class MemberService {
 
     // -------------------- 회원가입 serivce --------------------
     public boolean insert(Member member) {
+
+        // 회원가입 시 비밀번호 암호화
 //        String encryptedPassword = passwordEncoder.encrypt(member.getUserEmail(), member.getUserPassword());
 //        member.setUserPassword(encryptedPassword);
+
+
         return mapper.add(member) == 1;
     }
 
@@ -144,5 +156,51 @@ public class MemberService {
             member.setUserPassword(oldMember.getUserPassword());
         }
         return mapper.update(member) == 1;
+    }
+
+    // 비밀번호 찾기
+    // 회원가입할때 해당 아이디에 맞는 이름이랑, 핸드폰번호랑 비교하는 로직
+    public boolean validateUserInformationPw(Member member) {
+        String userIdFromDb = mapper.selectByUserName(member.getUserName(), member.getUserPhoneNumber());
+        return userIdFromDb != null && userIdFromDb.equals(member.getUserId());
+    }
+
+    public String findPassword(Member member, WebRequest request) {
+        String s = mapper.selectByUserId(member);
+
+        if (s != null) {
+            request.setAttribute("findPasswordUserId", s, RequestAttributes.SCOPE_SESSION);
+        }
+        return s;
+
+    }
+
+    public boolean changePw(Member member) {
+        return mapper.changePw(member) == 1;
+    }
+
+
+    public boolean validateUserInformationId(Member member) {
+        String userName = mapper.selectByUserName2(member.getUserName(), member.getUserPhoneNumber());
+        return userName != null && userName.equals(member.getUserName());
+    }
+
+    public String findId(Member member, WebRequest request) {
+        String b = mapper.selectFindName(member);
+
+        if (b != null) {
+            request.setAttribute("findIdUserName", b, RequestAttributes.SCOPE_SESSION);
+        }
+        return b;
+    }
+
+    public boolean validateIdCheck(Member member) {
+        if (member == null) {
+            return false;
+        }
+        if (member.getUserId() == null || member.getUserId().isBlank()) {
+            return false;
+        }
+        return true;
     }
 }
