@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class TransLike {
     private Integer id;
-    private Integer tId;
+    private Integer transId;
     private String userId;
 }

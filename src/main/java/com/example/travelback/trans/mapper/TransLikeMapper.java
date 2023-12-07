@@ -11,14 +11,14 @@ public interface TransLikeMapper {
 
     @Delete("""
         DELETE FROM translike
-        WHERE tId = #{tId}
+        WHERE transId = #{transId}
         AND userId = #{userId}
         """)
     int delete(TransLike transLike);
 
     @Insert("""
-        INSERT INTO translike (tid, userid)
-        VALUES (#{tId}, #{userId})
+        INSERT INTO translike (transId, userId)
+        VALUES (#{transId}, #{userId})
         """)
     int insert(TransLike transLike);
 
