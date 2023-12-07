@@ -1,6 +1,7 @@
 package com.example.travelback.trans.service;
 
 import com.example.travelback.trans.dto.TransBucket;
+import com.example.travelback.trans.mapper.TransBucketMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
