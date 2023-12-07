@@ -1,7 +1,10 @@
 package com.example.travelback.trans.controller;
 
 import com.example.travelback.trans.dto.Trans;
+import com.example.travelback.trans.dto.TransLike;
+import com.example.travelback.trans.service.TransLikeService;
 import com.example.travelback.trans.service.TransService;
+import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,12 +21,10 @@ public class TransController {
     @PostMapping("/add")
     public void add (Trans trans,
                      @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
+                     @RequestParam(value = "transContentImages[]", required = false) MultipartFile[] transContentImages,
                      @RequestParam(value = "type") String type) throws IOException {
-        if (transMainImage != null){
-            System.out.println("transMainImage = " + transMainImage.getOriginalFilename());
-            System.out.println("transMainImage = " + transMainImage.getSize());
-        }
-        service.add(trans, type, transMainImage);
+
+        service.add(trans, type, transMainImage, transContentImages);
     }
 
     @GetMapping("list")
@@ -49,8 +50,10 @@ public class TransController {
     }
 
     @PutMapping("edit")
-    public void edit (@RequestBody Trans trans) {
-        service.update(trans);
+    public void edit ( Trans trans,
+                       @RequestParam(value = "removeMainImageId",required = false) Integer removeMainImageId,
+                       @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage) throws IOException {
+        service.update(trans, removeMainImageId, transMainImage);
     }
 
     @DeleteMapping("delete/{id}")

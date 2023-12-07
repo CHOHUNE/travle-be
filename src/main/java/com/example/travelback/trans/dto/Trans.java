@@ -3,6 +3,7 @@ package com.example.travelback.trans.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class Trans {
@@ -11,9 +12,15 @@ public class Trans {
     private String transTitle;
     private String transPrice;
     private String transContent;
+    private String transStartLocation;
+    private String transArriveLocation;
     private LocalDateTime transInserted;
     private String typeName;
-//     이미지 조회 테스트 중
-//    private String mainImage;
+    private String url;
+
+    // 이미지 조회 테스트 중
+    private TransMainImage mainImage;
+
+    private List<TransContentImages> contentImages;
 
 }
