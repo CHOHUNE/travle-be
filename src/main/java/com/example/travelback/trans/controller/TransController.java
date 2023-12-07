@@ -1,7 +1,10 @@
 package com.example.travelback.trans.controller;
 
 import com.example.travelback.trans.dto.Trans;
+import com.example.travelback.trans.dto.TransLike;
+import com.example.travelback.trans.service.TransLikeService;
 import com.example.travelback.trans.service.TransService;
+import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
