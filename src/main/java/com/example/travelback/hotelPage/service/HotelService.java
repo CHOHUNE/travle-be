@@ -42,7 +42,7 @@ public class HotelService {
 //        파일 삭제
         deleteFile(id);
 //
-        hotelMapper.deletById(id);
+        hotelMapper.deleteById(id);
     }
 
     public Hotel getHotelById(Long id) {
@@ -54,8 +54,32 @@ public class HotelService {
     }
 
     //    기존 update
-    public void update(Hotel hotel) {
-        hotelMapper.update(hotel);
+//    public void update(Hotel hotel) {
+//        hotelMapper.update(hotel);
+//    }
+
+    public void update(Hotel hotel, Integer removeFileId, MultipartFile uploadFile) throws IOException {
+
+
+        // 이미지 외 수정 정보 삽입
+        hotelMapper.insertHotel(hotel);
+
+        // 기존 이미지 삭제
+        deleteFile(removeFileId);
+
+        // DB에서 레코드 삭제
+        hotelMapper.deleteById(removeFileId);
+
+        // 새로운 이미지 업로드 및 DB 업데이트
+        if (uploadFile != null) {
+
+            // 이미지 URL 설정
+            String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), uploadFile);
+
+            // db추가
+            hotelMapper.updateMainImg(hotel.getHid(), uploadFile.getOriginalFilename(), mainImgUrl);
+
+        }
     }
 
 
@@ -66,7 +90,7 @@ public class HotelService {
         if (mainImg != null) {
             hotelMapper.insertHotel(hotel);
 
-            String mainImgUrl = urlPrefix+uploadFile(hotel.getHid(), mainImg);
+            String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), mainImg);
 
 
             hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl);

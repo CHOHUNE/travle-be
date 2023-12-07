@@ -25,9 +25,6 @@ public class HotelController {
     private final ReservationService reservationService;
 
 
-
-
-
     @GetMapping
     public ResponseEntity<List<Hotel>> getAllHotels() {
         List<Hotel> hotel = hotelService.getAllHotels();
@@ -48,21 +45,39 @@ public class HotelController {
 
 
     @PostMapping(value = "/write")
-    public void add( Hotel hotel,
-                    @RequestParam(value="mainImg[]",required = false)MultipartFile mainImg
-                    )throws IOException {
+    public void add(Hotel hotel,
+                    @RequestParam(value = "mainImg[]", required = false) MultipartFile mainImg
+    ) throws IOException {
 
-        if(mainImg !=null){
-            System.out.println("mainImg"+ mainImg.getOriginalFilename());
-            System.out.println("maingImg"+ mainImg.getSize());
+        if (mainImg != null) {
+            System.out.println("mainImg" + mainImg.getOriginalFilename());
+            System.out.println("maingImg" + mainImg.getSize());
         }
 
-        hotelService.addHotel(hotel,mainImg);
+        hotelService.addHotel(hotel, mainImg);
     }
 
+
     @PutMapping(value = "/edit")
-    public void edit(@RequestBody Hotel hotel) {
-        hotelService.update(hotel);
+    public void edit(Hotel hotel,
+                     @RequestParam(value = "removeFileId[]", required = false) Integer removeFileId,
+                     @RequestParam(value = "uploadFile[]", required = false) MultipartFile uploadFile
+    ) throws IOException {
+
+
+        System.out.println("Hotel ID: " + hotel.getHid());
+
+        if (removeFileId != null) {
+            System.out.println("Remove File ID: " + removeFileId);
+        }
+
+        if (uploadFile != null) {
+            System.out.println("Upload File: " + uploadFile.getOriginalFilename());
+            System.out.println("Upload File Size: " + uploadFile.getSize());
+        }
+
+        // HotelService를 통해 업데이트 수행
+        hotelService.update(hotel, removeFileId, uploadFile);
     }
 
     @DeleteMapping("/delete/{id}")
