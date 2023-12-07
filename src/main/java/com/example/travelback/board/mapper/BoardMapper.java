@@ -2,7 +2,6 @@ package com.example.travelback.board.mapper;
 
 import com.example.travelback.board.domain.Board;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -11,23 +10,37 @@ public interface BoardMapper {
 
 
     @Select("""
-                 select * from board;
+                 select * from board
+                 where  content like #{keyword} 
+                       or title like #{keyword}
+                       or writer like  #{keyword}
+                       
+                       
+                  LIMIT #{from},5
        """)
 
-    List<Board> list();
+    List<Board> selectAll(int from, String keyword);
 
 
-
-    @Insert("""
-            insert into board (title, content, writer) values (#{title},#{content},#{writer});
-        """)
-    int add(Board board);
 //
 //    @Select("""
 //                 select * from board LIMIT #{from},5;
 //       """)
 //
 //    List<Board> selectAll(Integer from);
+
+    //
+//    @Select("""
+//                select count(*) from board;
+//        """)
+//    int countAll();
+
+
+    @Insert("""
+            insert into board (title, content, writer) values (#{title},#{content},#{writer});
+        """)
+    @Options(useGeneratedKeys = true,keyProperty = "id")
+    int add(Board board);
 
     @Select("""
                 select * from board where id=#{id};
@@ -44,9 +57,20 @@ public interface BoardMapper {
         """)
 
     int update(Board board);
-//
-//    @Select("""
-//                select count(*) from board;
-//        """)
-//    int countAll();
+    @Select("""
+        SELECT id, title, content, writer, inserted
+        FROM board
+        WHERE id = #{id}
+        """)
+    Board selectById(Integer id);
+
+    @Select("""
+                select count(*) from board 
+                 where  content like #{keyword} 
+                       or title like #{keyword}
+                       or writer like  #{keyword}
+        """)
+    int countAll(String keyword);
+
+
 }
