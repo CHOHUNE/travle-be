@@ -11,5 +11,6 @@ public class TransBucket {
     public String url;
     public String transStartLocation;
     public String transArriveLocation;
+    public String transAddress;
     public LocalDateTime createdAt;
 }
