@@ -53,11 +53,14 @@ public class HotelController {
     ) throws IOException {
 
         if (mainImg != null) {
-            System.out.println("mainImg" + mainImg.getOriginalFilename());
-            System.out.println("maingImg" + mainImg.getSize());
+            System.out.println("mainImgFileName:" + mainImg.getOriginalFilename());
+            System.out.println("subImg1 = " + subImg1.getName());
+            System.out.println("subImg2 = " + subImg2.getName());
+            System.out.println("mapImg = " + mapImg.getName());
+
         }
 
-        hotelService.addHotel(hotel, mainImg,subImg1,subImg2,mapImg);
+        hotelService.addHotel(hotel,mainImg,subImg1,subImg2,mapImg);
     }
 
 

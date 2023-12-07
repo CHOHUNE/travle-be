@@ -96,7 +96,7 @@ public class HotelService {
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
 
-            hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl,subImgUrl1,subImgUrl2,mapImgUrl);
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl,subImgUrl1,subImgUrl2,mapImgUrl);
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }
