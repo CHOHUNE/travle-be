@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,11 +34,9 @@ public class Boardcontroller {
 
 
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board,
-                              @SessionAttribute(value = "login" ,required = false)Member login){
-        System.out.println("Board = " + board);
-        System.out.println("login = " + login);
-
+    public ResponseEntity add( Board board,
+                               @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                              @SessionAttribute(value = "login" ,required = false)Member login) throws IOException {
         // 로그인 여부확인
         if(login==null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -48,7 +48,7 @@ public class Boardcontroller {
         }
 
         // 글 추가 하기
-        if (service.add(board,login)){
+        if (service.add(board,files,login)){
         return     ResponseEntity.ok().build();
         }
         else {

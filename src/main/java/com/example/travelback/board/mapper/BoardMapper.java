@@ -39,6 +39,7 @@ public interface BoardMapper {
     @Insert("""
             insert into board (title, content, writer) values (#{title},#{content},#{writer});
         """)
+    @Options(useGeneratedKeys = true,keyProperty = "id")
     int add(Board board);
 
     @Select("""

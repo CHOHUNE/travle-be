@@ -1,12 +1,24 @@
 package com.example.travelback.board.service;
 
 import com.example.travelback.board.domain.Board;
+import com.example.travelback.board.domain.BoardFile;
 import com.example.travelback.board.mapper.BoardMapper;
+import com.example.travelback.board.mapper.FileMapper;
 import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -14,10 +26,46 @@ import java.util.Map;
 public class BoardService {
 
     private final BoardMapper mapper;
+    private final FileMapper fileMapper;
 
-    public boolean add(Board board, Member login) {
+    private final S3Client s3;
+
+    @Value("${aws.s3.bucket.name}")
+    private String bucket;
+
+    @Value("${image.file.prefix}")
+    private String urlPrefix;
+
+    public boolean add(Board board, MultipartFile[] files, Member login) throws IOException {
         board.setWriter(login.getUserId());
-        return  mapper.add(board)==1;
+        System.out.println("files = " + files);
+
+        int cnt = mapper.add(board);
+
+        if (files!=null){
+            for (int i = 0; i < files.length; i++) {
+                fileMapper.insert(board.getId(), files[i].getOriginalFilename());
+
+                upload(board.getId(),files[i]);
+            }
+        }
+
+        return  cnt==1;
+    }
+
+
+    private void upload(Integer boardId, MultipartFile file) throws IOException {
+
+        String key= "travel/board/"+boardId+"/"+file.getOriginalFilename();
+
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        s3.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
     }
 
     public boolean validate( Board board){
@@ -72,7 +120,20 @@ public class BoardService {
 
 
     public Board id(Integer id) {
-        return mapper.id(id);
+        Board board = mapper.id(id);
+
+        List<BoardFile> boardFiles = fileMapper.selectNamesByBoardId(id);
+
+        for (BoardFile boardFile : boardFiles){
+            String url=urlPrefix+"travel/board/"+id+"/"+boardFile.getName();
+            boardFile.setUrl(url);
+        }
+
+        board.setFiles(boardFiles);
+
+        return board;
+
+
     }
 
     public boolean remove(Integer id) {
