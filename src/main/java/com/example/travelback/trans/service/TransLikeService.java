@@ -29,4 +29,15 @@ public class TransLikeService {
         int transLikeCount = mapper.countByTransId(transLike.getTransId());
         return Map.of("transLikeState", count == 1, "transLikeCount", transLikeCount);
     }
+
+    public Map<String, Object> get(Integer transId, Member login) {
+        int transLikeCount = mapper.countByTransId(transId);
+
+        TransLike like = null;
+        if(login != null) {
+            like = mapper.selectByTransIdAndUserId(transId,login.getUserId());
+
+        }
+        return Map.of("like",like != null,"transLikeCount", transLikeCount);
+    }
 }

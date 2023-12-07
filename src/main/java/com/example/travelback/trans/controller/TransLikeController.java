@@ -26,4 +26,11 @@ public class TransLikeController {
         // 찜 버튼이 성공적으로 입력 되면 프론트로 해당 상품의 찜 갯수와 로그인한 유저가 찜한지 여부를 리턴한다.
         return ResponseEntity.ok(service.update(transLike, login));
     }
+
+    @GetMapping("transport/{transId}")
+    public ResponseEntity<Map<String, Object>> get(@PathVariable Integer transId,
+                                                   @SessionAttribute(value = "login",required = false) Member login) {
+        return ResponseEntity.ok(service.get(transId, login));
+    }
+
 }

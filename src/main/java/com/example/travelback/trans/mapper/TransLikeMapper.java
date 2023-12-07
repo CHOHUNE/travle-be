@@ -27,4 +27,12 @@ public interface TransLikeMapper {
         WHERE transId = #{transId}
         """)
     int countByTransId(Integer transId);
+
+    @Select("""
+        SELECT * FROM translike
+        WHERE 
+            transId = #{transId}
+        AND userId = #{userId}
+        """)
+    TransLike selectByTransIdAndUserId(Integer transId, String userId);
 }
