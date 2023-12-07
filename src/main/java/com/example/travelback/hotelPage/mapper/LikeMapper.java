@@ -12,8 +12,12 @@ public interface LikeMapper {
     @Select("SELECT * FROM hotelike WHERE hid = #{hotelId}")
     Like getLikesByHotelId(Integer hotelId);
 
-    @Insert("INSERT INTO hotelike (hid, userId,name,mainImgUrl,location) VALUES (#{hotelId}, #{userId},#{name},#{mainImgUrl},#{location})")
+    @Select("SELECT * FROM hotelike WHERE userId=#{userId}")
+    Like getLikesByUserId(String userId);
+
+    @Insert("INSERT INTO hotelike (hid, userId,name,mainImgUrl,location,roomType) VALUES (#{hotelId}, #{userId},#{name},#{mainImgUrl},#{location},#{roomType})")
     void insertLike(Like like);
+
 
     @Delete("DELETE FROM hotelike WHERE hid = #{hid}")
     void deleteLike(Integer id);

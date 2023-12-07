@@ -2,8 +2,11 @@ package com.example.travelback.hotelPage.controller;
 
 
 import com.example.travelback.hotelPage.domain.Hotel;
+import com.example.travelback.hotelPage.domain.Like;
 import com.example.travelback.hotelPage.domain.Reservation;
+import com.example.travelback.hotelPage.mapper.LikeMapper;
 import com.example.travelback.hotelPage.service.HotelService;
+import com.example.travelback.hotelPage.service.LikeService;
 import com.example.travelback.hotelPage.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,12 +25,19 @@ public class HotelController {
 
     private final HotelService hotelService;
     private final ReservationService reservationService;
-
+    private final LikeService likeService;
 
     @GetMapping
     public ResponseEntity<List<Hotel>> getAllHotels() {
         List<Hotel> hotel = hotelService.getAllHotels();
+
         return new ResponseEntity<>(hotel, HttpStatus.OK);
+    }
+
+    @GetMapping("/bucket/id/{userId}")
+    public ResponseEntity<Like> getLikeByUserId (@PathVariable String userId){
+        Like like =likeService.getLikeByUserId(userId);
+        return ResponseEntity.ok(like);
     }
 
     @GetMapping("/reserv/id/{id}")
@@ -91,7 +101,6 @@ public class HotelController {
     @PostMapping("/pay")
     public void add(@RequestBody Reservation reservation) {
         reservationService.addResrvation(reservation);
-
     }
 }
 

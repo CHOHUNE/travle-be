@@ -12,5 +12,6 @@ public class Like {
     private String mainImgUrl;
 //    private String mainImg;
     private String location;
+    private String roomType;
 
 }

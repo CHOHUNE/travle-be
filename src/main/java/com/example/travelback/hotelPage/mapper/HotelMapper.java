@@ -55,7 +55,10 @@ public interface HotelMapper {
             """)
     void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl);
 
-
+//    @Insert("""
+//SELECT userId FROM member
+//""")
+//    void getUserId(Integer userId);
 
 
 // file delete Mapper

@@ -22,6 +22,7 @@ public class HotelService {
     private final HotelMapper hotelMapper;
     private final LikeMapper likeMapper;
 
+
     private final S3Client s3Client;
 
     @Value("${aws.s3.bucket.name}")
@@ -31,6 +32,7 @@ public class HotelService {
     private String urlPrefix;
 
 // 기존 add 코드
+
 
 
     public void deleteHotel(Integer id) {
@@ -55,10 +57,7 @@ public class HotelService {
 //        hotelMapper.update(hotel);
 //    }
 
-    public void update(Hotel hotel, Integer hid, MultipartFile mainImg,MultipartFile subImg1,MultipartFile subImg2,MultipartFile mapImg) throws IOException {
-
-
-
+    public void update(Hotel hotel, Integer hid, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
         // 기존 이미지 삭제
         deleteFile(hid);
@@ -77,12 +76,12 @@ public class HotelService {
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
             // db추가
-            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl,subImgUrl1,subImgUrl2,mapImgUrl);
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImgUrl2, mapImgUrl);
         }
     }
 
 
-    public void addHotel(Hotel hotel, MultipartFile mainImg,MultipartFile subImg1,MultipartFile subImg2,MultipartFile mapImg) throws IOException {
+    public void addHotel(Hotel hotel, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
 
         // 이미지 업로드 및 URL 설정
@@ -94,7 +93,7 @@ public class HotelService {
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
 
-            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl,subImgUrl1,subImgUrl2,mapImgUrl);
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImgUrl2, mapImgUrl);
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }

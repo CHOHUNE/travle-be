@@ -21,7 +21,9 @@ public class LikeService {
     public void insertLike(Like like){
         likemapper.insertLike(like);
     }
-
+    public Like getLikeByUserId(String userId) {
+        return likemapper.getLikesByUserId(userId);
+    }
     public void deleteLike(Integer id){
         likemapper.deleteLike(id);
     }
