@@ -22,4 +22,9 @@ public interface TransLikeMapper {
         """)
     int insert(TransLike transLike);
 
+    @Select("""
+        SELECT COUNT(id) FROM translike
+        WHERE transId = #{transId}
+        """)
+    int countByTransId(Integer transId);
 }
