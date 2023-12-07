@@ -20,7 +20,12 @@ public class Hotel {
     private String mapImg;
     private String numberOfBedRooms;
     private Double totalPrice;
+
     private String mainImgUrl;
+    private String subImgUrl1;
+    private String subImgUrl2;
+    private String mapImgUrl;
+
 }
 
 

@@ -46,7 +46,10 @@ public class HotelController {
 
     @PostMapping(value = "/write")
     public void add(Hotel hotel,
-                    @RequestParam(value = "mainImg[]", required = false) MultipartFile mainImg
+                    @RequestParam(value = "mainImg[]", required = false) MultipartFile mainImg,
+                    @RequestParam(value = "subImg1[]", required = false) MultipartFile subImg1,
+                    @RequestParam(value = "subImg2[]", required = false) MultipartFile subImg2,
+                    @RequestParam(value = "mapImg[]", required = false) MultipartFile mapImg
     ) throws IOException {
 
         if (mainImg != null) {
@@ -54,7 +57,7 @@ public class HotelController {
             System.out.println("maingImg" + mainImg.getSize());
         }
 
-        hotelService.addHotel(hotel, mainImg);
+        hotelService.addHotel(hotel, mainImg,subImg1,subImg2,mapImg);
     }
 
 

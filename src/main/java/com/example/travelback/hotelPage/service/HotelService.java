@@ -77,13 +77,13 @@ public class HotelService {
             String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), uploadFile);
 
             // db추가
-            hotelMapper.updateMainImg(hotel.getHid(), uploadFile.getOriginalFilename(), mainImgUrl);
+//            hotelMapper.updateMainImg(hotel.getHid(), uploadFile.getOriginalFilename(), mainImgUrl);
 
         }
     }
 
 
-    public void addHotel(Hotel hotel, MultipartFile mainImg) throws IOException {
+    public void addHotel(Hotel hotel, MultipartFile mainImg,MultipartFile subImg1,MultipartFile subImg2,MultipartFile mapImg) throws IOException {
 
 
         // 이미지 업로드 및 URL 설정
@@ -91,9 +91,12 @@ public class HotelService {
             hotelMapper.insertHotel(hotel);
 
             String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), mainImg);
+            String subImgUrl1 = urlPrefix + uploadFile(hotel.getHid(), subImg1);
+            String subImgUrl2 = urlPrefix + uploadFile(hotel.getHid(), subImg2);
+            String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
 
-            hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl);
+            hotelMapper.updateMainImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl,subImgUrl1,subImgUrl2,mapImgUrl);
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }

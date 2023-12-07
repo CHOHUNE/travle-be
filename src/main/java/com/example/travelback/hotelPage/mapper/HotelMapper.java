@@ -48,11 +48,12 @@ public interface HotelMapper {
 
     @Update("""
             UPDATE hotel
-            SET mainImg=#{mainImg},mainImgUrl=#{mainImgUrl}
+            SET mainImg=#{mainImg},mainImgUrl=#{mainImgUrl},subImgUrl1=#{subImgUrl1},
+            subImgUrl2=#{subImg2},mapImgUrl=#{mapImgUrl}
             
             WHERE hId=#{hid}
             """)
-    void updateMainImg(long hid, String mainImg,String mainImgUrl);
+    void updateMainImg(long hid, String mainImg,String mainImgUrl,String subImgUrl1,String subImgUrl2,String mapImgUrl);
 
     @Select("""
 SELECT mainImg
