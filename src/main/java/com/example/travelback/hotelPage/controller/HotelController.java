@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.util.List;
 
@@ -66,24 +65,15 @@ public class HotelController {
 
     @PutMapping(value = "/edit")
     public void edit(Hotel hotel,
-                     @RequestParam(value = "removeFileId[]", required = false) Integer removeFileId,
-                     @RequestParam(value = "uploadFile[]", required = false) MultipartFile uploadFile
+                     @RequestParam(value = "hid", required = false) Integer hid,
+                     @RequestParam(value = "mainImg[]", required = false) MultipartFile mainImg,
+                     @RequestParam(value = "subImg1[]", required = false) MultipartFile subImg1,
+                     @RequestParam(value = "subImg2[]", required = false) MultipartFile subImg2,
+                     @RequestParam(value = "mapImg[]", required = false) MultipartFile mapImg
     ) throws IOException {
 
 
-        System.out.println("Hotel ID: " + hotel.getHid());
-
-        if (removeFileId != null) {
-            System.out.println("Remove File ID: " + removeFileId);
-        }
-
-        if (uploadFile != null) {
-            System.out.println("Upload File: " + uploadFile.getOriginalFilename());
-            System.out.println("Upload File Size: " + uploadFile.getSize());
-        }
-
-        // HotelService를 통해 업데이트 수행
-        hotelService.update(hotel, removeFileId, uploadFile);
+        hotelService.update(hotel, hid,mainImg,subImg1,subImg2,mapImg);
     }
 
     @DeleteMapping("/delete/{id}")

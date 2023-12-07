@@ -55,13 +55,11 @@ public interface HotelMapper {
             """)
     void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl);
 
-    @Select("""
-SELECT mainImg
-FROM hotel
-WHERE hId=#{hid}
-""")
-    String selectNameByHotelId(Integer hid);
+
+
+
 // file delete Mapper
 
     // 다른 메서드들...
+
 }
