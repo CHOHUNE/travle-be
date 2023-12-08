@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetUrlRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +21,7 @@ import java.util.List;
 public class HotelService {
     private final HotelMapper hotelMapper;
     private final LikeMapper likeMapper;
+
 
     private final S3Client s3Client;
 
@@ -36,9 +34,13 @@ public class HotelService {
 // 기존 add 코드
 
 
+
     public void deleteHotel(Integer id) {
 //        라이크 삭제
-        likeMapper.deleteLike(id);
+//        likeMapper.deleteLikeById(id);
+//        TODO : 나중에 기능 다시 추가할 것(ID를 받는 DELETE 기능)
+
+
 //        파일 삭제
         deleteFile(id);
 //
@@ -58,45 +60,43 @@ public class HotelService {
 //        hotelMapper.update(hotel);
 //    }
 
-    public void update(Hotel hotel, Integer removeFileId, MultipartFile uploadFile) throws IOException {
+    public void update(Hotel hotel, Integer hid, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
+        // 기존 이미지 삭제
+        deleteFile(hid);
+
+        // DB에서 레코드 삭제
+        hotelMapper.deleteById(hid);
 
         // 이미지 외 수정 정보 삽입
         hotelMapper.insertHotel(hotel);
 
-        // 기존 이미지 삭제
-        deleteFile(removeFileId);
-
-        // DB에서 레코드 삭제
-        hotelMapper.deleteById(removeFileId);
-
         // 새로운 이미지 업로드 및 DB 업데이트
-        if (uploadFile != null) {
-
-            // 이미지 URL 설정
-            String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), uploadFile);
+        if (mainImg != null) {
+            String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), mainImg);
+            String subImgUrl1 = urlPrefix + uploadFile(hotel.getHid(), subImg1);
+            String subImgUrl2 = urlPrefix + uploadFile(hotel.getHid(), subImg2);
+            String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
             // db추가
-//            hotelMapper.updateMainImg(hotel.getHid(), uploadFile.getOriginalFilename(), mainImgUrl);
-
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImgUrl2, mapImgUrl);
         }
     }
 
 
-    public void addHotel(Hotel hotel, MultipartFile mainImg,MultipartFile subImg1,MultipartFile subImg2,MultipartFile mapImg) throws IOException {
+    public void addHotel(Hotel hotel, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
 
         // 이미지 업로드 및 URL 설정
         if (mainImg != null) {
             hotelMapper.insertHotel(hotel);
-
             String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), mainImg);
             String subImgUrl1 = urlPrefix + uploadFile(hotel.getHid(), subImg1);
             String subImgUrl2 = urlPrefix + uploadFile(hotel.getHid(), subImg2);
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
 
-            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl,subImgUrl1,subImgUrl2,mapImgUrl);
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImgUrl2, mapImgUrl);
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }
@@ -132,18 +132,47 @@ public class HotelService {
 
     private void deleteFile(Integer hid) {
 
-//        파일명
-        String mainImg = hotelMapper.selectNameByHotelId(hid);
+        String folderKey = "travel/hotel/img/" + hid + "/";
 
-//    s3 bucket
-        String key = "travel/hotel/img/" + hid + "/" + mainImg;
-
-        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+        // 폴더 안의 모든 객체 가져오기
+        ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(ListObjectsV2Request.builder()
                 .bucket(BUCKET_NAME)
-                .key(key)
-                .build();
+                .prefix(folderKey)
+                .build());
 
-        s3Client.deleteObject(objectRequest);
+        // 폴더 안의 모든 객체 삭제
+        for (S3Object object : listObjectsResponse.contents()) {
+            s3Client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(BUCKET_NAME)
+                    .key(object.key())
+                    .build());
+        }
+
+        // 폴더 자체 삭제
+        s3Client.deleteObject(DeleteObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(folderKey)
+                .build());
+
+//        원래 코드
+////        파일명
+//        String mainImg = hotelMapper.selectMainIMgByHotelId(hid);
+//
+////    s3 bucket
+//        String key = "travel/hotel/img/" + hid + "/" + mainImg;
+//        String subImg1= hotelMapper.selectSubImg1ByHotelId(hid);
+//        String subImg2= hotelMapper.selectSubImg2ByHotelId(hid);
+//        String mapImg= hotelMapper.selectMapImgByHotelId(hid);
+//
+//        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+//                .bucket(BUCKET_NAME)
+//                .key(key)
+//                .build();
+//
+//        s3Client.deleteObject(objectRequest);
+//        s3Client.deleteObject(DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(mapImg).build());
+//        s3Client.deleteObject(DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(subImg1).build());
+//        s3Client.deleteObject(DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(subImg2).build());
     }
 
 }
