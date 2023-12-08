@@ -3,9 +3,11 @@ package com.example.travelback.hotelPage.service;
 
 import com.example.travelback.hotelPage.domain.Like;
 import com.example.travelback.hotelPage.mapper.LikeMapper;
+import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,20 +20,38 @@ public class LikeService {
         return likemapper.getLikeById(id);
     }
 
-    public void insertLike(Like like){
-        likemapper.insertLike(like);
-    }
-    public Like getLikeByUserId(String userId) {
+//    public void insertLike(Like like){
+//        likemapper.insertLike(like);
+//    }
+
+    public List<Like> getLikeByUserId(String userId) {
         return likemapper.getLikesByUserId(userId);
     }
-    public void deleteLike(Integer id){
-        likemapper.deleteLike(id);
-    }
+//    public void deleteLike(Integer id){
+//        likemapper.deleteLike(id);
+//    }
 
 
     public Like getLikesByHotelId(Integer hotelId) {
         return likemapper.getLikesByHotelId(hotelId);
 
     }
+
+    public Object update(Like like, Member login) {
+        like.setUserId(login.getUserId());
+//      login  세션에 있는 로그인 정보를 userId로 삽입
+        if(likemapper.deleteLike(like)==0){
+            likemapper.insertLike(like,login);
+
+        }
+        return null;
+    }
+
+
+//    public void deleteLikeByHotelId(Like like, Member login) {
+//    if(likemapper.insertLike(like,login)!=0){
+//        likemapper.deleteLikeByHotelId(like,login.getUserId());
+//    }
+//    }
 }
 

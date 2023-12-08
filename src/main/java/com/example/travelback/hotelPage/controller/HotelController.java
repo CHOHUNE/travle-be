@@ -35,9 +35,9 @@ public class HotelController {
     }
 
     @GetMapping("/bucket/id/{userId}")
-    public ResponseEntity<Like> getLikeByUserId (@PathVariable String userId){
-        Like like =likeService.getLikeByUserId(userId);
-        return ResponseEntity.ok(like);
+    public List<Like> getLikeByUserId (@PathVariable String userId){
+
+        return likeService.getLikeByUserId(userId);
     }
 
     @GetMapping("/reserv/id/{id}")

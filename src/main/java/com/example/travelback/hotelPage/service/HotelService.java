@@ -37,7 +37,10 @@ public class HotelService {
 
     public void deleteHotel(Integer id) {
 //        라이크 삭제
-        likeMapper.deleteLike(id);
+//        likeMapper.deleteLikeById(id);
+//        TODO : 나중에 기능 다시 추가할 것(ID를 받는 DELETE 기능)
+
+
 //        파일 삭제
         deleteFile(id);
 //
