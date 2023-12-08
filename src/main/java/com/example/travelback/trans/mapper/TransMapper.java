@@ -8,8 +8,21 @@ import java.util.List;
 @Mapper
 public interface TransMapper {
     @Insert("""
-        INSERT INTO transport ( transTitle, transPrice, transContent, transStartLocation, transArriveLocation) 
-        VALUES ( #{transTitle}, #{transPrice}, #{transContent}, #{transStartLocation}, #{transArriveLocation}) 
+        INSERT INTO transport (
+            transTitle,
+            transPrice,
+            transContent,
+            transStartLocation,
+            transArriveLocation,
+            transAddress
+             ) 
+        VALUES ( 
+            #{transTitle},
+            #{transPrice},
+            #{transContent}, 
+            #{transStartLocation}, 
+            #{transArriveLocation}, 
+            #{transAddress}) 
         """)
     @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
@@ -22,9 +35,10 @@ public interface TransMapper {
                 tp.transContent,
                 tp.transStartLocation,
                 tp.transArriveLocation,
+                tp.transAddress, 
                 tp.transInserted,
                 tty.typeName,
-                tMI.url 
+                tMI.url
             FROM transport tp JOIN transtype tty
             ON tp.tId = tty.tId
             LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
@@ -40,6 +54,7 @@ public interface TransMapper {
                 tp.transContent, 
                 tp.transStartLocation,
                 tp.transArriveLocation,
+                tp.transAddress,
                 tp.transInserted, 
                 tty.typeName,
                 tMI.url  
@@ -60,6 +75,7 @@ public interface TransMapper {
                 tp.transContent, 
                 tp.transStartLocation,
                 tp.transArriveLocation,
+                tp.transAddress,
                 tp.transInserted, 
                 tty.typeName,
                 tMI.url
@@ -80,6 +96,7 @@ public interface TransMapper {
                 tp.transContent,
                 tp.transStartLocation,
                 tp.transArriveLocation,
+                tp.transAddress,
                 tp.transInserted,
                 tty.typeName,
                 tMI.url
@@ -95,7 +112,8 @@ public interface TransMapper {
         SET 
             transTitle = #{transTitle},
             transPrice = #{transPrice},
-            transContent = #{transContent}
+            transContent = #{transContent},
+            transAddress = #{trasnAddress}
         WHERE tId = #{tId}
         """)
     void update(Trans trans);
