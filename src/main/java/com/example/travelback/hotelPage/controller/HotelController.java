@@ -5,6 +5,7 @@ import com.example.travelback.hotelPage.domain.Hotel;
 import com.example.travelback.hotelPage.domain.Reservation;
 import com.example.travelback.hotelPage.service.HotelService;
 import com.example.travelback.hotelPage.service.ReservationService;
+import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hotel")
@@ -92,10 +95,17 @@ public class HotelController {
     }
 
     @GetMapping("/pay/{id}")
-    public ResponseEntity<Hotel> getPayHotelById(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getPayHotelById(@PathVariable Long id, @SessionAttribute(value = "login", required = false) Member login) {
         Hotel hotel = hotelService.getHotelById(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", login.getUserName());
+        map.put("email", login.getUserEmail());
+        map.put("phoneNumber", login.getUserPhoneNumber());
 
-        return ResponseEntity.ok(hotel);
+
+
+        return ResponseEntity.ok(Map.of("hotel", hotel, "member", map));
+
     }
 
     @PostMapping("/pay")
