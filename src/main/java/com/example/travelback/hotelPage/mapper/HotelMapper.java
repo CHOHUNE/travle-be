@@ -13,7 +13,7 @@ public interface HotelMapper {
             INSERT INTO hotel (name, location, description, rating, numberOfBed, review, roomType, numberOfBedRooms, totalPrice,mainImgUrl)
              
             VALUES (#{name}, #{location}, #{description}, #{rating}, #{numberOfBed}, #{review}, #{roomType},  #{numberOfBedRooms}, #{totalPrice},#{mainImgUrl})""")
-    @Options(useGeneratedKeys = true,keyProperty = "hid")
+    @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
     @Select("SELECT * FROM hotel WHERE hId = #{hid}")
@@ -50,10 +50,12 @@ public interface HotelMapper {
             UPDATE hotel
             SET mainImg=#{mainImg},mainImgUrl=#{mainImgUrl},subImgUrl1=#{subImgUrl1},
             subImgUrl2=#{subImgUrl2},mapImgUrl=#{mapImgUrl}
-            
+                        
             WHERE hId=#{hid}
             """)
     void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl);
+
+
 
 //    @Insert("""
 //SELECT userId FROM member

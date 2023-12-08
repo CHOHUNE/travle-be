@@ -34,10 +34,9 @@ public class HotelService {
 // 기존 add 코드
 
 
-
     public void deleteHotel(Integer id) {
 //        라이크 삭제
-//        likeMapper.deleteLikeById(id);
+        likeMapper.deleteLikeById(id);
 //        TODO : 나중에 기능 다시 추가할 것(ID를 받는 DELETE 기능)
 
 
@@ -64,6 +63,9 @@ public class HotelService {
 
         // 기존 이미지 삭제
         deleteFile(hid);
+
+//        좋아요 삭제
+        likeMapper.deleteLikeById(hid);
 
         // DB에서 레코드 삭제
         hotelMapper.deleteById(hid);
