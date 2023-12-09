@@ -1,7 +1,9 @@
 package com.example.travelback.trans.controller;
 
 import com.example.travelback.trans.dto.Trans;
+import com.example.travelback.trans.dto.TransBucket;
 import com.example.travelback.trans.dto.TransLike;
+import com.example.travelback.trans.service.TransBucketService;
 import com.example.travelback.trans.service.TransLikeService;
 import com.example.travelback.trans.service.TransService;
 import com.example.travelback.user.dto.Member;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/transport")
 public class TransController {
     private final TransService service;
+    private final TransBucketService transBucketService;
 
     @PostMapping("/add")
     public void add (Trans trans,
@@ -59,5 +62,11 @@ public class TransController {
     @DeleteMapping("delete/{id}")
     public void delete(@PathVariable Integer id) {
         service.delete(id);
+    }
+
+    @GetMapping("bucket/id/{id}")
+    public List<TransBucket> getTransBucket(@PathVariable String id) {
+        System.out.println(id);
+        return transBucketService.getByUserId(id);
     }
 }

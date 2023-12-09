@@ -30,15 +30,27 @@ public class HotelLikeController {
         return service.getLikesByHotelId(hotelId);
     }
 
+//    @PostMapping
+//    public void insertLike(@RequestBody Like like) {
+//        service.insertLike(like);
+//    }
     @PostMapping
-    public void insertLike(@RequestBody Like like) {
-        service.insertLike(like);
+    public ResponseEntity insertLike(@RequestBody Like like,
+                           @SessionAttribute(value ="login",required = false)Member login){
+        if(login ==null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(service.update(like,login));
+
+//        service.insertLike(like);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteLike(@PathVariable Integer id) {
-        service.deleteLike(id);
-    }
+
+
+//        @DeleteMapping("/{id}")
+//        public void deleteLike(@RequestBody Like like,@SessionAttribute(value ="login",required = false)Member login) {
+//            service.deleteLikeByHotelId(like,login);
+//        }
 
 }
 
