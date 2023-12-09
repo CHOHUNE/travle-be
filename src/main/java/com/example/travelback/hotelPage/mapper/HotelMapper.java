@@ -16,7 +16,11 @@ public interface HotelMapper {
     @Options(useGeneratedKeys = true,keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
-    @Select("SELECT * FROM hotel WHERE hId = #{hid}")
+    @Select("""
+            SELECT * 
+            FROM hotel 
+            WHERE hId = #{hid}
+            """)
     Hotel selectHotelById(Long id);
 
     @Select("""

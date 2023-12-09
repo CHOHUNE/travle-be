@@ -95,14 +95,14 @@ public class HotelController {
     }
 
     @GetMapping("/pay/{id}")
-    public ResponseEntity<Map<String, Object>> getPayHotelById(@PathVariable Long id, @SessionAttribute(value = "login", required = false) Member login) {
+    public ResponseEntity<Map<String, Object>> getPayHotelById
+            (@PathVariable Long id,
+             @SessionAttribute(value = "login", required = false) Member login) {
         Hotel hotel = hotelService.getHotelById(id);
         Map<String, Object> map = new HashMap<>();
         map.put("name", login.getUserName());
         map.put("email", login.getUserEmail());
         map.put("phoneNumber", login.getUserPhoneNumber());
-
-
 
         return ResponseEntity.ok(Map.of("hotel", hotel, "member", map));
 
@@ -114,5 +114,10 @@ public class HotelController {
 
     }
 }
+
+
+
+
+
 
 
