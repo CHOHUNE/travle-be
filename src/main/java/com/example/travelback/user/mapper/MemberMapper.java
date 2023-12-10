@@ -3,6 +3,7 @@ package com.example.travelback.user.mapper;
 import com.example.travelback.user.dto.Auth;
 import com.example.travelback.user.dto.Member;
 import org.apache.ibatis.annotations.*;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -138,4 +139,10 @@ public interface MemberMapper {
             WHERE userPhoneNumber = #{userPhoneNumber}
             """)
     String selectByUserNameAndId(String userPhoneNumber);
+
+
+    @Query("SELECT m " +
+            "FROM Member m " +
+            "WHERE m.userEmail = :email")
+    Member findByEmail(String email);
 }

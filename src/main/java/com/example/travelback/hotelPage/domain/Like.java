@@ -1,9 +1,11 @@
 package com.example.travelback.hotelPage.domain;
 
 
+import com.example.travelback.user.util.AppUtill;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class Like {
@@ -14,5 +16,13 @@ public class Like {
     private String mainImgUrl;
     private String location;
     private String roomType;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
+
+    // ---------- 시간 관련 ----------
+    public String getAgo() {
+        return AppUtill.getAgo(createdAt, LocalDateTime.now());
+
+    }
 }
+
+

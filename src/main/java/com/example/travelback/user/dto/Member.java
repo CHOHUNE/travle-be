@@ -3,10 +3,7 @@ package com.example.travelback.user.dto;
 import com.example.travelback.user.util.AppUtill;
 import lombok.Data;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Data
