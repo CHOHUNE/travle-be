@@ -21,8 +21,13 @@ public interface HotelMapper {
 
     @Select("""
             SELECT * FROM hotel
+            WHERE name LIKE #{keyword}
+            OR description LIKE #{keyword}
+        GROUP BY hId
+        ORDER BY hId DESC
+        LIMIT #{from}, 10
             """)
-    List<Hotel> selectAllHotels();
+    List<Hotel> selectAllHotels(Integer from,String keyword);
 
     @Delete("""
             DELETE FROM hotel
@@ -55,6 +60,12 @@ public interface HotelMapper {
             """)
     void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl);
 
+    @Select("""
+        SELECT COUNT(*) FROM hotel
+        WHERE hotel.name LIKE #{keyword}
+           OR hotel.description LIKE #{keyword}
+""")
+    int countAll(String keyword);
 
 
 //    @Insert("""
