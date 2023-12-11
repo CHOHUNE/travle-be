@@ -5,6 +5,7 @@ import com.example.travelback.trans.dto.TransBucket;
 import com.example.travelback.trans.dto.TransLike;
 import com.example.travelback.trans.service.TransBucketService;
 import com.example.travelback.trans.service.TransLikeService;
+import com.example.travelback.trans.service.TransPayService;
 import com.example.travelback.trans.service.TransService;
 import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import java.util.Map;
 public class TransController {
     private final TransService service;
     private final TransBucketService transBucketService;
+    private final TransPayService transPayService;
 
     @PostMapping("/add")
     public void add (Trans trans,
@@ -74,5 +77,17 @@ public class TransController {
     public List<TransBucket> getTransBucket(@PathVariable String id) {
         System.out.println(id);
         return transBucketService.getByUserId(id);
+    }
+
+    @GetMapping("pay/{id}")
+    public Map<String, Object> getTransPayById(@PathVariable Integer id,
+                                               @SessionAttribute(value = "login", required = false)Member login) {
+
+        Trans trans = transPayService.getTransPayById(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", login.getUserName());
+        map.put("email", login.getUserEmail());
+        map.put("phoneNumber", login.getUserPhoneNumber());
+        return Map.of("trans", trans, "member", map);
     }
 }
