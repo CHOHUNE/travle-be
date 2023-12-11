@@ -59,8 +59,10 @@ public class TransController {
     @PutMapping("edit")
     public void edit ( Trans trans,
                        @RequestParam(value = "removeMainImageId",required = false) Integer removeMainImageId,
-                       @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage) throws IOException {
-        service.update(trans, removeMainImageId, transMainImage);
+                       @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
+                       @RequestParam(value = "removeContentImageIds[]", required = false) List<Integer> removeContentImageIds,
+                       @RequestParam(value = "transContentImages[]", required = false)MultipartFile[] transContentImages) throws IOException {
+        service.update(trans, removeMainImageId, transMainImage, removeContentImageIds, transContentImages);
     }
 
     @DeleteMapping("delete/{id}")
