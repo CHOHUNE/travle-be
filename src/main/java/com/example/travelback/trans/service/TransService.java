@@ -3,10 +3,7 @@ package com.example.travelback.trans.service;
 import com.example.travelback.trans.dto.Trans;
 import com.example.travelback.trans.dto.TransContentImages;
 import com.example.travelback.trans.dto.TransMainImage;
-import com.example.travelback.trans.mapper.ContentImagesMapper;
-import com.example.travelback.trans.mapper.MainImageMapper;
-import com.example.travelback.trans.mapper.TransMapper;
-import com.example.travelback.trans.mapper.TransTypeMapper;
+import com.example.travelback.trans.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -29,6 +26,7 @@ public class TransService {
     private final TransTypeMapper transTypeMapper;
     private final MainImageMapper mainImageMapper;
     private final ContentImagesMapper contentImagesMapper;
+    private final TransLikeMapper transLikeMapper;
 
     // 아마존 파일 업로드 ====================
     private final S3Client s3;
@@ -162,7 +160,6 @@ public class TransService {
             mainImageMapper.insert(trans.getTId(), transMainImage.getOriginalFilename(), url);
         }
 
-
         mapper.update(trans);
     }
     // 운송 상품 업데이트 (끝)--------------------------------------------------------------------------------------------------
@@ -178,6 +175,9 @@ public class TransService {
 
         // 운송 상품 삭제전 contentimage 테이블 삭제, aws DB 파일도 삭제
         deleteContentImage(id);
+
+        // 좋아요 한 것들도 삭제
+        transLikeMapper.deleteByTransId(id);
 
         // 운송 상품 삭제 하기
         mapper.deleteById(id);
