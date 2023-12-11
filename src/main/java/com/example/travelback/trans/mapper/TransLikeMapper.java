@@ -35,4 +35,10 @@ public interface TransLikeMapper {
         AND userId = #{userId}
         """)
     TransLike selectByTransIdAndUserId(Integer transId, String userId);
+
+    @Delete("""
+        DELETE FROM translike
+        WHERE transId = #{id}
+        """)
+    void deleteByTransId(Integer id);
 }

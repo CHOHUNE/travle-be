@@ -113,7 +113,7 @@ public interface TransMapper {
             transTitle = #{transTitle},
             transPrice = #{transPrice},
             transContent = #{transContent},
-            transAddress = #{trasnAddress}
+            transAddress = #{transAddress}
         WHERE tId = #{tId}
         """)
     void update(Trans trans);
