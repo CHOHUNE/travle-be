@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,10 +30,13 @@ public class TransController {
 
         service.add(trans, type, transMainImage, transContentImages);
     }
-
+    // 상품 리스트별로 조회하고 페이지 부여
     @GetMapping("list")
-    public List<Trans> list() {
-        return service.list();
+    public Map<String, Object> list(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "p",defaultValue = "1")Integer page) {
+
+        return service.list(type,page);
     }
 
     @GetMapping("listPopularBus")
