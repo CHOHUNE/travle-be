@@ -14,8 +14,7 @@ public interface BoardMapper {
                  where  content like #{keyword} 
                        or title like #{keyword}
                        or writer like  #{keyword}
-                       
-                       
+                ORDER BY id DESC               
                   LIMIT #{from},5
        """)
 
