@@ -1,5 +1,6 @@
 package com.example.travelback.trans.dto;
 
+import com.example.travelback.user.util.AppUtill;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -14,4 +15,9 @@ public class TransBucket {
     public String transArriveLocation;
     public String transAddress;
     public LocalDateTime createdAt;
+
+    public String getAgo() {
+        return AppUtill.getAgo(createdAt, LocalDateTime.now());
+
+    }
 }
