@@ -16,7 +16,9 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -101,8 +103,40 @@ public class TransService {
     // 운송 상품 메인 이미지 업로드 (끝) --------------------------------------------------------------------------------------
     // 운송 상품 등록 (끝) ------------------------------------------------------------------------------------------------
 
-    public List<Trans> list() {
-        return mapper.selectAll();
+    public Map<String, Object> list(String type, Integer page) {
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> pageInfo = new HashMap<>();
+
+        int countAll = 0;
+        if( type.equals("bus") ) {
+            countAll = mapper.countByTypeName("bus");
+        } else {
+            countAll = mapper.countByTypeName("air");
+        }
+
+        int lastPageNumber = (countAll - 1) / 10 + 1;
+        int startPageNumber = (page - 1) / 10 * 10 + 1;
+        int endPageNumber = startPageNumber + 9;
+        endPageNumber = Math.min(endPageNumber,lastPageNumber);
+
+        int prePageNumber = startPageNumber - 10;
+        int nextPageNumber = endPageNumber + 1;
+
+        pageInfo.put("startPageNumber", startPageNumber);
+        pageInfo.put("endPageNumber", endPageNumber);
+        if(prePageNumber > 0) {
+            pageInfo.put("prevPageNumber",0);
+        }
+        if(nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber",0);
+        }
+
+        int from = (page - 1) * 10;
+
+        map.put("transList", mapper.selectAllByTypeName(type,from));
+        map.put("pageInfo", pageInfo);
+
+        return map;
     }
 
     // 운송 상품 해당 아이디 조회 (시작) ------------------------------------------------------------------------------------------------
