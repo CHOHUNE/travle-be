@@ -26,6 +26,11 @@ public interface LikeMapper {
 """)
     int deleteLike(Like like);
 
+    @Delete("""
+DELETE FROM hotelike WHERE hid=#{id}
+""")
+    void deleteLikeById(Integer id);
+
 //    @Delete("""
 //    DELETE FROM hotelike WHERE hid=#{like.hotelId} AND userId=#{id}
 //""")

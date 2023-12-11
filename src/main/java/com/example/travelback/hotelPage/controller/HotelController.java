@@ -4,13 +4,11 @@ package com.example.travelback.hotelPage.controller;
 import com.example.travelback.hotelPage.domain.Hotel;
 import com.example.travelback.hotelPage.domain.Like;
 import com.example.travelback.hotelPage.domain.Reservation;
-import com.example.travelback.hotelPage.mapper.LikeMapper;
 import com.example.travelback.hotelPage.service.HotelService;
 import com.example.travelback.hotelPage.service.LikeService;
 import com.example.travelback.hotelPage.service.ReservationService;
 import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,11 +28,17 @@ public class HotelController {
     private final ReservationService reservationService;
     private final LikeService likeService;
 
-    @GetMapping
-    public ResponseEntity<List<Hotel>> getAllHotels() {
-        List<Hotel> hotel = hotelService.getAllHotels();
+    @GetMapping("list")
+    public Map<String,Object> getAllHotels(
+            @RequestParam(value="p",defaultValue = "1")Integer page,
+            @RequestParam(value="k",defaultValue = "")String keyword) {
 
-        return new ResponseEntity<>(hotel, HttpStatus.OK);
+        return hotelService.getAllHotels(page,keyword);
+    }
+
+    @GetMapping("/wishList/{userId}")
+    public List<Like> getAllLike(@PathVariable String userId){
+        return likeService.getLikeByUserId(userId);
     }
 
     @GetMapping("/bucket/id/{userId}")
@@ -113,10 +117,5 @@ public class HotelController {
         reservationService.addResrvation(reservation);
     }
 }
-
-
-
-
-
 
 
