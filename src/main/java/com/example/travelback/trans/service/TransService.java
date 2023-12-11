@@ -114,24 +114,24 @@ public class TransService {
             countAll = mapper.countByTypeName("air");
         }
 
-        int lastPageNumber = (countAll - 1) / 10 + 1;
-        int startPageNumber = (page - 1) / 10 * 10 + 1;
-        int endPageNumber = startPageNumber + 9;
+        int lastPageNumber = (countAll - 1) / 3 + 1;
+        int startPageNumber = (page - 1) / 3 * 3 + 1;
+        int endPageNumber = startPageNumber + 2;
         endPageNumber = Math.min(endPageNumber,lastPageNumber);
 
-        int prePageNumber = startPageNumber - 10;
+        int prePageNumber = startPageNumber - 3;
         int nextPageNumber = endPageNumber + 1;
 
         pageInfo.put("startPageNumber", startPageNumber);
         pageInfo.put("endPageNumber", endPageNumber);
         if(prePageNumber > 0) {
-            pageInfo.put("prevPageNumber",0);
+            pageInfo.put("prevPageNumber", prePageNumber);
         }
         if(nextPageNumber <= lastPageNumber) {
-            pageInfo.put("nextPageNumber",0);
+            pageInfo.put("nextPageNumber", nextPageNumber);
         }
 
-        int from = (page - 1) * 10;
+        int from = (page - 1) * 3;
 
         map.put("transList", mapper.selectAllByTypeName(type,from));
         map.put("pageInfo", pageInfo);
