@@ -56,12 +56,12 @@ public class HotelService {
         Map<String, Object> pageInfo = new HashMap<>();
 
         int countAll = hotelMapper.countAll("%"+keyword+"%");
-        int lastPageNumber = (countAll - 1) / 10 + 1;
-        int startPageNumber = (page - 1) / 10 * 10 + 1;
-        int endPageNumber = startPageNumber + 9;
+        int lastPageNumber = (countAll - 1) / 9 + 1;
+        int startPageNumber = (page - 1) / 9 * 9 + 1;
+        int endPageNumber = startPageNumber + 8;
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
 
-        int prevPageNumber = startPageNumber - 10;
+        int prevPageNumber = startPageNumber - 9;
         int nextPageNumber = endPageNumber + 1;
         pageInfo.put("currentPage",page);
         pageInfo.put("startPageNumber", startPageNumber);
@@ -73,7 +73,7 @@ public class HotelService {
             pageInfo.put("nextPageNumber", nextPageNumber);
         }
 
-        int from = (page - 1) * 10;
+        int from = (page - 1) * 9;
         map.put("hotelList", hotelMapper.selectAllHotels(from,"%"+keyword+"%"));
         map.put("pageInfo", pageInfo);
         return map;

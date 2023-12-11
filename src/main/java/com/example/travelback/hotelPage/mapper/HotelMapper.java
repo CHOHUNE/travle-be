@@ -10,9 +10,9 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (name, location, description, rating, numberOfBed, review, roomType, numberOfBedRooms, totalPrice,mainImgUrl)
+            INSERT INTO hotel (name, location, description, rating, lodgingType, review, roomType, numberOfBed, originalPrice,totalPrice,mainImgUrl)
              
-            VALUES (#{name}, #{location}, #{description}, #{rating}, #{numberOfBed}, #{review}, #{roomType},  #{numberOfBedRooms}, #{totalPrice},#{mainImgUrl})""")
+            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType}, #{review}, #{roomType},  #{numberOfBed}, #{originalPrice},#{totalPrice},#{mainImgUrl})""")
     @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
@@ -29,7 +29,7 @@ public interface HotelMapper {
             OR description LIKE #{keyword}
         GROUP BY hId
         ORDER BY hId DESC
-        LIMIT #{from}, 10
+        LIMIT #{from}, 9
             """)
     List<Hotel> selectAllHotels(Integer from,String keyword);
 
@@ -45,10 +45,10 @@ public interface HotelMapper {
                 name =#{name},
                 location=#{location},
                 description=#{description},
-                numberOfBed=#{numberOfBed},
+                lodgingType=#{lodgingType},
                 roomType=#{roomType},
                 totalPrice=#{totalPrice},
-                numberOfBedRooms=#{numberOfBedRooms},  
+                numberOfBed=#{numberOfBed},  
                 mainImgUrl=#{mainImgUrl}
                 
                 WHERE hId=#{hid}

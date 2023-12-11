@@ -21,7 +21,8 @@ public class Hotel {
 //    private String subImg2;
 //    private String mapImg;
 //
-    private String numberOfBedRooms;
+    private String lodgingType;
+    private Double originalPrice;
     private Double totalPrice;
 
     private String mainImgUrl;
