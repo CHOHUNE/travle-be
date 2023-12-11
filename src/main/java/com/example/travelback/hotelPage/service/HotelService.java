@@ -14,7 +14,8 @@ import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +35,9 @@ public class HotelService {
 // 기존 add 코드
 
 
-
     public void deleteHotel(Integer id) {
 //        라이크 삭제
-//        likeMapper.deleteLikeById(id);
-//        TODO : 나중에 기능 다시 추가할 것(ID를 받는 DELETE 기능)
+        likeMapper.deleteLikeById(id);
 
 
 //        파일 삭제
@@ -51,19 +50,43 @@ public class HotelService {
         return hotelMapper.selectHotelById(id);
     }
 
-    public List<Hotel> getAllHotels() {
-        return hotelMapper.selectAllHotels();
+    public Map<String,Object> getAllHotels(Integer page, String keyword) {
+
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> pageInfo = new HashMap<>();
+
+        int countAll = hotelMapper.countAll("%"+keyword+"%");
+        int lastPageNumber = (countAll - 1) / 10 + 1;
+        int startPageNumber = (page - 1) / 10 * 10 + 1;
+        int endPageNumber = startPageNumber + 9;
+        endPageNumber = Math.min(endPageNumber, lastPageNumber);
+
+        int prevPageNumber = startPageNumber - 10;
+        int nextPageNumber = endPageNumber + 1;
+        pageInfo.put("currentPage",page);
+        pageInfo.put("startPageNumber", startPageNumber);
+        pageInfo.put("endPageNumber", endPageNumber);
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
+
+        int from = (page - 1) * 10;
+        map.put("hotelList", hotelMapper.selectAllHotels(from,"%"+keyword+"%"));
+        map.put("pageInfo", pageInfo);
+        return map;
     }
 
-    //    기존 update
-//    public void update(Hotel hotel) {
-//        hotelMapper.update(hotel);
-//    }
 
     public void update(Hotel hotel, Integer hid, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
         // 기존 이미지 삭제
         deleteFile(hid);
+
+//        좋아요 삭제
+        likeMapper.deleteLikeById(hid);
 
         // DB에서 레코드 삭제
         hotelMapper.deleteById(hid);
