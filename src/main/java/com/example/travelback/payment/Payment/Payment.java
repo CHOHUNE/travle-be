@@ -1,4 +1,4 @@
-//package com.example.travelback.payment.dto;
+//package com.example.travelback.payment.Payment;
 //
 //import lombok.AllArgsConstructor;
 //import lombok.Builder;
@@ -6,21 +6,19 @@
 //import lombok.NoArgsConstructor;
 //
 //@Data
-//@Builder
 //@AllArgsConstructor
 //@NoArgsConstructor
-//public class PaymentResDto {
+//@Builder
+//public class Payment {
+//    private Long id;
 //    private String status;
 //    private Long amount;
-//    private String paymentName;
 //    private String paymentUid;
-//    private String customerEmail;
-//    private String customerName;
-//    private String successUrl;
-//    private String failUrl;
-//
+//    private String paymentName;
+//    private boolean paySuccessYN;
+//    private String memberId;
+//    private String paymentKey;
 //    private String failReason;
-//    private boolean cancelYN;
+//    private boolean cancelYN = false;
 //    private String cancelReason;
-//    private String createdAt;
 //}
