@@ -1,6 +1,7 @@
 package com.example.travelback.hotelPage.mapper;
 
 import com.example.travelback.hotelPage.domain.Hotel;
+import com.example.travelback.hotelPage.domain.HotelRoomType;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -10,11 +11,17 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (name, location, description, rating, lodgingType, review, roomType, numberOfBed, originalPrice,totalPrice,mainImgUrl)
+            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfBed, mainImgUrl)
              
-            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType}, #{review}, #{roomType},  #{numberOfBed}, #{originalPrice},#{totalPrice},#{mainImgUrl})""")
+            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfBed},#{mainImgUrl})""")
     @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
+
+    @Insert("""
+            INSERT INTO hotelroomtype(hId, originalPriceWeekday, salePriceWeekday, originalPriceWeekend, salePriceWeekend, roomtype, roomImg) 
+            VALUES (#{hid}, #{originalPriceWeekday}, #{salePriceWeekday}, #{originalPriceWeekend}, #{salePriceWeekend}, #{roomtype}, #{roomImg})
+            """)
+ void insertHotelRoomType(HotelRoomType hotelRoomType);
 
     @Select("""
             SELECT * 
@@ -46,8 +53,6 @@ public interface HotelMapper {
                 location=#{location},
                 description=#{description},
                 lodgingType=#{lodgingType},
-                roomType=#{roomType},
-                totalPrice=#{totalPrice},
                 numberOfBed=#{numberOfBed},  
                 mainImgUrl=#{mainImgUrl}
                 
@@ -64,22 +69,21 @@ public interface HotelMapper {
             """)
     void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl);
 
+    @Update("""
+    UPDATE hotelroomtype
+    SET 
+    roomImg=#{roomImg},
+    roomImgUrl=#{mainImgUrl}
+    
+    WHERE hrtId=#{hrtId} 
+""")
+    void updateRoomImg(long hid,String roomImg,String roomImgUrl);
+
     @Select("""
         SELECT COUNT(*) FROM hotel
         WHERE hotel.name LIKE #{keyword}
            OR hotel.description LIKE #{keyword}
 """)
     int countAll(String keyword);
-
-
-//    @Insert("""
-//SELECT userId FROM member
-//""")
-//    void getUserId(Integer userId);
-
-
-// file delete Mapper
-
-    // 다른 메서드들...
 
 }

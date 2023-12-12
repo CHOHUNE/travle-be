@@ -2,6 +2,7 @@ package com.example.travelback.hotelPage.service;
 
 
 import com.example.travelback.hotelPage.domain.Hotel;
+import com.example.travelback.hotelPage.domain.HotelRoomType;
 import com.example.travelback.hotelPage.mapper.HotelMapper;
 import com.example.travelback.hotelPage.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import software.amazon.awssdk.services.s3.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -106,13 +108,27 @@ public class HotelService {
         }
     }
 
+    public void addHotelType(HotelRoomType hotelRoomType,MultipartFile roomImg)throws IOException {
+
+
+        hotelMapper.insertHotelRoomType(hotelRoomType);
+
+        if(roomImg!=null) {
+            String roomImgUrl = urlPrefix + uploadFile(hotelRoomType.getHid(), roomImg);
+            hotelMapper.updateRoomImg(hotelRoomType.getHid(), roomImg.getOriginalFilename(), roomImgUrl);
+        }
+
+    }
 
     public void addHotel(Hotel hotel, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
+        hotelMapper.insertHotel(hotel);
 
         // 이미지 업로드 및 URL 설정
         if (mainImg != null) {
-            hotelMapper.insertHotel(hotel);
+
+
+
             String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), mainImg);
             String subImgUrl1 = urlPrefix + uploadFile(hotel.getHid(), subImg1);
             String subImgUrl2 = urlPrefix + uploadFile(hotel.getHid(), subImg2);
@@ -176,26 +192,8 @@ public class HotelService {
                 .bucket(BUCKET_NAME)
                 .key(folderKey)
                 .build());
-
-//        원래 코드
-////        파일명
-//        String mainImg = hotelMapper.selectMainIMgByHotelId(hid);
-//
-////    s3 bucket
-//        String key = "travel/hotel/img/" + hid + "/" + mainImg;
-//        String subImg1= hotelMapper.selectSubImg1ByHotelId(hid);
-//        String subImg2= hotelMapper.selectSubImg2ByHotelId(hid);
-//        String mapImg= hotelMapper.selectMapImgByHotelId(hid);
-//
-//        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
-//                .bucket(BUCKET_NAME)
-//                .key(key)
-//                .build();
-//
-//        s3Client.deleteObject(objectRequest);
-//        s3Client.deleteObject(DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(mapImg).build());
-//        s3Client.deleteObject(DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(subImg1).build());
-//        s3Client.deleteObject(DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(subImg2).build());
     }
 
-}
+
+
+    }

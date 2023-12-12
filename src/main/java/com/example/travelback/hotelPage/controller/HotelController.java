@@ -2,6 +2,7 @@ package com.example.travelback.hotelPage.controller;
 
 
 import com.example.travelback.hotelPage.domain.Hotel;
+import com.example.travelback.hotelPage.domain.HotelRoomType;
 import com.example.travelback.hotelPage.domain.Like;
 import com.example.travelback.hotelPage.domain.Reservation;
 import com.example.travelback.hotelPage.service.HotelService;
@@ -59,6 +60,12 @@ public class HotelController {
         return ResponseEntity.ok(hotel);
     }
 
+    @PostMapping(value = "/write/type")
+    public void addType(HotelRoomType hotelRoomType,
+            @RequestParam(value="roomImg[]",required=false) MultipartFile roomImg)throws IOException {
+
+        hotelService.addHotelType(hotelRoomType,roomImg);
+    }
 
     @PostMapping(value = "/write")
     public void add(Hotel hotel,

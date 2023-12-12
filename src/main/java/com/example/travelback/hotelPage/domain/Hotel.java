@@ -15,15 +15,8 @@ public class Hotel {
     private String roomType;
     private String description;
 
-
-//    private String mainImg;
-//    private String subImg1;
-//    private String subImg2;
-//    private String mapImg;
-//
     private String lodgingType;
-    private Double originalPrice;
-    private Double totalPrice;
+    private Double cheapestPrice;
 
     private String mainImgUrl;
     private String subImgUrl1;
