@@ -51,6 +51,9 @@ public class HotelService {
     public Hotel getHotelById(Long id) {
         return hotelMapper.selectHotelById(id);
     }
+    public List<HotelRoomType> getHotelRoomtypeById(Long id) {
+        return hotelMapper.selectAllRoomtypeByHotelId(id);
+    }
 
     public Map<String,Object> getAllHotels(Integer page, String keyword) {
 
@@ -196,4 +199,4 @@ public class HotelService {
 
 
 
-    }
+}

@@ -48,11 +48,17 @@ public class HotelController {
         return likeService.getLikeByUserId(userId);
     }
 
+    @GetMapping("/reserv/type/{id}")
+            public List<HotelRoomType> getAllRoomtypeByHotelId(@PathVariable Long id){
+        return hotelService.getHotelRoomtypeById(id);
+    }
+
     @GetMapping("/reserv/id/{id}")
     public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
         Hotel hotel = hotelService.getHotelById(id);
         return ResponseEntity.ok(hotel);
     }
+
 
     @GetMapping("/edit/id/{id}")
     public ResponseEntity<Hotel> getEditHotelById(@PathVariable Long id) {

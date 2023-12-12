@@ -40,6 +40,13 @@ public interface HotelMapper {
             """)
     List<Hotel> selectAllHotels(Integer from,String keyword);
 
+    @Select("""
+SELECT *
+FROM hotelroomtype
+WHERE hId=#{hid}
+""")
+    List<HotelRoomType> selectAllRoomtypeByHotelId(Long id);
+
     @Delete("""
             DELETE FROM hotel
             WHERE hId=#{id}
@@ -85,5 +92,6 @@ public interface HotelMapper {
            OR hotel.description LIKE #{keyword}
 """)
     int countAll(String keyword);
+
 
 }
