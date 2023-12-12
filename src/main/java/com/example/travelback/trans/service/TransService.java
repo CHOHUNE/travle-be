@@ -131,7 +131,7 @@ public class TransService {
             pageInfo.put("nextPageNumber", nextPageNumber);
         }
 
-        int from = (page - 1) * 3;
+        int from = (page - 1) * 10;
 
         map.put("transList", mapper.selectAllByTypeName(type,from));
         map.put("pageInfo", pageInfo);
