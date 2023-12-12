@@ -5,6 +5,7 @@ import com.example.travelback.trans.dto.TransBucket;
 import com.example.travelback.trans.dto.TransLike;
 import com.example.travelback.trans.service.TransBucketService;
 import com.example.travelback.trans.service.TransLikeService;
+import com.example.travelback.trans.service.TransPayService;
 import com.example.travelback.trans.service.TransService;
 import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ import java.util.List;
 public class TransController {
     private final TransService service;
     private final TransBucketService transBucketService;
+    private final TransPayService transPayService;
 
     @PostMapping("/add")
     public void add (Trans trans,
@@ -29,10 +33,13 @@ public class TransController {
 
         service.add(trans, type, transMainImage, transContentImages);
     }
-
+    // 상품 리스트별로 조회하고 페이지 부여
     @GetMapping("list")
-    public List<Trans> list() {
-        return service.list();
+    public Map<String, Object> list(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "p",defaultValue = "1")Integer page) {
+
+        return service.list(type,page);
     }
 
     @GetMapping("listPopularBus")
@@ -55,8 +62,10 @@ public class TransController {
     @PutMapping("edit")
     public void edit ( Trans trans,
                        @RequestParam(value = "removeMainImageId",required = false) Integer removeMainImageId,
-                       @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage) throws IOException {
-        service.update(trans, removeMainImageId, transMainImage);
+                       @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
+                       @RequestParam(value = "removeContentImageIds[]", required = false) List<Integer> removeContentImageIds,
+                       @RequestParam(value = "transContentImages[]", required = false)MultipartFile[] transContentImages) throws IOException {
+        service.update(trans, removeMainImageId, transMainImage, removeContentImageIds, transContentImages);
     }
 
     @DeleteMapping("delete/{id}")
@@ -68,5 +77,17 @@ public class TransController {
     public List<TransBucket> getTransBucket(@PathVariable String id) {
         System.out.println(id);
         return transBucketService.getByUserId(id);
+    }
+
+    @GetMapping("pay/{id}")
+    public Map<String, Object> getTransPayById(@PathVariable Integer id,
+                                               @SessionAttribute(value = "login", required = false)Member login) {
+
+        Trans trans = transPayService.getTransPayById(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", login.getUserName());
+        map.put("email", login.getUserEmail());
+        map.put("phoneNumber", login.getUserPhoneNumber());
+        return Map.of("trans", trans, "member", map);
     }
 }

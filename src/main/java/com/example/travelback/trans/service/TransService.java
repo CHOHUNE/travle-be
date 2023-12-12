@@ -16,7 +16,9 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -101,8 +103,40 @@ public class TransService {
     // 운송 상품 메인 이미지 업로드 (끝) --------------------------------------------------------------------------------------
     // 운송 상품 등록 (끝) ------------------------------------------------------------------------------------------------
 
-    public List<Trans> list() {
-        return mapper.selectAll();
+    public Map<String, Object> list(String type, Integer page) {
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> pageInfo = new HashMap<>();
+
+        int countAll = 0;
+        if( type.equals("bus") ) {
+            countAll = mapper.countByTypeName("bus");
+        } else {
+            countAll = mapper.countByTypeName("air");
+        }
+
+        int lastPageNumber = (countAll - 1) / 3 + 1;
+        int startPageNumber = (page - 1) / 3 * 3 + 1;
+        int endPageNumber = startPageNumber + 2;
+        endPageNumber = Math.min(endPageNumber,lastPageNumber);
+
+        int prePageNumber = startPageNumber - 3;
+        int nextPageNumber = endPageNumber + 1;
+
+        pageInfo.put("startPageNumber", startPageNumber);
+        pageInfo.put("endPageNumber", endPageNumber);
+        if(prePageNumber > 0) {
+            pageInfo.put("prevPageNumber", prePageNumber);
+        }
+        if(nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
+
+        int from = (page - 1) * 10;
+
+        map.put("transList", mapper.selectAllByTypeName(type,from));
+        map.put("pageInfo", pageInfo);
+
+        return map;
     }
 
     // 운송 상품 해당 아이디 조회 (시작) ------------------------------------------------------------------------------------------------
@@ -135,7 +169,11 @@ public class TransService {
     // 운송 상품 해당 아이디 조회 (끝)--------------------------------------------------------------------------------------------------
 
     // 운송 상품 업데이트 (시작)--------------------------------------------------------------------------------------------------
-    public void update(Trans trans, Integer removeMainImageId, MultipartFile transMainImage) throws IOException {
+    public void update(Trans trans,
+                       Integer removeMainImageId,
+                       MultipartFile transMainImage,
+                       List<Integer> removeContentImageIds,
+                       MultipartFile[] transContentImages) throws IOException {
 
         // 메인 이미지 업데이트 전 메인 이미지 지우기가 있다면 지우기
         if(removeMainImageId != null) {
@@ -158,6 +196,34 @@ public class TransService {
             // db에 업로드
             String url = urlPrefix + "travel/trans/mainImage/" + trans.getTId() + "/" + transMainImage.getOriginalFilename();
             mainImageMapper.insert(trans.getTId(), transMainImage.getOriginalFilename(), url);
+        }
+
+        // 컨텐츠 이미지 중 선택한 것이 있다면 지우기
+        if(removeContentImageIds != null){
+            // s3에서 지우기
+            for (Integer id : removeContentImageIds){
+                TransContentImages contentImages = contentImagesMapper.selectById(id);
+                String key = "travel/trans/contentImages/" + trans.getTId() + "/" + contentImages.getName();
+                DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                        .bucket(bucket)
+                        .key(key)
+                        .build();
+                // 파일삭제 경로로 삭제
+                s3.deleteObject(objectRequest);
+
+                // db에서 지우기
+                contentImagesMapper.deleteById(id);
+            }
+        }
+
+        // 추가한 파일 이 있다면 추가하기
+        if(transContentImages != null) {
+            for (int i = 0; i < transContentImages.length; i++) {
+                String url = urlPrefix + "travel/trans/contentImages/" + trans.getTId() + "/" + transContentImages[i].getOriginalFilename();
+                contentImagesMapper.insert(trans.getTId(), transContentImages[i].getOriginalFilename(), url);
+                // 파일 정보를 s3 bucket 에 저장 시키기
+                uploadContentImages(trans.getTId(), transContentImages[i]);
+            }
         }
 
         mapper.update(trans);
