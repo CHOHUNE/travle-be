@@ -27,24 +27,27 @@ public interface TransMapper {
     @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
 
-    @Select("""
-        SELECT
-                tp.tId,
-                tp.transTitle,
-                tp.transPrice,
-                tp.transContent,
-                tp.transStartLocation,
-                tp.transArriveLocation,
-                tp.transAddress, 
-                tp.transInserted,
-                tty.typeName,
-                tMI.url
-            FROM transport tp JOIN transtype tty
-            ON tp.tId = tty.tId
-            LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
-            ORDER BY tp.tId
-        """)
-    List<Trans> selectAll();
+    // 타입 관계없이 다 조회 지금은 사용 하지 않음
+//    @Select("""
+//        SELECT
+//                tp.tId,
+//                tp.transTitle,
+//                tp.transPrice,
+//                tp.transContent,
+//                tp.transStartLocation,
+//                tp.transArriveLocation,
+//                tp.transAddress,
+//                tp.transInserted,
+//                tty.typeName,
+//                tMI.url
+//            FROM transport tp JOIN transtype tty
+//            ON tp.tId = tty.tId
+//            LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+//            ORDER BY tp.tId
+//            LIMIT #{from}, 8
+//        """)
+//    List<Trans> selectAll(String type, int from);
+
 
     @Select("""
         SELECT 
@@ -125,4 +128,29 @@ public interface TransMapper {
     void deleteById(Integer id);
 
 
+    @Select("""
+    SELECT COUNT(*) FROM transtype WHERE typeName = #{type}
+    """)
+    int countByTypeName(String type);
+
+    @Select("""
+        SELECT 
+                tp.tId,
+                tp.transTitle, 
+                tp.transPrice, 
+                tp.transContent, 
+                tp.transStartLocation,
+                tp.transArriveLocation,
+                tp.transAddress,
+                tp.transInserted, 
+                tty.typeName,
+                tMI.url  
+            FROM transport tp JOIN transtype tty 
+            ON tp.tId = tty.tId
+            LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+            WHERE typeName = #{type}
+            ORDER BY tp.tId DESC 
+            LIMIT #{from}, 8
+        """)
+    List<Trans> selectAllByTypeName(String type, int from);
 }

@@ -27,7 +27,7 @@ public class TransLikeService {
             count = mapper.insert(transLike);
         }
         int transLikeCount = mapper.countByTransId(transLike.getTransId());
-        return Map.of("transLikeState", count == 1, "transLikeCount", transLikeCount);
+        return Map.of("like", count == 1, "transLikeCount", transLikeCount);
     }
 
     public Map<String, Object> get(Integer transId, Member login) {

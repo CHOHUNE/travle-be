@@ -27,4 +27,16 @@ public interface ContentImagesMapper {
         WHERE tId = #{tId}
         """)
     void deleteByTId(Integer tId);
+
+    @Select("""
+        SELECT * FROM transcontentimages
+        WHERE id = #{id}
+        """)
+    TransContentImages selectById(Integer id);
+
+    @Delete("""
+        DELETE FROM transcontentimages
+        WHERE id = #{id}
+        """)
+    int deleteById(Integer id);
 }
