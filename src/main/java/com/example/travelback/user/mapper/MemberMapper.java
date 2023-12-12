@@ -141,8 +141,10 @@ public interface MemberMapper {
     String selectByUserNameAndId(String userPhoneNumber);
 
 
-    @Query("SELECT m " +
-            "FROM Member m " +
-            "WHERE m.userEmail = :email")
-    Member findByEmail(String email);
+    @Select("""
+            SELECT userId
+            FROM member
+            WHERE userEmail = #{userEmail}
+            """)
+    String findIdByEmail(String userEmail);
 }
