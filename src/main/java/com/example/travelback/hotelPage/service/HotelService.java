@@ -118,7 +118,7 @@ public class HotelService {
 
         if(roomImg!=null) {
             String roomImgUrl = urlPrefix + uploadFile(hotelRoomType.getHid(), roomImg);
-            hotelMapper.updateRoomImg(hotelRoomType.getHid(), roomImg.getOriginalFilename(), roomImgUrl);
+            hotelMapper.updateRoomImg(hotelRoomType.getHid(), roomImgUrl);
         }
 
     }

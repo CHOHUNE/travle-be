@@ -18,8 +18,8 @@ public interface HotelMapper {
     void insertHotel(Hotel hotel);
 
     @Insert("""
-            INSERT INTO hotelroomtype(hId, originalPriceWeekday, salePriceWeekday, originalPriceWeekend, salePriceWeekend, roomtype, roomImg) 
-            VALUES (#{hid}, #{originalPriceWeekday}, #{salePriceWeekday}, #{originalPriceWeekend}, #{salePriceWeekend}, #{roomtype}, #{roomImg})
+            INSERT INTO hotelroomtype(hId, originalPriceWeekday, salePriceWeekday, originalPriceWeekend, salePriceWeekend, roomtype) 
+            VALUES (#{hid}, #{originalPriceWeekday}, #{salePriceWeekday}, #{originalPriceWeekend}, #{salePriceWeekend}, #{roomtype} )
             """)
  void insertHotelRoomType(HotelRoomType hotelRoomType);
 
@@ -79,12 +79,11 @@ WHERE hId=#{hid}
     @Update("""
     UPDATE hotelroomtype
     SET 
-    roomImg=#{roomImg},
-    roomImgUrl=#{mainImgUrl}
+    roomImg=#{roomImg}
     
-    WHERE hrtId=#{hrtId} 
+    WHERE hid=#{hid} 
 """)
-    void updateRoomImg(long hid,String roomImg,String roomImgUrl);
+    void updateRoomImg(long hid,String roomImg);
 
     @Select("""
         SELECT COUNT(*) FROM hotel
