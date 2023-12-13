@@ -9,6 +9,7 @@ import com.example.travelback.hotelPage.service.HotelService;
 import com.example.travelback.hotelPage.service.LikeService;
 import com.example.travelback.hotelPage.service.ReservationService;
 import com.example.travelback.user.dto.Member;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +65,11 @@ public class HotelController {
     public ResponseEntity<Hotel> getEditHotelById(@PathVariable Long id) {
         Hotel hotel = hotelService.getHotelById(id);
         return ResponseEntity.ok(hotel);
+    }
+
+    @DeleteMapping("/type/delete/{hrtId}")
+    public void typeDelete(@PathVariable Integer hrtId){
+        hotelService.deleHotelType(hrtId);
     }
 
     @PostMapping(value = "/write/type")

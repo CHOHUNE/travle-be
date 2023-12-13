@@ -117,8 +117,8 @@ public class HotelService {
         hotelMapper.insertHotelRoomType(hotelRoomType);
 
         if(roomImg!=null) {
-            String roomImgUrl = urlPrefix + uploadFile(hotelRoomType.getHid(), roomImg);
-            hotelMapper.updateRoomImg(hotelRoomType.getHid(), roomImgUrl);
+            String roomImgUrl = urlPrefix + uploadTypeFile(hotelRoomType.getHid(),hotelRoomType.getHrtId(), roomImg);
+            hotelMapper.updateRoomImg(hotelRoomType.getHrtId(),roomImg.getOriginalFilename(),roomImgUrl);
         }
 
     }
@@ -130,23 +130,42 @@ public class HotelService {
         // 이미지 업로드 및 URL 설정
         if (mainImg != null) {
 
-
-
             String mainImgUrl = urlPrefix + uploadFile(hotel.getHid(), mainImg);
             String subImgUrl1 = urlPrefix + uploadFile(hotel.getHid(), subImg1);
             String subImgUrl2 = urlPrefix + uploadFile(hotel.getHid(), subImg2);
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
-
 
             hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImgUrl2, mapImgUrl);
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }
 
+    private String uploadTypeFile(Long hid,int hrtId, MultipartFile roomImg) throws IOException {
+        // 파일 이름 생성
+
+        String key = "travel/hotel/img/" + hid + "/roomImg/"+hrtId+"/" + roomImg.getOriginalFilename();
+
+        // S3에 파일 업로드
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(key)
+                .acl(ObjectCannedACL.PUBLIC_READ)
+                .build();
+
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(roomImg.getInputStream(), roomImg.getSize()));
+
+//       URL 설정
+        GetUrlRequest getUrlRequest = GetUrlRequest.builder()
+                .bucket(BUCKET_NAME)
+                .key(key)
+                .build();
+
+        URL imageUrl = s3Client.utilities().getUrl(getUrlRequest);
+        return key;
+    }
 
     //    uploadFile
     private String uploadFile(Long hid, MultipartFile mainImg) throws IOException {
-
 
         // 파일 이름 생성
         String key = "travel/hotel/img/" + hid + "/" + mainImg.getOriginalFilename();
@@ -198,5 +217,7 @@ public class HotelService {
     }
 
 
-
+    public void deleHotelType(Integer hrtId) {
+        hotelMapper.deleteHotelTypeByhrtId(hrtId);
+    }
 }

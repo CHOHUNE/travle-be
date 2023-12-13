@@ -21,6 +21,7 @@ public interface HotelMapper {
             INSERT INTO hotelroomtype(hId, originalPriceWeekday, salePriceWeekday, originalPriceWeekend, salePriceWeekend, roomtype) 
             VALUES (#{hid}, #{originalPriceWeekday}, #{salePriceWeekday}, #{originalPriceWeekend}, #{salePriceWeekend}, #{roomtype} )
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "hrtId")
  void insertHotelRoomType(HotelRoomType hotelRoomType);
 
     @Select("""
@@ -46,6 +47,11 @@ FROM hotelroomtype
 WHERE hId=#{hid}
 """)
     List<HotelRoomType> selectAllRoomtypeByHotelId(Long id);
+
+    @Delete("""
+    DELETE FROM hotelroomtype WHERE hrtId=#{hrtId}
+""")
+    void deleteHotelTypeByhrtId(Integer hrtId);
 
     @Delete("""
             DELETE FROM hotel
@@ -79,11 +85,12 @@ WHERE hId=#{hid}
     @Update("""
     UPDATE hotelroomtype
     SET 
-    roomImg=#{roomImg}
+    roomImg=#{roomImg},
+    roomImgUrl=#{roomImgUrl}
     
-    WHERE hid=#{hid} 
+    WHERE hrtId=#{hrtId}
 """)
-    void updateRoomImg(long hid,String roomImg);
+    void updateRoomImg(int hrtId, String roomImg, String roomImgUrl);
 
     @Select("""
         SELECT COUNT(*) FROM hotel
