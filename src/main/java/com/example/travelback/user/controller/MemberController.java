@@ -135,13 +135,13 @@ public class MemberController {
     public ResponseEntity<Member> view(String userId,
                                        @SessionAttribute(value = "login", required = false) Member login) {
 
-        if (login == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        if (!service.hasAccess(userId, login)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+//        if (login == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        if (!service.hasAccess(userId, login)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
 
         Member member = service.getMember(userId);
 
