@@ -15,14 +15,6 @@ public interface TossMapper {
 
     int save(Toss toss);
 
-    @Select("""
-                    select amount from travel.ttoss where id=#{id};
-    """)
-    void get();
 
-//    @Select("""
-//                select t.transPrice amount from travel.ttoss join travel.transport t on t.tId = ttoss.tid;
-//
-//        """)
-//    Toss getamount();
+
 }

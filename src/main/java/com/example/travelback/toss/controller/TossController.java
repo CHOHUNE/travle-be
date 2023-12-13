@@ -19,9 +19,6 @@ public class TossController {
                 service.save(toss);
     }
 
-    @GetMapping("get")
-    public Toss  get(){
-        return  service.get();
-    }
+
 
 }
