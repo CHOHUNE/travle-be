@@ -15,6 +15,7 @@ public class HotelRoomType {
     private double salePriceWeekend;
     private String roomtype;
     private String roomImgUrl;
+//    private String roomImg;
     private long hid;
     private int hrtId;
 

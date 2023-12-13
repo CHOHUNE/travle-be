@@ -47,11 +47,5 @@ public class LikeService {
         return null;
     }
 
-
-//    public void deleteLikeByHotelId(Like like, Member login) {
-//    if(likemapper.insertLike(like,login)!=0){
-//        likemapper.deleteLikeByHotelId(like,login.getUserId());
-//    }
-//    }
 }
 

@@ -22,7 +22,6 @@ public class Hotel {
     private String subImgUrl1;
     private String subImgUrl2;
     private String mapImgUrl;
-
 }
 
 

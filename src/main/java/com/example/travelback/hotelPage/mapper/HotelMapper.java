@@ -76,11 +76,11 @@ WHERE hId=#{hid}
     @Update("""
             UPDATE hotel
             SET mainImg=#{mainImg},mainImgUrl=#{mainImgUrl},subImgUrl1=#{subImgUrl1},
-            subImgUrl2=#{subImgUrl2},mapImgUrl=#{mapImgUrl}
+            subImgUrl2=#{subImgUrl2},mapImgUrl=#{mapImgUrl},subImg1=#{subImg1},subImg2=#{subImg2},mapImg=#{mapImg}
                         
             WHERE hId=#{hid}
             """)
-    void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl);
+    void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl, String subImg1, String subImg2, String mapImg);
 
     @Update("""
     UPDATE hotelroomtype
@@ -100,4 +100,21 @@ WHERE hId=#{hid}
     int countAll(String keyword);
 
 
+@Select("""
+SELECT * FROM hotelroomtype
+WHERE hrtId=#{removeRoomhrtId}
+""")
+    HotelRoomType selectRoomtypeByhrtId(Integer removeRoomhrtId);
+
+@Update("""
+UPDATE hotelroomtype
+SET
+originalPriceWeekday=#{originalPriceWeekday},
+salePriceWeekday=#{salePriceWeekday},
+originalPriceWeekend=#{originalPriceWeekend},
+salePriceWeekend=#{salePriceWeekend},
+roomtype=#{roomtype}
+WHERE hrtId=#{hrtId}
+""")
+    void updateType(HotelRoomType hotelRoomType);
 }
