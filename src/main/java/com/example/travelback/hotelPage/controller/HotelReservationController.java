@@ -12,6 +12,4 @@ import org.springframework.web.bind.annotation.*;
 public class HotelReservationController {
     private final ReservationService reservationService;
 
-
-
 }

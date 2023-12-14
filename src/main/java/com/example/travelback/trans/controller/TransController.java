@@ -30,7 +30,7 @@ public class TransController {
                      @RequestParam(value = "transMainImage", required = false) MultipartFile transMainImage,
                      @RequestParam(value = "transContentImages[]", required = false) MultipartFile[] transContentImages,
                      @RequestParam(value = "type") String type) throws IOException {
-
+        System.out.println("trans = " + trans);
         service.add(trans, type, transMainImage, transContentImages);
     }
     // 상품 리스트별로 조회하고 페이지 부여
