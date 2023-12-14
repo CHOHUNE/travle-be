@@ -16,26 +16,27 @@ public class LikeService {
 
     private final LikeMapper likemapper;
 
-    public Like getLikeById(Integer id){
-        return likemapper.getLikeById(id);
-    }
-
-//    public void insertLike(Like like){
-//        likemapper.insertLike(like);
+//    public Like getLikeById(Integer id){
+//        return likemapper.getLikeById(id);
 //    }
 
+//
+////    public void insertLike(Like like){
+////        likemapper.insertLike(like);
+////    }
+//
     public List<Like> getLikeByUserId(String userId) {
         return likemapper.getLikesByUserId(userId);
     }
-//    public void deleteLike(Integer id){
-//        likemapper.deleteLike(id);
+////    public void deleteLike(Integer id){
+////        likemapper.deleteLike(id);
+////    }
+
+//
+//    public Like getLikesByHotelId(Integer hotelId) {
+//        return likemapper.getLikesByHotelId(hotelId);
+//
 //    }
-
-
-    public Like getLikesByHotelId(Integer hotelId) {
-        return likemapper.getLikesByHotelId(hotelId);
-
-    }
 
     public Object update(Like like, Member login) {
         like.setUserId(login.getUserId());
@@ -47,5 +48,12 @@ public class LikeService {
         return null;
     }
 
+//    public Object get(Integer hotelId,Member login) {
+//        List<Like> like=null;
+//        if(login!=null){
+//            like=likemapper.getLikesByUserIdAndHotelId(login.getUserId());
+//        }
+//        return Map.of("like",like!=null);
+//    }
 }
 
