@@ -15,7 +15,7 @@ public class Like {
     private String name;
     private String mainImgUrl;
     private String location;
-    private String roomType;
+    private String lodgingType;
     private LocalDateTime createdAt;
 
     // ---------- 시간 관련 ----------
