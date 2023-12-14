@@ -34,11 +34,10 @@ public class HotelService {
     private String urlPrefix;
 
 
-
 //    호텔 관련 ------------------------------------------------------------------------------------------------------
 
 
-//    호텔 삭제
+    //    호텔 삭제
     public void deleteHotel(Integer id) {
 //        라이크 삭제
         likeMapper.deleteLikeById(id);
@@ -48,12 +47,12 @@ public class HotelService {
         hotelMapper.deleteById(id);
     }
 
-// 호텔 정보 불러오기
+    // 호텔 정보 불러오기
     public Hotel getHotelById(Long id) {
         return hotelMapper.selectHotelById(id);
     }
 
-// 모든 호텔 목록 불러오기 ( 페이지 네이션 )
+    // 모든 호텔 목록 불러오기 ( 페이지 네이션 )
     public Map<String, Object> getAllHotels(Integer page, String keyword) {
 
         Map<String, Object> map = new HashMap<>();
@@ -83,7 +82,7 @@ public class HotelService {
         return map;
     }
 
-// 호텔 업데이트 -> 완전 삭제 -> 다시 생성 ( 라이크, 객실 모두 수정 )
+    // 호텔 업데이트 -> 완전 삭제 -> 다시 생성 ( 라이크, 객실 모두 수정 )
     public void update(Hotel hotel, Integer hid, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
         // 기존 이미지 삭제
@@ -106,12 +105,12 @@ public class HotelService {
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
             // db추가
-            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1,subImg1.getOriginalFilename(), subImgUrl2,subImg2.getOriginalFilename(), mapImgUrl,mapImg.getOriginalFilename());
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImg1.getOriginalFilename(), subImgUrl2, subImg2.getOriginalFilename(), mapImgUrl, mapImg.getOriginalFilename());
         }
     }
 
 
-//    호텔 추가
+    //    호텔 추가
     public void addHotel(Hotel hotel, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {
 
         hotelMapper.insertHotel(hotel);
@@ -124,7 +123,7 @@ public class HotelService {
             String subImgUrl2 = urlPrefix + uploadFile(hotel.getHid(), subImg2);
             String mapImgUrl = urlPrefix + uploadFile(hotel.getHid(), mapImg);
 
-            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1,subImg1.getOriginalFilename(), subImgUrl2,subImg2.getOriginalFilename(), mapImgUrl,mapImg.getOriginalFilename());
+            hotelMapper.updateImg(hotel.getHid(), mainImg.getOriginalFilename(), mainImgUrl, subImgUrl1, subImg1.getOriginalFilename(), subImgUrl2, subImg2.getOriginalFilename(), mapImgUrl, mapImg.getOriginalFilename());
 //            uploadFile(hotel.getHid(),mainImg);
         }
     }
@@ -147,7 +146,6 @@ public class HotelService {
 
         return key;
     }
-
 
 
     //    호텔 삭제
@@ -179,11 +177,13 @@ public class HotelService {
 
     //    객실 관련 ------------------------------------------------------------------------------------------------------
 
-// 호텔 객실 타입 불러오기
+    // 객실 불러오기
     public List<HotelRoomType> getHotelRoomtypeById(Long id) {
         return hotelMapper.selectAllRoomtypeByHotelId(id);
     }
 
+
+    //  객실 추가
     public void addHotelType(HotelRoomType hotelRoomType, MultipartFile transRoomImg) throws IOException {
 
 
@@ -196,7 +196,7 @@ public class HotelService {
 
     }
 
-// 객실 업로드
+    // 객실 업로드
     private String uploadTypeFile(Long hid, int hrtId, MultipartFile roomImg) throws IOException {
         // 파일 이름 생성
 
@@ -214,7 +214,7 @@ public class HotelService {
         return key;
     }
 
-// 타입 삭제
+    // 타입 삭제
     public void deleHotelType(Long hId, Integer hrtId) {
 //        DB 지우기
         hotelMapper.deleteHotelTypeByhrtId(hrtId);
