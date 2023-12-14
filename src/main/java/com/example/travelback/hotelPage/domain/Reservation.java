@@ -12,6 +12,7 @@ public class Reservation{
 
     private int hrId;
     private int hId;
+    private int hrtId;
     private String guestName;
     private Date checkinDate;
     private Date checkoutDate;
