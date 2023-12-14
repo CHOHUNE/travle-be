@@ -14,7 +14,9 @@ public interface TransMapper {
             transContent,
             transStartLocation,
             transArriveLocation,
-            transAddress
+            transAddress,
+            transStartDate,
+            transEndDate
              ) 
         VALUES ( 
             #{transTitle},
@@ -22,7 +24,9 @@ public interface TransMapper {
             #{transContent}, 
             #{transStartLocation}, 
             #{transArriveLocation}, 
-            #{transAddress}) 
+            #{transAddress},
+            #{transStartDate},
+            #{transEndDate}) 
         """)
     @Options(useGeneratedKeys = true, keyProperty = "tId")
     Integer insert(Trans trans);
@@ -59,6 +63,8 @@ public interface TransMapper {
                 tp.transArriveLocation,
                 tp.transAddress,
                 tp.transInserted, 
+                tp.transStartDate,
+                tp.transEndDate,
                 tty.typeName,
                 tMI.url  
             FROM transport tp JOIN transtype tty 
@@ -79,6 +85,8 @@ public interface TransMapper {
                 tp.transStartLocation,
                 tp.transArriveLocation,
                 tp.transAddress,
+                tp.transStartDate,
+                tp.transEndDate,
                 tp.transInserted, 
                 tty.typeName,
                 tMI.url
@@ -100,6 +108,8 @@ public interface TransMapper {
                 tp.transStartLocation,
                 tp.transArriveLocation,
                 tp.transAddress,
+                tp.transStartDate,
+                tp.transEndDate,
                 tp.transInserted,
                 tty.typeName,
                 tMI.url
@@ -116,7 +126,9 @@ public interface TransMapper {
             transTitle = #{transTitle},
             transPrice = #{transPrice},
             transContent = #{transContent},
-            transAddress = #{transAddress}
+            transAddress = #{transAddress},
+            transStartDate = #{transStartDate},
+            transEndDate = #{transEndDate}
         WHERE tId = #{tId}
         """)
     void update(Trans trans);
@@ -142,6 +154,8 @@ public interface TransMapper {
                 tp.transStartLocation,
                 tp.transArriveLocation,
                 tp.transAddress,
+                tp.transStartDate,
+                tp.transEndDate,
                 tp.transInserted, 
                 tty.typeName,
                 tMI.url  

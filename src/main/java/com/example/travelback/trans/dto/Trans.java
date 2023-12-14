@@ -1,6 +1,7 @@
 package com.example.travelback.trans.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,10 @@ public class Trans {
     private String transStartLocation;
     private String transArriveLocation;
     private String transAddress;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime transStartDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime transEndDate;
     private LocalDateTime transInserted;
     private String typeName;
     private String url;

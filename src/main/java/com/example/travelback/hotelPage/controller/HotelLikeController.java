@@ -20,20 +20,17 @@ public class HotelLikeController {
 
     private final LikeService service;
 
-    @GetMapping("/{id}")
-    public Like getLikeById(@PathVariable Integer id) {
-        return service.getLikeById(id);
-    }
-
-    @GetMapping("/hotel/{hotelId}")
-    public Like getLikesByHotelId(@PathVariable Integer hotelId) {
-        return service.getLikesByHotelId(hotelId);
-    }
-
-//    @PostMapping
-//    public void insertLike(@RequestBody Like like) {
-//        service.insertLike(like);
+//    @GetMapping("/{id}")
+//    public Like getLikeById(@PathVariable Integer id) {
+//        return service.getLikeById(id);
 //    }
+//
+//    @GetMapping("/hotel/{hotelId}")
+//    public Like getLikesByHotelId(@PathVariable Integer hotelId) {
+//        return service.getLikesByHotelId(hotelId);
+//    }
+
+
     @PostMapping
     public ResponseEntity insertLike(@RequestBody Like like,
                            @SessionAttribute(value ="login",required = false)Member login){
@@ -41,16 +38,14 @@ public class HotelLikeController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(service.update(like,login));
-
-//        service.insertLike(like);
     }
 
-
-
-//        @DeleteMapping("/{id}")
-//        public void deleteLike(@RequestBody Like like,@SessionAttribute(value ="login",required = false)Member login) {
-//            service.deleteLikeByHotelId(like,login);
-//        }
+//    @GetMapping("/user")
+//    public ResponseEntity get(
+//            Integer hotelId,
+//            @SessionAttribute(value = "login",required = false)Member login){
+//        return ResponseEntity.ok(service.get(hotelId,login));
+//    }
 
 }
 
