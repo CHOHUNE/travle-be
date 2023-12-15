@@ -158,10 +158,11 @@ public class HotelController {
 
     }
 
-    @PostMapping("/pay")
-    public void add(@RequestBody Reservation reservation) {
+    @GetMapping("/pay")
+    public void add(Reservation reservation) {
         reservationService.addResrvation(reservation);
     }
+
 }
 
 

@@ -18,6 +18,8 @@ public class HotelRoomType {
 //    private String roomImg;
     private long hid;
     private int hrtId;
-
+    private String maxMinPerRoom;
+    private String ableCooking;
+    private String numberOfBedRoom;
 }
 

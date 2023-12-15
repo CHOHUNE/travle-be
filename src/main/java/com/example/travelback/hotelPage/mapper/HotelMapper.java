@@ -11,15 +11,15 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfBed, mainImgUrl)
+            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfBed, mainImgUrl,salesFrom,salesTo,cautionMessage)
              
-            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfBed},#{mainImgUrl})""")
+            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfBed},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage})""")
     @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
     @Insert("""
-            INSERT INTO hotelroomtype(hId, originalPriceWeekday, salePriceWeekday, originalPriceWeekend, salePriceWeekend, roomtype) 
-            VALUES (#{hid}, #{originalPriceWeekday}, #{salePriceWeekday}, #{originalPriceWeekend}, #{salePriceWeekend}, #{roomtype} )
+            INSERT INTO hotelroomtype(hId, originalPriceWeekday, salePriceWeekday, originalPriceWeekend, salePriceWeekend, roomtype,maxMinPerRoom,ableCooking,numberOfBedRoom) 
+            VALUES (#{hid}, #{originalPriceWeekday}, #{salePriceWeekday}, #{originalPriceWeekend}, #{salePriceWeekend}, #{roomtype} ,#{maxMinPerRoom},#{ableCooking},#{numberOfBedRoom})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "hrtId")
  void insertHotelRoomType(HotelRoomType hotelRoomType);
@@ -34,7 +34,7 @@ public interface HotelMapper {
     @Select("""
             SELECT * FROM hotel
             WHERE name LIKE #{keyword}
-            OR description LIKE #{keyword}
+            OR location LIKE #{keyword}
         GROUP BY hId
         ORDER BY hId DESC
         LIMIT #{from}, 9
@@ -52,6 +52,11 @@ WHERE hId=#{hid}
     DELETE FROM hotelroomtype WHERE hrtId=#{hrtId}
 """)
     void deleteHotelTypeByhrtId(Integer hrtId);
+
+    @Delete("""
+    DELETE FROM hotelroomtype WHERE hId=#{hId}
+""")
+    void deleteHotelAllTypeByhId(Integer hId);
 
     @Delete("""
             DELETE FROM hotel
@@ -113,7 +118,11 @@ originalPriceWeekday=#{originalPriceWeekday},
 salePriceWeekday=#{salePriceWeekday},
 originalPriceWeekend=#{originalPriceWeekend},
 salePriceWeekend=#{salePriceWeekend},
-roomtype=#{roomtype}
+roomtype=#{roomtype},
+maxMinPerRoom=#{maxMinPerRoom},
+ableCooking=#{ableCooking},
+numberOfBedRoom=#{numberOfBedRoom}
+
 WHERE hrtId=#{hrtId}
 """)
     void updateType(HotelRoomType hotelRoomType);
