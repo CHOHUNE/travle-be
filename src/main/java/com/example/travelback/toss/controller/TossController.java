@@ -2,8 +2,11 @@ package com.example.travelback.toss.controller;
 
 import com.example.travelback.toss.domain.Toss;
 import com.example.travelback.toss.service.TossService;
+import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,11 +16,21 @@ public class TossController {
     private final TossService service;
 
     @PostMapping("save")
-    public  void save(@RequestBody Toss toss){
-        System.out.println("들어옴");
-        System.out.println("toss = " + toss);
-                service.save(toss);
+    public  void save( Integer id,Integer amount,String orderId,
+                       @SessionAttribute (value = "login",required = false) Member login){
+        service.save(id,amount,orderId ,login);
     }
+
+
+    @GetMapping("id/{userId}")
+    public List<Toss> getId(@PathVariable String userId){
+        return service.getId(userId);
+    }
+
+
+
+
+
 
 
 
