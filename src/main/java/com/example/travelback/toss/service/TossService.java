@@ -1,9 +1,12 @@
 package com.example.travelback.toss.service;
 
+import com.example.travelback.toss.domain.Toss;
 import com.example.travelback.toss.mapper.TossMapper;
 import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +17,10 @@ public class TossService {
     public void save(Integer id, Integer amount, String orderId, Member login) {
        login.getUserId();
         mapper.save(id,amount,orderId,login.getUserId());
+    }
+
+    public List<Toss> getId(String userId) {
+        return  mapper.getId(userId);
     }
 
 /*
