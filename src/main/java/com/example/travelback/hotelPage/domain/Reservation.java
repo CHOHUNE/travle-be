@@ -19,5 +19,6 @@ public class Reservation{
     private int numberOfGuests;
     private boolean isConfirmed;
     private Date createdAt;
+    private int totalPrice;
 
 }

@@ -13,9 +13,13 @@ import java.util.List;
 public interface ReservationMapper {
 
 
-    @Insert("INSERT INTO hotelreservation (hId, guestName, checkinDate, checkoutDate, numberOfGuests, isConfirmed) " +
-            "VALUES (#{hId}, #{guestName}, #{checkinDate}, #{checkoutDate}, #{numberOfGuests}, #{isConfirmed})")
+    @Insert("INSERT INTO hotelreservation (hId, guestName, checkinDate, checkoutDate, numberOfGuests, isConfirmed,hrtId,totalPrice) " +
+            "VALUES (#{hId}, #{guestName}, #{checkinDate}, #{checkoutDate}, #{numberOfGuests}, #{isConfirmed},#{hrtId},#{totalPrice})")
     void insertReservation(Reservation reservation);
+
+    @Insert("INSERT INTO hotelreservation (hId, guestName, checkinDate, checkoutDate, numberOfGuests, isConfirmed,hrtId,totalPrice) " +
+            "VALUES (#{hId}, #{guestName}, #{checkinDate}, #{checkoutDate}, #{numberOfGuests}, #{isConfirmed},#{hrtId},#{totalPrice})")
+    void getReservation(Reservation reservation);
 
     @Select("SELECT * FROM hotelreservation WHERE hrId = #{hrId}")
     Reservation getReservationById(long hrId);
