@@ -167,4 +167,50 @@ public interface TransMapper {
             LIMIT #{from}, 8
         """)
     List<Trans> selectAllByTypeName(String type, int from);
+
+    @Select("""
+        SELECT 
+                tp.tId,
+                tp.transTitle, 
+                tp.transPrice, 
+                tp.transContent, 
+                tp.transStartLocation,
+                tp.transArriveLocation,
+                tp.transAddress,
+                tp.transInserted, 
+                tp.transStartDate,
+                tp.transEndDate,
+                tty.typeName,
+                tMI.url  
+            FROM transport tp JOIN transtype tty 
+            ON tp.tId = tty.tId
+            LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+            WHERE tty.typeName = 'bus'
+            ORDER BY tp.tId DESC 
+            LIMIT 8;
+        """)
+    List<Trans> selectPopularToBusEight();
+
+    @Select("""
+        SELECT 
+                tp.tId,
+                tp.transTitle, 
+                tp.transPrice, 
+                tp.transContent, 
+                tp.transStartLocation,
+                tp.transArriveLocation,
+                tp.transAddress,
+                tp.transStartDate,
+                tp.transEndDate,
+                tp.transInserted, 
+                tty.typeName,
+                tMI.url
+            FROM transport tp JOIN transtype tty 
+            ON tp.tId = tty.tId
+            LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+            WHERE tty.typeName = 'air'
+            ORDER BY tp.tId DESC 
+            LIMIT 8;
+        """)
+    List<Trans> selectPopularToAirEight();
 }

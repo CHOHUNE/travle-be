@@ -54,6 +54,18 @@ public class TransController {
         return service.listPopularAir();
     }
 
+    @GetMapping("listPopularBus")
+    // transport 페이지 에서 버스 카테고리 중 인기 있는 순으로 8개 씩 조회 되게 하기
+    public List<Trans> listPopularBusEight() {
+        return service.listPopularBusEight();
+    }
+
+    @GetMapping("listPopularAir")
+    // transport 페이지 에서 비행기 카테고리 중 인기 있는 순으로 8개 씩 조회 되게 하기
+    public List<Trans> listPopularAirEight() {
+        return service.listPopularAirEight();
+    }
+
     @GetMapping("id/{id}")
     public Trans get(@PathVariable Integer id) {
         return service.get(id);
