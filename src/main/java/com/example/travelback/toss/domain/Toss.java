@@ -10,6 +10,5 @@ public class Toss {
     private String orderId;
     private  String inserted;
     private  String userId;
-
     private String transTitle,transStartDate,transEndDate,request,reservation;
 }
