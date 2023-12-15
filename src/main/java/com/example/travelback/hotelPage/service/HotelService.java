@@ -41,6 +41,8 @@ public class HotelService {
     public void deleteHotel(Integer id) {
 //        라이크 삭제
         likeMapper.deleteLikeById(id);
+//        객실 삭제
+        hotelMapper.deleteHotelAllTypeByhId(id);
 //        파일 삭제
         deleteFile(id);
 //        DB 삭제

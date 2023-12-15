@@ -34,7 +34,7 @@ public interface HotelMapper {
     @Select("""
             SELECT * FROM hotel
             WHERE name LIKE #{keyword}
-            OR description LIKE #{keyword}
+            OR location LIKE #{keyword}
         GROUP BY hId
         ORDER BY hId DESC
         LIMIT #{from}, 9
@@ -52,6 +52,11 @@ WHERE hId=#{hid}
     DELETE FROM hotelroomtype WHERE hrtId=#{hrtId}
 """)
     void deleteHotelTypeByhrtId(Integer hrtId);
+
+    @Delete("""
+    DELETE FROM hotelroomtype WHERE hId=#{hId}
+""")
+    void deleteHotelAllTypeByhId(Integer hId);
 
     @Delete("""
             DELETE FROM hotel
