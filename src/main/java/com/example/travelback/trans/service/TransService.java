@@ -295,4 +295,12 @@ public class TransService {
     public List<Trans> listPopularAir() {
         return mapper.selectPopularToAir();
     }
+
+    public List<Trans> listPopularBusEight() {
+        return mapper.selectPopularToBusEight();
+    }
+
+    public List<Trans> listPopularAirEight() {
+        return mapper.selectPopularToAirEight();
+    }
 }
