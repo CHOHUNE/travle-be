@@ -12,6 +12,7 @@ public class Trans {
     private LocalDateTime transStartDay;
     private String transTitle;
     private String transPrice;
+    private String transInsertPrice;
     private String transContent;
     private String transStartLocation;
     private String transArriveLocation;

@@ -87,7 +87,7 @@ public class TransController {
 
     @GetMapping("bucket/id/{id}")
     public List<TransBucket> getTransBucket(@PathVariable String id) {
-        System.out.println(id);
+
         return transBucketService.getByUserId(id);
     }
 
