@@ -37,6 +37,11 @@ public class HotelController {
 
         return hotelService.getAllHotels(page, keyword);
     }
+    @GetMapping("/price")
+    public List<Hotel> getPrice(Long hId){
+        return hotelService.getPrice(hId);
+    }
+
 
 //    찜하기 기능
     @GetMapping("/wishList/{userId}")
