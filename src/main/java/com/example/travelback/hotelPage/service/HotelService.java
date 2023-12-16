@@ -81,7 +81,13 @@ public class HotelService {
         int from = (page - 1) * 9;
         map.put("hotelList", hotelMapper.selectAllHotels(from, "%" + keyword + "%"));
         map.put("pageInfo", pageInfo);
+
         return map;
+    }
+
+    public List<Hotel> getPrice(Long hId){
+        hotelMapper.selectSalesPriceWeekdayByHotelId(hId);
+        return null;
     }
 
     // 호텔 업데이트 -> 완전 삭제 -> 다시 생성 ( 라이크, 객실 모두 수정 )

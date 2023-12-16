@@ -11,9 +11,9 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfBed, mainImgUrl,salesFrom,salesTo,cautionMessage)
+            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfBed, mainImgUrl,salesFrom,salesTo,cautionMessage,pool,oceanview,pet,familyMood,romanticMood,campingMood)
              
-            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfBed},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage})""")
+            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfBed},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage},#{pool},#{oceanview},#{pet},#{familyMood},#{romanticMood},#{campingMood})""")
     @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
@@ -35,6 +35,13 @@ public interface HotelMapper {
             SELECT * FROM hotel
             WHERE name LIKE #{keyword}
             OR location LIKE #{keyword}
+            OR pet LIKE #{keyword}
+            OR pool LIKE #{keyword}
+            OR oceanview LIKE #{keyword}
+            OR campingMood LIKE #{keyword}
+            OR romanticMood LIKE #{keyword}
+            OR familyMood LIKE #{keyword}
+       
         GROUP BY hId
         ORDER BY hId DESC
         LIMIT #{from}, 9
@@ -42,9 +49,19 @@ public interface HotelMapper {
     List<Hotel> selectAllHotels(Integer from,String keyword);
 
     @Select("""
+SELECT hotel.hId, MIN(hotelroomtype.salePriceWeekday) as minSalePriceWeekday
+FROM hotel INNER JOIN hotelroomtype ON hotel.hId = hotelroomtype.hId
+WHERE hotel.hId = #{id}
+GROUP BY hotel.hId
+ORDER BY minSalePriceWeekday ASC
+""")
+    List<Hotel> selectSalesPriceWeekdayByHotelId(Long hId);
+
+    @Select("""
 SELECT *
 FROM hotelroomtype
 WHERE hId=#{hid}
+ORDER BY salePriceWeekday ASC
 """)
     List<HotelRoomType> selectAllRoomtypeByHotelId(Long id);
 
