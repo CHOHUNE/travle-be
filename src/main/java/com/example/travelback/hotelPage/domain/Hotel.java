@@ -28,6 +28,13 @@ public class Hotel {
     private String subImgUrl2;
     private String mapImgUrl;
 
+    private String pet;
+    private String pool;
+    private String oceanview;
+    private String familyMood;
+    private String romanticMood;
+    private String campingMood;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime salesFrom;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
