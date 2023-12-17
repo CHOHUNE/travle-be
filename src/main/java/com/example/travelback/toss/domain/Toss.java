@@ -11,5 +11,6 @@ public class Toss {
     private String inserted;
     private String userId;
     private String requested;
+    private String phoneNumber;
     private String transTitle,transStartDate,transEndDate,reservation;
 }
