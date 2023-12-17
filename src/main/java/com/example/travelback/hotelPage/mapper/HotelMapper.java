@@ -31,29 +31,71 @@ public interface HotelMapper {
             """)
     Hotel selectHotelById(Long id);
 
+//    @Select("""
+//            SELECT * FROM hotel
+//            WHERE name LIKE #{keyword}
+//            OR location LIKE #{keyword}
+//            OR pet LIKE #{keyword}
+//            OR pool LIKE #{keyword}
+//            OR oceanview LIKE #{keyword}
+//            OR campingMood LIKE #{keyword}
+//            OR romanticMood LIKE #{keyword}
+//            OR familyMood LIKE #{keyword}
+//
+//        GROUP BY hId
+//        ORDER BY hId DESC
+//        LIMIT #{from}, 9
+//            """)
+//    List<Hotel> selectAllHotels(Integer from,String keyword);
+
     @Select("""
-            SELECT * FROM hotel
-            WHERE name LIKE #{keyword}
-            OR location LIKE #{keyword}
-            OR pet LIKE #{keyword}
-            OR pool LIKE #{keyword}
-            OR oceanview LIKE #{keyword}
-            OR campingMood LIKE #{keyword}
-            OR romanticMood LIKE #{keyword}
-            OR familyMood LIKE #{keyword}
-       
-        GROUP BY hId
-        ORDER BY hId DESC
-        LIMIT #{from}, 9
-            """)
-    List<Hotel> selectAllHotels(Integer from,String keyword);
+    SELECT h.hId,
+         h.name,
+          h.location,
+           h.description,
+            h.mainImg,
+             h.rating,
+              h.lodgingType,
+              h.subImg1,
+               h.subImg2,
+                h.mapImg,
+                 h.numberOfBed,
+                  h.mainImgUrl,
+                   h.subImgUrl1,
+                    h.mapImgUrl,
+                     h.subImgUrl2,
+                      h.salesFrom,
+                       h.salesTo,
+                        h.cautionMessage,
+                         h.pool,
+                          h.oceanview,
+                           h.pet,
+                            h.familyMood,
+                             h.romanticMood,
+                              h.campingMood,
+                              COALESCE(MIN(hr.salePriceWeekday), null) as minSalePriceWeekday
+     FROM hotel h
+     LEFT JOIN hotelroomtype hr ON h.hId = hr.hId
+    WHERE h.name LIKE #{keyword}
+    OR h.location LIKE #{keyword}
+    OR h.pet LIKE #{keyword}
+    OR h.pool LIKE #{keyword}
+    OR h.oceanview LIKE #{keyword}
+    OR h.campingMood LIKE #{keyword}
+    OR h.romanticMood LIKE #{keyword}
+    OR h.familyMood LIKE #{keyword}
+    GROUP BY h.hId
+    ORDER BY h.hId DESC
+    LIMIT #{from}, 9
+""")
+    List<Hotel> selectAllHotels(Integer from, String keyword);
+
 
     @Select("""
 SELECT hotel.hId, MIN(hotelroomtype.salePriceWeekday) as minSalePriceWeekday
 FROM hotel INNER JOIN hotelroomtype ON hotel.hId = hotelroomtype.hId
 WHERE hotel.hId = #{id}
 GROUP BY hotel.hId
-ORDER BY minSalePriceWeekday ASC
 """)
     List<Hotel> selectSalesPriceWeekdayByHotelId(Long hId);
 
