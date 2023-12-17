@@ -37,10 +37,6 @@ public class HotelController {
 
         return hotelService.getAllHotels(page, keyword);
     }
-    @GetMapping("/price")
-    public List<Hotel> getPrice(Long hId){
-        return hotelService.getPrice(hId);
-    }
 
 
 //    찜하기 기능
@@ -111,12 +107,7 @@ public class HotelController {
                     @RequestParam(value = "mapImg[]", required = false) MultipartFile mapImg
     ) throws IOException {
 
-        if (mainImg != null) {
-            System.out.println("mainImgFileName:" + mainImg.getOriginalFilename());
-            System.out.println("subImg1 = " + subImg1.getName());
-            System.out.println("subImg2 = " + subImg2.getName());
-            System.out.println("mapImg = " + mapImg.getName());
-        }
+
         hotelService.addHotel(hotel, mainImg, subImg1, subImg2, mapImg);
     }
 

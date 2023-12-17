@@ -85,10 +85,7 @@ public class HotelService {
         return map;
     }
 
-    public List<Hotel> getPrice(Long hId){
-        hotelMapper.selectSalesPriceWeekdayByHotelId(hId);
-        return null;
-    }
+
 
     // 호텔 업데이트 -> 완전 삭제 -> 다시 생성 ( 라이크, 객실 모두 수정 )
     public void update(Hotel hotel, Integer hid, MultipartFile mainImg, MultipartFile subImg1, MultipartFile subImg2, MultipartFile mapImg) throws IOException {

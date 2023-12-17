@@ -21,6 +21,7 @@ public class Hotel {
     private String description;
 
     private String lodgingType;
+    private String rating;
 
     private String mainImgUrl;
     private String subImgUrl1;
@@ -33,8 +34,6 @@ public class Hotel {
     private String familyMood;
     private String romanticMood;
     private String campingMood;
-
-
 
     private String minSalePriceWeekday;
 

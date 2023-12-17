@@ -91,13 +91,7 @@ public interface HotelMapper {
     List<Hotel> selectAllHotels(Integer from, String keyword);
 
 
-    @Select("""
-SELECT hotel.hId, MIN(hotelroomtype.salePriceWeekday) as minSalePriceWeekday
-FROM hotel INNER JOIN hotelroomtype ON hotel.hId = hotelroomtype.hId
-WHERE hotel.hId = #{id}
-GROUP BY hotel.hId
-""")
-    List<Hotel> selectSalesPriceWeekdayByHotelId(Long hId);
+
 
     @Select("""
 SELECT *
@@ -137,14 +131,17 @@ ORDER BY salePriceWeekday ASC
                """)
     void update(Hotel hotel);
 
+
     @Update("""
-            UPDATE hotel
-            SET mainImg=#{mainImg},mainImgUrl=#{mainImgUrl},subImgUrl1=#{subImgUrl1},
-            subImgUrl2=#{subImgUrl2},mapImgUrl=#{mapImgUrl},subImg1=#{subImg1},subImg2=#{subImg2},mapImg=#{mapImg}
-                        
-            WHERE hId=#{hid}
-            """)
-    void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImgUrl2, String mapImgUrl, String subImg1, String subImg2, String mapImg);
+        UPDATE hotel
+        SET mainImg=#{mainImg}, mainImgUrl=#{mainImgUrl},
+            subImgUrl1=#{subImgUrl1}, subImg1=#{subImg1},
+            subImgUrl2=#{subImgUrl2}, subImg2=#{subImg2},
+            mapImgUrl=#{mapImgUrl}, mapImg=#{mapImg}
+        WHERE hId=#{hid}
+        """)
+    void updateImg(long hid, String mainImg, String mainImgUrl, String subImgUrl1, String subImg1, String subImgUrl2, String subImg2, String mapImgUrl, String mapImg);
+
 
     @Update("""
     UPDATE hotelroomtype
