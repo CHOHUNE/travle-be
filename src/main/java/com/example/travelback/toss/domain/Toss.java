@@ -8,7 +8,8 @@ public class Toss {
     private Integer id;
     private Integer amount;
     private String orderId;
-    private  String inserted;
-    private  String userId;
-    private String transTitle,transStartDate,transEndDate,request,reservation;
+    private String inserted;
+    private String userId;
+    private String requested;
+    private String transTitle,transStartDate,transEndDate,reservation;
 }

@@ -14,9 +14,8 @@ public class TossService {
 
     private final TossMapper mapper;
 
-    public void save(Integer id, Integer amount, String orderId, Member login) {
-       login.getUserId();
-        mapper.save(id,amount,orderId,login.getUserId());
+    public void save(Integer id, Integer amount, String orderId, String requested, Member login) {
+        mapper.save(id, amount, orderId, requested, login.getUserId());
     }
 
     public List<Toss> getId(String userId) {

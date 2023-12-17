@@ -108,32 +108,29 @@ public class TransService {
         Map<String, Object> pageInfo = new HashMap<>();
 
         int countAll = 0;
-        if( type.equals("bus") ) {
+        if(type.equals("bus")) {
             countAll = mapper.countByTypeName("bus");
         } else {
             countAll = mapper.countByTypeName("air");
         }
 
-        int lastPageNumber = (countAll - 1) / 3 + 1;
-        int startPageNumber = (page - 1) / 3 * 3 + 1;
-        int endPageNumber = startPageNumber + 2;
-        endPageNumber = Math.min(endPageNumber,lastPageNumber);
+        int pageSize = 8; // 페이지 당 게시물 수
+        int lastPageNumber = (countAll + pageSize - 1) / pageSize; // 총 페이지 수
+        int pageGroupSize = 3; // 페이지 그룹 내에 표시할 페이지 수
+        int startPageNumber = ((page - 1) / pageGroupSize) * pageGroupSize + 1;
+        int endPageNumber = Math.min(startPageNumber + pageGroupSize - 1, lastPageNumber);
 
-        int prePageNumber = startPageNumber - 3;
-        int nextPageNumber = endPageNumber + 1;
+        Integer prePageNumber = (startPageNumber > pageGroupSize) ? startPageNumber - pageGroupSize : null;
+        Integer nextPageNumber = (endPageNumber < lastPageNumber) ? endPageNumber + 1 : null;
 
         pageInfo.put("startPageNumber", startPageNumber);
         pageInfo.put("endPageNumber", endPageNumber);
-        if(prePageNumber > 0) {
-            pageInfo.put("prevPageNumber", prePageNumber);
-        }
-        if(nextPageNumber <= lastPageNumber) {
-            pageInfo.put("nextPageNumber", nextPageNumber);
-        }
+        pageInfo.put("prevPageNumber", prePageNumber); // null이면 이전 버튼을 표시하지 않음
+        pageInfo.put("nextPageNumber", nextPageNumber); // null이면 다음 버튼을 표시하지 않음
 
-        int from = (page - 1) * 10;
+        int from = (page - 1) * pageSize; // 조회 시작 페이지
 
-        map.put("transList", mapper.selectAllByTypeName(type,from));
+        map.put("transList", mapper.selectAllByTypeName(type, from, pageSize));
         map.put("pageInfo", pageInfo);
 
         return map;
