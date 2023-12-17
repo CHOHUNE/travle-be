@@ -44,6 +44,13 @@ public interface TossMapper {
         """)
     List<Toss> getId(String userId);
 
+    @Select("""
+            SELECT *
+            FROM ttoss
+            LEFT JOIN travel.transport t ON t.tId = ttoss.id
+            """)
+    List<Toss> getAll(String userId);
+
 
 //    // 운송 상품 결제 시 db저장 기능
 //    @Insert("""

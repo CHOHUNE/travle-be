@@ -1,5 +1,6 @@
 package com.example.travelback.user.sms;
 
+import com.example.travelback.toss.domain.Toss;
 import com.example.travelback.user.dto.Member;
 import com.example.travelback.user.mapper.MemberMapper;
 import jakarta.annotation.PostConstruct;
@@ -30,6 +31,7 @@ public class SmsUtil2 {
     private String SecretKey;
 
     private DefaultMessageService messageService;
+    private Toss toss;
 
     @PostConstruct
     public void initialize() {
@@ -39,9 +41,9 @@ public class SmsUtil2 {
 
     // ---------- 문자 발송 로직 ----------
     @PostMapping("sendSMS3")
-    public ResponseEntity<String> sendOne(@RequestBody Member member) {
+    public ResponseEntity<String> sendOne(@RequestParam("userPhoneNumber") String phoneNumber, @RequestBody Member member) {
 
-        System.out.println("전화번호: " + member.getUserPhoneNumber());
+        System.out.println("전화번호: " + phoneNumber);
         System.out.println("예약번호: " + member.getMessageContent());
 
         if (messageService == null) {
@@ -50,7 +52,7 @@ public class SmsUtil2 {
 
         Message message = new Message();
         message.setFrom("01036138304"); // 발신자 번호
-        message.setTo(member.getUserPhoneNumber()); // 수신자 번호: 사용자가 입력한 번호
+        message.setTo(phoneNumber); // 수신자 번호: 사용자가 입력한 번호
         // 메시지 내용: 판매자가 입력한 예약번호
         message.setText("[Web발신]\n트레블 여행\n구입하신 상품의 예약번호\n[" + member.getMessageContent() + "] 입니다.");
 

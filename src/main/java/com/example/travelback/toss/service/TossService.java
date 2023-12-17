@@ -19,6 +19,9 @@ public class TossService {
     }
 
     public List<Toss> getId(String userId) {
+        if (userId.equals("admin")) {
+            return mapper.getAll(userId);
+        }
         return  mapper.getId(userId);
     }
 
