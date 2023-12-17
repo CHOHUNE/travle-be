@@ -37,7 +37,7 @@ public interface TossMapper {
 
 
     @Select("""
-                select tossid,transTitle,transStartDate,transEndDate,requested,reservation,userId,amount
+                select tossid,transTitle,transStartDate,transEndDate,requested,reservation,userId,amount, phoneNumber
                  from travel.ttoss 
                   left join travel.transport t on t.tId = ttoss.id 
                   where  userId=#{userId};
