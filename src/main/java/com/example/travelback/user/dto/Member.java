@@ -27,6 +27,7 @@ public class Member {
     // ---------- sms 관련 ----------
     private String verificationCode;
     private String sendSMS;
+    private String messageContent;
 
     // ---------- 시간 관련 ----------
     public String getAgo() {
