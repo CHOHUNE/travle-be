@@ -16,6 +16,7 @@ public interface TossMapper {
                 amount,
                 orderId,
                 requested, 
+                phoneNumber,
                 userId
                 ) 
             values (
@@ -23,6 +24,7 @@ public interface TossMapper {
                 #{amount},
                 #{orderId},
                 #{requested},
+                #{phoneNumber},
                 #{userId}
                 );
         """)
@@ -30,15 +32,37 @@ public interface TossMapper {
              Integer amount,
              String orderId,
              String requested,
+             String phoneNumber,
              String userId);
 
 
     @Select("""
-                select tossid,transTitle,transStartDate,transEndDate,requested,reservation,userId,amount
+                select tossid,transTitle,transStartDate,transEndDate,requested,reservation,userId,amount, phoneNumber
                  from travel.ttoss 
                   left join travel.transport t on t.tId = ttoss.id 
                   where  userId=#{userId};
         """)
     List<Toss> getId(String userId);
+
+
+//    // 운송 상품 결제 시 db저장 기능
+//    @Insert("""
+//         INSERT INTO transtosspay (
+//            orderId,
+//            userId,
+//            userName,
+//            realUserName,
+//            realUserPhoneNumber,
+//            people,
+//            transId,
+//            transTitle,
+//            transStartDay,
+//            amount,
+//            requested,
+//            inserted
+//         ) VALUES (
+//         )
+//    """)
+//    int save();
 }
 
