@@ -25,6 +25,10 @@ public class TossService {
         return  mapper.getId(userId);
     }
 
+    public void transSave(Integer id, Integer amount, String orderId, String requested, String phoneNumber, Member login) {
+        mapper.transSave(id, amount, orderId, requested, phoneNumber, login.getUserId());
+    }
+
 /*
     public void order(Toss toss) {
         mapper.order(toss);

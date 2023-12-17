@@ -32,15 +32,16 @@ public class TossController {
     }
 
 
-//    // 운송 상품 결제 저장
-//    @PostMapping("transSave")
-//    public void transSave( Integer id,
-//                       Integer amount,
-//                       String orderId,
-//                       String requested,
-//                       @SessionAttribute (value = "login",required = false) Member login){
-//        service.save(id, amount, orderId, requested, login);
-//    }
+    // 운송 상품 결제 저장
+    @PostMapping("transSave")
+    public void transSave( Integer id,
+                       Integer amount,
+                       String orderId,
+                       String requested,
+                           String phoneNumber,
+                       @SessionAttribute (value = "login",required = false) Member login){
+        service.transSave(id, amount, orderId, requested, phoneNumber, login);
+    }
 
 
 
