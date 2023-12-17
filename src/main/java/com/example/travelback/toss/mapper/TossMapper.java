@@ -11,13 +11,30 @@ import java.util.List;
 public interface TossMapper {
 
     @Insert("""
-                insert into travel.ttoss (id, amount,orderId,userId ) values (#{id},#{amount},#{orderId} ,#{userId});
+            insert into travel.ttoss (
+                id, 
+                amount,
+                orderId,
+                requested, 
+                userId
+                ) 
+            values (
+                #{id},
+                #{amount},
+                #{orderId},
+                #{requested},
+                #{userId}
+                );
         """)
-    int save(Integer id, Integer amount, String orderId, String userId);
+    int save(Integer id,
+             Integer amount,
+             String orderId,
+             String requested,
+             String userId);
 
 
     @Select("""
-                select tossid,transTitle,transStartDate,transEndDate,request,reservation,userId,amount
+                select tossid,transTitle,transStartDate,transEndDate,requested,reservation,userId,amount
                  from travel.ttoss 
                   left join travel.transport t on t.tId = ttoss.id 
                   where  userId=#{userId};

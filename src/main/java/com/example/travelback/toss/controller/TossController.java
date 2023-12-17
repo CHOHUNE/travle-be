@@ -16,9 +16,12 @@ public class TossController {
     private final TossService service;
 
     @PostMapping("save")
-    public  void save( Integer id,Integer amount,String orderId,
+    public  void save( Integer id,
+                       Integer amount,
+                       String orderId,
+                       String requested,
                        @SessionAttribute (value = "login",required = false) Member login){
-        service.save(id,amount,orderId ,login);
+        service.save(id, amount, orderId, requested, login);
     }
 
 
