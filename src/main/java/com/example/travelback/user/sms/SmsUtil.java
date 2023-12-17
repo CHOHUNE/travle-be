@@ -5,6 +5,9 @@ import com.example.travelback.user.mapper.MemberMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
+import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -51,15 +54,15 @@ public class SmsUtil {
         // ---------- 난수를 메모리에 저장 로직 ----------
         verificationCodes.put(member.getUserPhoneNumber(), verificationCode);
 
-//        Message message = new Message();
-//        message.setFrom("01036138304");
-//        message.setTo(member.getUserPhoneNumber());
-//        message.setText("[Web발신]\n회원가입 인증번호\n[" + verificationCode + "]를 입니다.");
+        Message message = new Message();
+        message.setFrom("01036138304");
+        message.setTo(member.getUserPhoneNumber());
+        message.setText("[Web발신]\n트레블 여행\n회원가입 인증번호\n[" + verificationCode + "]를 입니다.");
 
         System.out.println(verificationCode);
 
-//        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-//        System.out.println(response);
+        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        System.out.println(response);
 
         return ResponseEntity.ok().build();
     }

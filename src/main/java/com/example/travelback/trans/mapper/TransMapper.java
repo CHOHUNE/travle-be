@@ -152,28 +152,28 @@ public interface TransMapper {
     int countByTypeName(String type);
 
     @Select("""
-        SELECT 
-                tp.tId,
-                tp.transTitle, 
-                tp.transPrice, 
-                tp.transInsertPrice,
-                tp.transContent, 
-                tp.transStartLocation,
-                tp.transArriveLocation,
-                tp.transAddress,
-                tp.transStartDate,
-                tp.transEndDate,
-                tp.transInserted, 
-                tty.typeName,
-                tMI.url  
-            FROM transport tp JOIN transtype tty 
-            ON tp.tId = tty.tId
-            LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
-            WHERE typeName = #{type}
-            ORDER BY tp.tId DESC 
-            LIMIT #{from}, 8
-        """)
-    List<Trans> selectAllByTypeName(String type, int from);
+    SELECT 
+         tp.tId,
+         tp.transTitle,
+         tp.transPrice,
+         tp.transInsertPrice,
+         tp.transContent,
+         tp.transStartLocation,
+         tp.transArriveLocation,
+         tp.transAddress,
+         tp.transStartDate,
+         tp.transEndDate,
+         tp.transInserted,
+         tty.typeName,
+         tMI.url
+        FROM transport tp JOIN transtype tty 
+        ON tp.tId = tty.tId
+        LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+        WHERE typeName = #{type}
+        ORDER BY tp.tId DESC 
+        LIMIT #{from}, #{pageSize}
+""")
+    List<Trans> selectAllByTypeName(String type, int from, int pageSize);
 
     @Select("""
         SELECT 

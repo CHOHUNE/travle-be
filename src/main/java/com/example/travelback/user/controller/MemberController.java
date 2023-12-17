@@ -61,43 +61,7 @@ public class MemberController {
         return login;
     }
 
-    // -------------------- 카카오 로그인 api key, redirecturi --------------------
-//    @GetMapping("kakaoKey")
-//    public Map<String, String> kakaoKey() {
-//        return Map.of("key", RestApiKey, "redirect", redirectUri);
-//    }
-//
-//
-//    //    @RequestMapping("kakaoLogin")
-////    public String kakao_login(HttpServletRequest request) {
-////        String client_id = RestApiKey;
-////        String redirect_uri = redirectUri;
-////        String login_url = "https://kauth.kakao.com/oauth/authorize?response_type=code"
-////                           + "&client_id=" + client_id
-////                           + "&redirect_uri=" + redirect_uri;
-////
-////        return "redirect:" + login_url;
-////    }
-//    KakaoAPI kakaoApi = new KakaoAPI();
-//
-//    @PostMapping("kakaoLogin")
-//    public Map<String, Object> kakaoLogin(@RequestParam("code") String code, HttpSession session) {
-//        // 1번 인증코드 요청 전달
-//        String accessToken = kakaoApi.getAccessToken(code);
-//        // 2번 인증코드로 토큰 전달
-//        HashMap<String, Object> userInfo = kakaoApi.getUserInfo(accessToken);
-//        System.out.println("login info : " + userInfo.toString());
-////        Map<String, Object> response = new HashMap<>();
-//        if (userInfo.get("email") != null) {
-//            session.setAttribute("userId", userInfo.get("email"));
-//            session.setAttribute("isKakao", true);
-//            session.setAttribute("accessToken", accessToken);
-//        }
-//
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("code", userInfo.get(accessToken));
-//        return response;
-//    }
+
 
     // ---------- 로그아웃 로직 ----------------
     @PostMapping("logout")
