@@ -8,20 +8,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Hotel {
     private Long hid;
     private String name;
     private String location;
-    private String rating;
+
     private int numberOfBed;
-    private String review;
-    private String roomType;
+
     private String description;
 
     private String lodgingType;
-    private Double cheapestPrice;
+    private String rating;
 
     private String mainImgUrl;
     private String subImgUrl1;
@@ -34,6 +34,8 @@ public class Hotel {
     private String familyMood;
     private String romanticMood;
     private String campingMood;
+
+    private String minSalePriceWeekday;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime salesFrom;
