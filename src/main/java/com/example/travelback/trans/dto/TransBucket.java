@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class TransBucket {
+    public String tId;
     public String userId;
     public String transTitle;
     public String typeName;

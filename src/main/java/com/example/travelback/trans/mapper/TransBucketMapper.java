@@ -11,6 +11,7 @@ public interface TransBucketMapper {
 
     @Select("""
         SELECT
+            t.tId,
             m.userId,
             tt.typeName,
             timage.url,
