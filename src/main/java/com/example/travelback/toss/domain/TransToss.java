@@ -35,4 +35,6 @@ public class TransToss {
     private String requested;
     // 운송 상품을 결제한 시간
     private LocalDateTime inserted;
+    // 결제 타입이 운송이라고 설정
+    private String payType;
 }
