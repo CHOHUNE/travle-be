@@ -37,9 +37,10 @@ public class TransController {
     @GetMapping("list")
     public Map<String, Object> list(
             @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "p",defaultValue = "1")Integer page) {
+            @RequestParam(value = "p",defaultValue = "1")Integer page,
+            @RequestParam(value = "k",required = false)String keyword) {
 
-        return service.list(type,page);
+        return service.list(type,page,keyword);
     }
 
     @GetMapping("listPopularBus")
