@@ -37,4 +37,6 @@ public class TransToss {
     private LocalDateTime inserted;
     // 관리자로부터 받은 예약번호
     private String reservNumber;
+    // 결제 타입이 운송이라고 설정
+    private String payType;
 }

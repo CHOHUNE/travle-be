@@ -15,10 +15,6 @@ public class ReservationService {
 
 
     public void addResrvation(Reservation reservation) {
-        reservationMapper.getReservation(reservation);
-    }
-
-    public Reservation getReservationById(long id){
-        return reservationMapper.getReservationById(id);
+        reservationMapper.addReservation(reservation);
     }
 }

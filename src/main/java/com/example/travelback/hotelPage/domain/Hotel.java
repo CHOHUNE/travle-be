@@ -16,7 +16,7 @@ public class Hotel {
     private String name;
     private String location;
 
-    private int numberOfBed;
+    private int numberOfRoom;
 
     private String description;
 

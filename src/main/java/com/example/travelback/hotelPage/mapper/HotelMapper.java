@@ -11,9 +11,9 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfBed, mainImgUrl,salesFrom,salesTo,cautionMessage,pool,oceanview,pet,familyMood,romanticMood,campingMood)
+            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfRoom, mainImgUrl,salesFrom,salesTo,cautionMessage,pool,oceanview,pet,familyMood,romanticMood,campingMood)
              
-            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfBed},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage},#{pool},#{oceanview},#{pet},#{familyMood},#{romanticMood},#{campingMood})""")
+            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfRoom},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage},#{pool},#{oceanview},#{pet},#{familyMood},#{romanticMood},#{campingMood})""")
     @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
@@ -59,7 +59,7 @@ public interface HotelMapper {
               h.subImg1,
                h.subImg2,
                 h.mapImg,
-                 h.numberOfBed,
+                 h.numberOfRoom,
                   h.mainImgUrl,
                    h.subImgUrl1,
                     h.mapImgUrl,
