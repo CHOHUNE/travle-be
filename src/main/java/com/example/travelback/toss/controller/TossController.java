@@ -48,7 +48,10 @@ public class TossController {
         return service.getTransTossByUserId(userId);
     }
 
-
-
-
+    @PutMapping("sendAndSave")
+    public void sendSmsAndSaveReservation(@RequestParam String tossId,
+                                          @RequestParam String reservNumber
+                                         ) {
+        service.saveReservationNumber(tossId, reservNumber);
+    }
 }

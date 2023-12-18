@@ -2,9 +2,11 @@ package com.example.travelback.toss.mapper;
 
 import com.example.travelback.toss.domain.Toss;
 import com.example.travelback.toss.domain.TransToss;
+import com.example.travelback.user.dto.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -98,5 +100,14 @@ public interface TossMapper {
         where userId=#{userId};
         """)
     List<TransToss> getTransTossByUserId(String userId);
+
+
+    @Update("""
+            UPDATE transtosspay
+            SET 
+                reservNumber = #{reservNumber}
+            WHERE tossId = #{tossId}
+            """)
+    void saveByTossIdAndUserId(String tossId, String reservNumber);
 }
 
