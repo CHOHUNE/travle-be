@@ -103,16 +103,30 @@ public class TransService {
     // 운송 상품 메인 이미지 업로드 (끝) --------------------------------------------------------------------------------------
     // 운송 상품 등록 (끝) ------------------------------------------------------------------------------------------------
 
-    public Map<String, Object> list(String type, Integer page) {
+    public Map<String, Object> list(String type, Integer page,String keyword) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
         int countAll = 0;
-        if(type.equals("bus")) {
-            countAll = mapper.countByTypeName("bus");
+
+        if(keyword != null) {
+        // 키워드가 있으면 키워드를 찾아 상품 수를 재 정의
+            if(type.equals("bus")) {
+                countAll = mapper.countByTypeNameAndKeyword("bus", keyword);
+            } else {
+                countAll = mapper.countByTypeNameAndKeyword("air", keyword);
+            }
         } else {
-            countAll = mapper.countByTypeName("air");
+            // 키워드가 없다면 해당 타입의 모든 상품 수 정의
+            if(type.equals("bus")) {
+                countAll = mapper.countByTypeName("bus");
+            } else {
+                countAll = mapper.countByTypeName("air");
+            }
         }
+
+
+
 
         int pageSize = 8; // 페이지 당 게시물 수
         int lastPageNumber = (countAll + pageSize - 1) / pageSize; // 총 페이지 수
@@ -130,8 +144,15 @@ public class TransService {
 
         int from = (page - 1) * pageSize; // 조회 시작 페이지
 
-        map.put("transList", mapper.selectAllByTypeName(type, from, pageSize));
+
         map.put("pageInfo", pageInfo);
+
+        if(keyword != null) {
+            map.put("transList", mapper.selectAllByTypeNameAndKeyword(type, from, pageSize,keyword));
+        } else {
+            map.put("transList", mapper.selectAllByTypeName(type, from, pageSize));
+        }
+
 
         return map;
     }

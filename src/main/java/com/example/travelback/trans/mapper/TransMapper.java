@@ -152,6 +152,17 @@ public interface TransMapper {
     int countByTypeName(String type);
 
     @Select("""
+        SELECT COUNT(*) 
+        FROM transtype tt 
+        LEFT JOIN transport tp 
+        ON tt.tId = tp.tId
+        WHERE tt.typeName = #{type} 
+        AND tp.transTitle 
+        LIKE CONCAT('%', #{keyword}, '%')
+        """)
+    int countByTypeNameAndKeyword(String type, String keyword);
+
+    @Select("""
     SELECT 
          tp.tId,
          tp.transTitle,
@@ -222,4 +233,30 @@ public interface TransMapper {
             LIMIT 8;
         """)
     List<Trans> selectPopularToAirEight();
+
+    @Select("""
+    SELECT 
+         tp.tId,
+         tp.transTitle,
+         tp.transPrice,
+         tp.transInsertPrice,
+         tp.transContent,
+         tp.transStartLocation,
+         tp.transArriveLocation,
+         tp.transAddress,
+         tp.transStartDate,
+         tp.transEndDate,
+         tp.transInserted,
+         tty.typeName,
+         tMI.url
+        FROM transport tp JOIN transtype tty 
+        ON tp.tId = tty.tId
+        LEFT JOIN transMainImage tMI on tp.tId = tMI.tId
+        WHERE typeName = #{type} AND tp.transTitle LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY tp.tId DESC 
+        LIMIT #{from}, #{pageSize}
+    """)
+    List<Trans> selectAllByTypeNameAndKeyword(String type, int from, int pageSize, String keyword);
+
+
 }
