@@ -154,7 +154,7 @@ public class HotelController {
 
     }
 
-    @GetMapping("/pay")
+    @PutMapping("/pay")
     public void add(Reservation reservation) {
         reservationService.addResrvation(reservation);
     }

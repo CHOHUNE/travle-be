@@ -16,9 +16,13 @@ public class Reservation{
     private String guestName;
     private Date checkinDate;
     private Date checkoutDate;
-    private int numberOfGuests;
+    private String numberOfGuests;
     private boolean isConfirmed;
     private Date createdAt;
     private int totalPrice;
+    private int cellPhoneNumber;
+    private String plusMessage;
+    private String roomtype;
+
 
 }
