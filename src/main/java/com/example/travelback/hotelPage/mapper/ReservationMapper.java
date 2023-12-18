@@ -17,9 +17,10 @@ public interface ReservationMapper {
             "VALUES (#{hId}, #{guestName}, #{checkinDate}, #{checkoutDate}, #{numberOfGuests}, #{isConfirmed},#{hrtId},#{totalPrice})")
     void insertReservation(Reservation reservation);
 
-    @Insert("INSERT INTO hotelreservation (hId, guestName, checkinDate, checkoutDate, numberOfGuests, isConfirmed,hrtId,totalPrice) " +
-            "VALUES (#{hId}, #{guestName}, #{checkinDate}, #{checkoutDate}, #{numberOfGuests}, #{isConfirmed},#{hrtId},#{totalPrice})")
-    void getReservation(Reservation reservation);
+    @Insert("""
+            INSERT INTO hotelreservation (hId, guestName, checkinDate, checkoutDate, numberOfGuests,totalPrice,cellPhoneNumber,plusMessage,roomtype)
+            VALUES (#{hId}, #{guestName}, #{checkinDate}, #{checkoutDate}, #{numberOfGuests},#{totalPrice},#{cellPhoneNumber},#{plusMessage},#{roomtype})""")
+    void addReservation(Reservation reservation);
 
     @Select("SELECT * FROM hotelreservation WHERE hrId = #{hrId}")
     Reservation getReservationById(long hrId);
