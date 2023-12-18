@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class Like {
     private Integer id;
-    private Integer hid;
+    private Integer hotelId;
     private String userId;
     private String name;
     private String mainImgUrl;

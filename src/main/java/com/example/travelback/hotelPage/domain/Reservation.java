@@ -20,9 +20,8 @@ public class Reservation{
     private boolean isConfirmed;
     private Date createdAt;
     private int totalPrice;
-    private int cellPhoneNumber;
+    private String cellPhoneNumber;
     private String plusMessage;
     private String roomtype;
-
 
 }
