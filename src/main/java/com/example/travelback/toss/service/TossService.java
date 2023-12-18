@@ -7,7 +7,6 @@ import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -41,6 +40,13 @@ public class TossService {
         }
         // 조회한 유저당 보여줄 것
         return  mapper.getTransTossByUserId(userId);
+    }
+
+    public void saveReservationNumber(String tossId, String reservNumber) {
+        System.out.println("tossId = " + tossId);
+        System.out.println("reservNumber = " + reservNumber);
+
+        mapper.saveByTossIdAndUserId(tossId, reservNumber);
     }
 
 /*

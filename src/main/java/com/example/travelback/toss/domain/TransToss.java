@@ -35,4 +35,6 @@ public class TransToss {
     private String requested;
     // 운송 상품을 결제한 시간
     private LocalDateTime inserted;
+    // 관리자로부터 받은 예약번호
+    private String reservNumber;
 }
