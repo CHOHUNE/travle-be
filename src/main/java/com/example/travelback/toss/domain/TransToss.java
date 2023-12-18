@@ -1,6 +1,7 @@
 package com.example.travelback.toss.domain;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,7 @@ public class TransToss {
     // 예약한 운송 상품 제목
     private String transTitle;
     // 예약한 운송 상품의 출발일
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime transStartDay;
     // 예약한 운송 상품 결제 가격
     private Integer amount;

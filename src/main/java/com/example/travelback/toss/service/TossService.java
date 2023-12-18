@@ -1,11 +1,13 @@
 package com.example.travelback.toss.service;
 
 import com.example.travelback.toss.domain.Toss;
+import com.example.travelback.toss.domain.TransToss;
 import com.example.travelback.toss.mapper.TossMapper;
 import com.example.travelback.user.dto.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,8 +27,20 @@ public class TossService {
         return  mapper.getId(userId);
     }
 
-    public void transSave(Integer id, Integer amount, String orderId, String requested, String phoneNumber, Member login) {
-        mapper.transSave(id, amount, orderId, requested, phoneNumber, login.getUserId());
+    // 운송 상품 결제 저장
+    public void transSave(TransToss transToss,
+                          Member login) {
+        mapper.transSave(transToss, login.getUserId());
+    }
+
+    // 결제한 운송 상품 조회
+    public List<TransToss> getTransTossByUserId(String userId) {
+        if (userId.equals("admin")) {
+            // 조회 유저가 어드민 일 경우
+            return mapper.getTransTossAll(userId);
+        }
+        // 조회한 유저당 보여줄 것
+        return  mapper.getTransTossByUserId(userId);
     }
 
 /*
