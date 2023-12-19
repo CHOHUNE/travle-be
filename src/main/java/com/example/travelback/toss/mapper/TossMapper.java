@@ -28,7 +28,8 @@ public interface TossMapper {
                 transTitle,
                 transStartDay,
                 amount,
-                requested
+                requested,
+                paymentKey
                 ) 
             VALUES (
                 #{transToss.orderId},
@@ -41,7 +42,8 @@ public interface TossMapper {
                 #{transToss.transTitle},
                 #{transToss.transStartDay},
                 #{transToss.amount},
-                #{transToss.requested}
+                #{transToss.requested},
+                #{transToss.paymentKey}
                 );
         """)
     int transSave(TransToss transToss,
@@ -99,7 +101,8 @@ public interface TossMapper {
                 checkoutDate, 
                 amount, 
                 plusMessage, 
-                roomtype        
+                roomtype,
+                paymentKey        
                 ) 
             VALUES (
                 #{hotelToss.orderId},
@@ -115,7 +118,8 @@ public interface TossMapper {
                 #{hotelToss.checkoutDate},
                 #{hotelToss.amount},
                 #{hotelToss.plusMessage},
-                #{hotelToss.roomtype}
+                #{hotelToss.roomtype},
+                #{hotelToss.paymentKey}
                 );
         """)
     int hotelSave(HotelToss hotelToss, String userId);
