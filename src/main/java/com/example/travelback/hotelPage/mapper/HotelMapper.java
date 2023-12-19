@@ -11,9 +11,9 @@ import java.util.List;
 public interface HotelMapper {
 
     @Insert("""
-            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfRoom, mainImgUrl,salesFrom,salesTo,cautionMessage,pool,oceanview,pet,familyMood,romanticMood,campingMood)
+            INSERT INTO hotel (name, location, description, rating, lodgingType, numberOfRoom, mainImgUrl,salesFrom,salesTo,cautionMessage,pool,oceanview,pet,familyMood,romanticMood,campingMood,natureMood,surfing,winterSport)
              
-            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfRoom},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage},#{pool},#{oceanview},#{pet},#{familyMood},#{romanticMood},#{campingMood})""")
+            VALUES (#{name}, #{location}, #{description}, #{rating}, #{lodgingType},#{numberOfRoom},#{mainImgUrl},#{salesFrom},#{salesTo},#{cautionMessage},#{pool},#{oceanview},#{pet},#{familyMood},#{romanticMood},#{campingMood},#{natureMood},#{surfing},#{winterSport})""")
     @Options(useGeneratedKeys = true, keyProperty = "hid")
     void insertHotel(Hotel hotel);
 
@@ -73,6 +73,9 @@ public interface HotelMapper {
                             h.familyMood,
                              h.romanticMood,
                               h.campingMood,
+                              h.surfing,
+                              h.winterSport,
+                              h.natureMood,
                               COALESCE(MIN(hr.salePriceWeekday), null) as minSalePriceWeekday
      FROM hotel h
      LEFT JOIN hotelroomtype hr ON h.hId = hr.hId
@@ -124,7 +127,7 @@ ORDER BY salePriceWeekday ASC
                 location=#{location},
                 description=#{description},
                 lodgingType=#{lodgingType},
-                numberOfBed=#{numberOfBed},  
+                numberOfRoom=#{numberOfRoom},  
                 mainImgUrl=#{mainImgUrl}
                 
                 WHERE hId=#{hid}
