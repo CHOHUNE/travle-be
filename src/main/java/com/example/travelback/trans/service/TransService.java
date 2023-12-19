@@ -130,7 +130,7 @@ public class TransService {
 
         int pageSize = 8; // 페이지 당 게시물 수
         int lastPageNumber = (countAll + pageSize - 1) / pageSize; // 총 페이지 수
-        int pageGroupSize = 3; // 페이지 그룹 내에 표시할 페이지 수
+        int pageGroupSize = 5; // 페이지 그룹 내에 표시할 페이지 수 변경됨
         int startPageNumber = ((page - 1) / pageGroupSize) * pageGroupSize + 1;
         int endPageNumber = Math.min(startPageNumber + pageGroupSize - 1, lastPageNumber);
 
@@ -144,8 +144,8 @@ public class TransService {
 
         int from = (page - 1) * pageSize; // 조회 시작 페이지
 
-
         map.put("pageInfo", pageInfo);
+
 
         if(keyword != null) {
             map.put("transList", mapper.selectAllByTypeNameAndKeyword(type, from, pageSize,keyword));
