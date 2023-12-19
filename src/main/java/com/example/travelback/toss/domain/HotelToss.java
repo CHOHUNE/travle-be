@@ -48,4 +48,6 @@ public class HotelToss {
     private String category;
     // 결제 키
     private String paymentKey;
+    // 결제 상태 (예약접수, 예약완료, 취소중, 취소완료)
+    private String reservStatus;
 }
