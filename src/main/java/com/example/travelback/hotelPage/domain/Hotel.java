@@ -35,6 +35,12 @@ public class Hotel {
     private String romanticMood;
     private String campingMood;
 
+    private String natureMood;
+    private String surfing;
+    private String winterSport;
+
+
+
     private String minSalePriceWeekday;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
