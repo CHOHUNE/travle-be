@@ -46,4 +46,6 @@ public class HotelToss {
     private String reservNumber;
     // 결제 타입이 호텔 이라고 설정
     private String category;
+    // 결제 키
+    private String paymentKey;
 }
