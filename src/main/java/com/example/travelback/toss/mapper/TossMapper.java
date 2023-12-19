@@ -1,5 +1,6 @@
 package com.example.travelback.toss.mapper;
 
+import com.example.travelback.toss.domain.HotelToss;
 import com.example.travelback.toss.domain.Toss;
 import com.example.travelback.toss.domain.TransToss;
 import com.example.travelback.user.dto.Member;
@@ -13,47 +14,6 @@ import java.util.List;
 
 @Mapper
 public interface TossMapper {
-
-    @Insert("""
-            insert into travel.ttoss (
-                id, 
-                amount,
-                orderId,
-                requested, 
-                phoneNumber,
-                userId
-                ) 
-            values (
-                #{id},
-                #{amount},
-                #{orderId},
-                #{requested},
-                #{phoneNumber},
-                #{userId}
-                );
-        """)
-    int save(Integer id,
-             Integer amount,
-             String orderId,
-             String requested,
-             String phoneNumber,
-             String userId);
-
-
-    @Select("""
-                select tossid,transTitle,transStartDate,transEndDate,requested,reservation,userId,amount, phoneNumber
-                 from travel.ttoss 
-                  left join travel.transport t on t.tId = ttoss.id 
-                  where  userId=#{userId};
-        """)
-    List<Toss> getId(String userId);
-
-    @Select("""
-            SELECT *
-            FROM ttoss
-            LEFT JOIN travel.transport t ON t.tId = ttoss.id
-            """)
-    List<Toss> getAll(String userId);
 
     // 운송 상품 저장 
     @Insert("""
@@ -94,12 +54,25 @@ public interface TossMapper {
             FROM transtosspay
             """)
     List<TransToss> getTransTossAll(String userId);
+    @Select("""
+            SELECT *
+            FROM hoteltosspay
+            """)
+    List<HotelToss> getHotelTossAll(String userId);
 
+    // 회원이 결제를 조회 했다면 해당 회원 id기준으로 내역 조회
+    // 회원 운송 결제 조회
     @Select("""
         SELECT * FROM transtosspay
         where userId=#{userId};
         """)
     List<TransToss> getTransTossByUserId(String userId);
+    // 회원 호텔 결제 조회
+    @Select("""
+        SELECT * FROM hoteltosspay
+        where userId=#{userId};
+        """)
+    List<HotelToss> getHotelTossByUserId(String userId);
 
 
     @Update("""
@@ -109,5 +82,45 @@ public interface TossMapper {
             WHERE tossId = #{tossId}
             """)
     void saveByTossIdAndUserId(String tossId, String reservNumber);
+
+    // 호텔 상품 결제 저장
+    @Insert("""
+            INSERT INTO hoteltosspay (
+                orderId, 
+                userId, 
+                userName, 
+                guestName, 
+                cellPhoneNumber, 
+                personAdult, 
+                personChild, 
+                hotelId, 
+                hotelName, 
+                checkinDate, 
+                checkoutDate, 
+                amount, 
+                plusMessage, 
+                roomtype        
+                ) 
+            VALUES (
+                #{hotelToss.orderId},
+                #{userId},
+                #{hotelToss.userName},
+                #{hotelToss.guestName},
+                #{hotelToss.cellPhoneNumber},
+                #{hotelToss.personAdult},
+                #{hotelToss.personChild},
+                #{hotelToss.hotelId},
+                #{hotelToss.hotelName},
+                #{hotelToss.checkinDate},
+                #{hotelToss.checkoutDate},
+                #{hotelToss.amount},
+                #{hotelToss.plusMessage},
+                #{hotelToss.roomtype}
+                );
+        """)
+    int hotelSave(HotelToss hotelToss, String userId);
+
+
+
 }
 
