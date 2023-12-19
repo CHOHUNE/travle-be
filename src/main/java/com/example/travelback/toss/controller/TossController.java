@@ -39,11 +39,21 @@ public class TossController {
         return service.getTransAndHotelTossByUserId(userId);
     }
 
+    // ------------------- 운송상품 예약번호 저장 로직 -------------------
     @PutMapping("sendAndSave")
     public void sendSmsAndSaveReservation(@RequestParam String tossId,
                                           @RequestParam String reservNumber
                                          ) {
         service.saveReservationNumber(tossId, reservNumber);
+    }
+
+    // ------------------- 호텔상품 예약번호 저장 로직 -------------------
+    @PutMapping("sendAndSave2")
+    public void sendSmsAndSaveReservation2(@RequestParam String hotelTossId,
+                                          @RequestParam String reservNumber
+    ) {
+
+        service.saveReservationNumber2(hotelTossId, reservNumber);
     }
 
 

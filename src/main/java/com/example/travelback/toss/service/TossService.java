@@ -48,14 +48,13 @@ public class TossService {
         return payList;
     }
 
+    // ------------------- 운송상품 예약번호 저장 로직 -------------------
     public void saveReservationNumber(String tossId, String reservNumber) {
-        System.out.println("tossId = " + tossId);
-        System.out.println("reservNumber = " + reservNumber);
-
         mapper.saveByTossIdAndUserId(tossId, reservNumber);
     }
 
-
-
-
+    // ------------------- 호텔상품 예약번호 저장 로직 -------------------
+    public void saveReservationNumber2(String hotelTossId, String reservNumber) {
+        mapper.saveByTossIdAndUserId2(hotelTossId, reservNumber);
+    }
 }

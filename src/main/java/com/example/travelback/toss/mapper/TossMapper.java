@@ -77,13 +77,7 @@ public interface TossMapper {
     List<HotelToss> getHotelTossByUserId(String userId);
 
 
-    @Update("""
-            UPDATE transtosspay
-            SET 
-                reservNumber = #{reservNumber}
-            WHERE tossId = #{tossId}
-            """)
-    void saveByTossIdAndUserId(String tossId, String reservNumber);
+
 
     // 호텔 상품 결제 저장
     @Insert("""
@@ -124,7 +118,22 @@ public interface TossMapper {
         """)
     int hotelSave(HotelToss hotelToss, String userId);
 
+    // ------------------- 운송상품 예약번호 저장 로직 -------------------
+    @Update("""
+            UPDATE transtosspay
+            SET 
+                reservNumber = #{reservNumber}
+            WHERE tossId = #{tossId}
+            """)
+    void saveByTossIdAndUserId(String tossId, String reservNumber);
 
-
+    // ------------------- 호텔상품 예약번호 저장 로직 -------------------
+    @Update("""
+            UPDATE hoteltosspay
+            SET 
+                reservNumber = #{reservNumber}
+            WHERE hotelTossId = #{hotelTossId}
+            """)
+    void saveByTossIdAndUserId2(String hotelTossId, String reservNumber);
 }
 
