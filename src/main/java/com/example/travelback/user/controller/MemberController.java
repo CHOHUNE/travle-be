@@ -75,16 +75,16 @@ public class MemberController {
     // -------------------- id 중복체크 로직 --------------------
     @GetMapping(value = "check", params = "userId")
     public ResponseEntity checkId(Member member, String userId) throws InterruptedException {
+        Map<String, String> map = new HashMap<>();
 
-
-        if (service.validateIdCheck(member)) {
+        if (service.validateIdCheck(member, map)) {
             if (service.getUserId(userId) == null) {
                 return ResponseEntity.notFound().build();
             } else {
                 return ResponseEntity.ok().build();
             }
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(map);
         }
     }
 

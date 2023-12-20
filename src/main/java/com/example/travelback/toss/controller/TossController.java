@@ -63,5 +63,12 @@ public class TossController {
         service.updateTransReservStatus(transToss);
     }
 
+    @PutMapping("updateHotelReservStatus")
+    public void updateHotelReservStatus(@RequestBody HotelToss hotelToss) {
+        System.out.println("hotelTossStatus = " + hotelToss.getReservStatus());
+        System.out.println("hotelTossId = " + hotelToss.getHotelTossId());
+        service.updateHotelReservStatus(hotelToss);
+    }
+
 
 }

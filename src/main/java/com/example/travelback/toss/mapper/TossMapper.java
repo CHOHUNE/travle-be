@@ -142,5 +142,12 @@ public interface TossMapper {
                 WHERE tossId = #{tossId}
             """)
     void updateTransReservStatus(TransToss transToss);
+
+    @Update("""
+            UPDATE hoteltosspay
+                SET reservStatus = #{reservStatus}
+            WHERE hotelTossId = #{hotelTossId}
+            """)
+    void updateHotelReservStatus(HotelToss hotelToss);
 }
 

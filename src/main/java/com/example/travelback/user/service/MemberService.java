@@ -11,53 +11,44 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberMapper mapper;
-//    private final PasswordEncoder passwordEncoder;
 
     // -------------------- 회원가입 유효성 검증-------------------
-    // TODO : 각 input 마다 정규식표현 넣어야함
     public boolean validate(Member member, Map<String, String> map) {
-        if (member == null) {
+        Pattern idPattern = Pattern.compile("^[a-zA-Z0-9]{5,20}$"); // 5자에서 20자 사이의 영문자와 숫자만 허용
+        Pattern passwordPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,}$"); // 최소 8자 이상, 숫자, 특수문자, 영문자 포함
+        Pattern namePattern = Pattern.compile("^[가-힣]{2,}$"); // 2글자 이상의 한글만 허용
+        Pattern phonePattern = Pattern.compile("^\\d{2,3}-?\\d{3,4}-?\\d{4}$"); // 10자리 또는 11자리 숫자만 허용
+
+        // 아이디 검사
+        if (!idPattern.matcher(member.getUserId()).matches()) {
+            map.put("message", "아이디는 5자 이상의 영문자와 숫자만 가능합니다.");
             return false;
         }
-        if (member.getUserId() == null || member.getUserId().isBlank()) {
-            map.put("message", "아이디를 다시 입력해주시기 바랍니다.");
+        // 비밀번호 검사
+        if (!passwordPattern.matcher(member.getUserPassword()).matches()) {
+            map.put("message", "비밀번호는 8자 이상이며, 영문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다.");
             return false;
         }
-        if (member.getUserPassword() == null || member.getUserPassword().isBlank()) {
-            map.put("message", "비밀번호를 다시 입력해주시기 바랍니다.");
+        // 이름 검사
+        if (!namePattern.matcher(member.getUserName()).matches()) {
+            map.put("message", "이름은 2글자 이상의 한글만 가능합니다.");
             return false;
         }
-        if (member.getUserName() == null || member.getUserName().isBlank()) {
-            map.put("message", "이름을 다시 입력해주시기 바랍니다.");
+        // 핸드폰 번호 검사
+        if (!phonePattern.matcher(member.getUserPhoneNumber()).matches()) {
+            map.put("message", "핸드폰 번호는 숫자만 가능합니다.");
             return false;
         }
-        if (member.getUserPostCode() == null || member.getUserPostCode().isBlank()) {
-            map.put("message", "주소를 다시 입력해주시기 바랍니다.");
-            return false;
-        }
-        if (member.getUserAddress() == null || member.getUserAddress().isBlank()) {
-            map.put("message", "주소를 다시 입력해주시기 바랍니다.");
-            return false;
-        }
-        if (member.getUserDetailAddress() == null || member.getUserDetailAddress().isBlank()) {
-            map.put("message", "주소를 다시 입력해주시기 바랍니다.");
-            return false;
-        }
-        if (member.getUserPhoneNumber() == null || member.getUserPhoneNumber().isBlank()) {
-            map.put("message", "핸드폰번호를 다시 입력해주시기 바랍니다.");
-            return false;
-        }
-        if (member.getUserEmail() == null || member.getUserEmail().isBlank()) {
-            map.put("message", "이메일을 다시 입력해주시기 바랍니다.");
-            return false;
-        }
+
         return true;
+
     }
 
     // -------------------- 회원가입 serivce --------------------
@@ -204,11 +195,19 @@ public class MemberService {
         return b;
     }
 
-    public boolean validateIdCheck(Member member) {
-        if (member == null) {
-            return false;
-        }
-        if (member.getUserId() == null || member.getUserId().isBlank()) {
+    public boolean validateIdCheck(Member member, Map<String, String> map) {
+        Pattern idPattern = Pattern.compile("^[a-zA-Z0-9]{5,20}$"); // 5자에서 20자 사이의 영문자와 숫자만 허용
+
+//        if (member == null) {
+//            return false;
+//        }
+//        if (member.getUserId() == null || member.getUserId().isBlank()) {
+//            return false;
+//        }
+
+        // 아이디 검사
+        if (!idPattern.matcher(member.getUserId()).matches()) {
+            map.put("message", "아이디는 5자 이상의 영문자와 숫자만 가능합니다.");
             return false;
         }
         return true;
