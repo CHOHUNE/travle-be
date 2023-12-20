@@ -80,6 +80,7 @@ public interface HotelMapper {
      FROM hotel h
      LEFT JOIN hotelroomtype hr ON h.hId = hr.hId
     WHERE h.name LIKE #{keyword}
+    OR h.lodgingType LIKE #{keyword}
     OR h.location LIKE #{keyword}
     OR h.pet LIKE #{keyword}
     OR h.pool LIKE #{keyword}
@@ -87,6 +88,9 @@ public interface HotelMapper {
     OR h.campingMood LIKE #{keyword}
     OR h.romanticMood LIKE #{keyword}
     OR h.familyMood LIKE #{keyword}
+    OR h.natureMood LIKE #{keyword}
+    OR h.surfing LIKE #{keyword}
+    OR h.winterSport LIKE #{keyword}
     GROUP BY h.hId
     ORDER BY h.hId DESC
     LIMIT #{from}, 9
