@@ -61,4 +61,8 @@ public class TossService {
     public void updateTransReservStatus(TransToss transToss) {
         mapper.updateTransReservStatus(transToss);
     }
+
+    public void updateHotelReservStatus(HotelToss hotelToss) {
+        mapper.updateHotelReservStatus(hotelToss);
+    }
 }
