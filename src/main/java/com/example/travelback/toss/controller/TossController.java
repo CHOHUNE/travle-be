@@ -56,5 +56,12 @@ public class TossController {
         service.saveReservationNumber2(hotelTossId, reservNumber);
     }
 
+    @PutMapping("updateTransReservStatus")
+    public void updateTransReservStatus(@RequestBody TransToss transToss) {
+        System.out.println("reservStatus = " + transToss.getReservStatus());
+        System.out.println("tossId = " + transToss.getTossId());
+        service.updateTransReservStatus(transToss);
+    }
+
 
 }

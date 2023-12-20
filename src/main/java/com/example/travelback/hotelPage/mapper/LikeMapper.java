@@ -15,7 +15,7 @@ public interface LikeMapper {
 //    @Select("SELECT * FROM hotelike WHERE hid = #{hotelId}")
 //    Like getLikesByHotelId(Integer hotelId);
 //
-    @Select("SELECT * FROM hotelike WHERE userId=#{userId}")
+    @Select("SELECT * FROM hotelike WHERE userId=#{userId} ORDER BY createdAt DESC")
     List<Like> getLikesByUserId(String userId);
 
     @Select("SELECT * FROM hotelike WHERE userId=#{userId} AND hid=#{hotelId}")

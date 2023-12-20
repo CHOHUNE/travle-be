@@ -57,4 +57,8 @@ public class TossService {
     public void saveReservationNumber2(String hotelTossId, String reservNumber) {
         mapper.saveByTossIdAndUserId2(hotelTossId, reservNumber);
     }
+
+    public void updateTransReservStatus(TransToss transToss) {
+        mapper.updateTransReservStatus(transToss);
+    }
 }
