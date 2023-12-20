@@ -28,7 +28,8 @@ public interface TransBucketMapper {
         ON t.tId = timage.tId
         JOIN member m
         ON tl.userId = m.userId
-        WHERE m.userId = #{usesrId};
+        WHERE m.userId = #{usesrId}
+        ORDER BY tl.createdAt DESC;
         """)
     List<TransBucket> selectByUserId(String userId);
 }
