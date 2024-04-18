@@ -31,14 +31,3 @@
     - 문의답변 등록
     - 회원 목록 관리
 
-### 개발 환경
-
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
-
-### ERD
-
-![img_3.png](img_3.png)
-
-### 화면 흐름도
-![img_4.png](img_4.png)
